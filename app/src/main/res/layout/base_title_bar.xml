@@ -3,7 +3,7 @@
     android:id="@+id/base_title_bar"
     android:layout_width="match_parent"
     android:layout_height="52dp"
-    android:background="#3BD2C9">
+    android:background="@color/base_color">
 
     <ImageView
         android:id="@+id/iv_bar_left_icon"

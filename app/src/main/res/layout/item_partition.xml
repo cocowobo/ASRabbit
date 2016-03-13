@@ -3,15 +3,15 @@
     android:id="@+id/base_title_bar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:minHeight="@dimen/common_item_height">
-    
+
     <TextView
         android:id="@+id/tv_partition_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/common_margin_left"
+        android:textColor="@color/base_first_text_color"
         android:textSize="@dimen/text_size_16" />
 
     <TextView
@@ -23,7 +23,18 @@
         android:layout_marginRight="@dimen/common_margin_right"
         android:drawablePadding="10dp"
         android:drawableRight="@mipmap/icon_right_arrow"
+        android:textColor="@color/base_second_text_color"
         android:textSize="@dimen/text_size_14" />
 
+    <View
+        android:id="@+id/cut_line"
+        style="@style/CommonHorizontalDivider"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/common_margin_left" />
+
+    <View
+        android:id="@+id/cut_line1"
+        style="@style/CommonHorizontalDivider"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

@@ -33,6 +33,7 @@ public class WelcomeActivity extends AsRabbitBaseActivity {
             @Override
             public void run() {
                 ActivityUtil.startActivityByAnim(activity, MainActivity.class);
+                finish();
             }
         }, 1000);
 

@@ -14,6 +14,9 @@
     <!-- 公共item高度-->
     <dimen name="common_item_height">50dp</dimen>
 
+    <!-- 公共setting item高度-->
+    <dimen name="common_setting_item_height">15dp</dimen>
+
     <!--字体大小-->
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_15">15sp</dimen>
@@ -24,5 +27,10 @@
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_21">21sp</dimen>
     <dimen name="text_size_22">22sp</dimen>
+
+    <!--选择开关  by hxm-->
+    <dimen name="switch_button_with">45dp</dimen>
+    <dimen name="switch_button_height">26dp</dimen>
+    <dimen name="base_title_bar_img">10dp</dimen>
 
 </resources>

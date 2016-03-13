@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--基础颜色 -->
-    <color name="base_color">#3BD2C9</color>
 
-    <!--系统状态栏 背景色 -->
-    <color name="base_sys_bar_bg">#42B9B8</color>
+    <!--主色调 -->
+    <color name="base_color">#d4859f</color>
+    <!--系统通知栏颜色 -->
+    <color name="base_sys_bar_bg">#d4859f</color>
+    <!--主要背景颜色 -->
+    <color name="base_soft_bg">#F2F3F4</color>
+    <!--白色 table背景 -->
+    <color name="base_tab_white">#FFFFFF</color>
 
-    <!--白色 -->
-    <color name="white">#FFFFFF</color>
+    <!--主要字体颜色 -->
+    <color name="base_first_text_color">#000000</color>
+    <!--小的图标/文字 -->
+    <color name="base_second_text_color">#b9b9b9</color>
 
     <!--分割线颜色 -->
-    <color name="common_divider">#c8c7cc</color>
-
+    <color name="common_divider">#aaaaaa</color>
+    <!--左滑删除颜色 -->
     <color name="global_price_orange">#FF5800</color>
+
+
+    <!--夜间模式-->
+
+    <!--小的图标/文字 #7a838c-->
+    <!--table背景 #16243e-->
+    <!--table分割线 #15233d-->
+    <!--一般字体颜色 #b2c0db-->
+    <!--顶部状态栏 #1f2b37-->
+    <!--粉红按钮 #9eacc7-->
 </resources>

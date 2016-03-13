@@ -1,9 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/base_soft_bg">
 
     <com.adolsai.asrabbit.views.AsRabbitTitleBar
-        android:id="@+id/as_rabbit_title_bar_fragment1"
+        android:id="@+id/as_rabbit_title_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -11,7 +12,7 @@
         android:id="@+id/sv_history"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_item_height"
-        android:layout_below="@+id/as_rabbit_title_bar_fragment1">
+        android:layout_below="@+id/as_rabbit_title_bar">
 
     </SearchView>
 

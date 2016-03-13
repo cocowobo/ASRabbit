@@ -32,13 +32,19 @@ public class PartitionAdapter extends BaseAdapter<Partition> {
 
         TextView tvPartitionNumber = SparseViewHelper.getView(convertView, R.id.tv_partition_number);
         TextView tvPartitionTitle = SparseViewHelper.getView(convertView, R.id.tv_partition_title);
-
+        View cutLine = SparseViewHelper.getView(convertView, R.id.cut_line);
+        View cutLine1 = SparseViewHelper.getView(convertView, R.id.cut_line1);
         Partition partition = getItem(position);
         if (partition != null) {
             tvPartitionNumber.setText(partition.getNumber());
             tvPartitionTitle.setText(partition.getTitle());
+            cutLine.setVisibility(View.VISIBLE);
+            cutLine1.setVisibility(View.GONE);
         }
-
+        if (position == getCount() - 1) {
+            cutLine.setVisibility(View.GONE);
+            cutLine1.setVisibility(View.VISIBLE);
+        }
         return convertView;
     }
 }

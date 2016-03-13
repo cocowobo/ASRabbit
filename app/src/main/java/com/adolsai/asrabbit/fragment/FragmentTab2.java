@@ -13,8 +13,8 @@ import com.adolsai.asrabbit.views.AsRabbitTitleBar;
 import butterknife.Bind;
 
 public class FragmentTab2 extends AsRabbitBaseFragment {
-    @Bind(R.id.as_rabbit_title_bar_fragment2)
-    AsRabbitTitleBar asRabbitTitleBarFragment2;
+    @Bind(R.id.as_rabbit_title_bar)
+    AsRabbitTitleBar asRabbitTitleBar;
 
     @Nullable
     @Override
@@ -26,7 +26,7 @@ public class FragmentTab2 extends AsRabbitBaseFragment {
 
     @Override
     protected void initViews() {
-        asRabbitTitleBarFragment2.setTvBarCenterTitle(getString(R.string.fragment2_title));
+        asRabbitTitleBar.setTvBarCenterTitle(getString(R.string.fragment2_title));
     }
 
     @Override

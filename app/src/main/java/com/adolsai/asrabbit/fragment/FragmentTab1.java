@@ -18,8 +18,8 @@ import butterknife.ButterKnife;
 
 
 public class FragmentTab1 extends AsRabbitBaseFragment {
-    @Bind(R.id.as_rabbit_title_bar_fragment1)
-    AsRabbitTitleBar asRabbitTitleBarFragment1;
+    @Bind(R.id.as_rabbit_title_bar)
+    AsRabbitTitleBar asRabbitTitleBar;
     @Bind(R.id.sv_history)
     SearchView svHistory;
     @Bind(R.id.lv_history)
@@ -36,8 +36,8 @@ public class FragmentTab1 extends AsRabbitBaseFragment {
 
     @Override
     protected void initViews() {
-        asRabbitTitleBarFragment1.setTvBarCenterTitle(getString(R.string.fragment1_title));
-        asRabbitTitleBarFragment1.setIvBarRightIcon(R.drawable.selector_titlebar_delete);
+        asRabbitTitleBar.setTvBarCenterTitle(getString(R.string.fragment1_title));
+        asRabbitTitleBar.setIvBarRightIcon(R.drawable.selector_titlebar_delete);
         lvHistory.setTextFilterEnabled(true);
         svHistory.setSubmitButtonEnabled(false);
         svHistory.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

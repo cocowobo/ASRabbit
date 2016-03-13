@@ -21,18 +21,18 @@ import com.ht.baselib.R;
  * <p>自定义滑动开关组件
  * <br/>注意：layout_width和layout_height和实际显示有偏差，不能精确设置
  * </p>
- * @author 7heaven (https://github.com/7heaven/SHSwitchView) 
- * @author zmingchun (Updated by) 
+ *
+ * @author 7heaven (https://github.com/7heaven/SHSwitchView)
+ * @author zmingchun (Updated by)
  * @version: 1.0(2015/9/25)
- * <p>
+ * <p/>
  * 增加reverseEnabled 属性，控制开关滑片方向：true反iOS7风格(滑片方向和iOS7相反的)，false iOS7风格
  * 相关属性：
-    declare-styleable name="ShSwitchView"
-    attr name="tintColor" format="reference|color" 开状态颜色
-    attr name="outerStrokeWidth" format="reference|dimension"外边框宽度
-    attr name="shadowSpace" format="reference|dimension"阴影间距
-    attr name="reverseEnabled" format="reference|boolean"滑片方向是否和ios7原生开关控件方向相反
-   <p/>
+ * declare-styleable name="ShSwitchView"
+ * attr name="tintColor" format="reference|color" 开状态颜色
+ * attr name="outerStrokeWidth" format="reference|dimension"外边框宽度
+ * attr name="shadowSpace" format="reference|dimension"阴影间距
+ * attr name="reverseEnabled" format="reference|boolean"滑片方向是否和ios7原生开关控件方向相反
  */
 public class ShSwitchView extends View {
     //默认的持续时间300毫秒
@@ -43,14 +43,14 @@ public class ShSwitchView extends View {
     //里层内容变换动画
     private ObjectAnimator innerContentAnimator;
     //属性定义
-    private Property<ShSwitchView, Float> innerContentProperty = new Property<ShSwitchView, Float>(Float.class, "innerBound"){
+    private Property<ShSwitchView, Float> innerContentProperty = new Property<ShSwitchView, Float>(Float.class, "innerBound") {
         @Override
-        public void set(ShSwitchView sv, Float innerContentRate){
+        public void set(ShSwitchView sv, Float innerContentRate) {
             sv.setInnerContentRate(innerContentRate);
         }
 
         @Override
-        public Float get(ShSwitchView sv){
+        public Float get(ShSwitchView sv) {
             return sv.getInnerContentRate();
         }
     };
@@ -58,14 +58,14 @@ public class ShSwitchView extends View {
     //收缩扩展动画
     private ObjectAnimator knobExpandAnimator;
     //属性定义
-    private Property<ShSwitchView, Float> knobExpandProperty = new Property<ShSwitchView, Float>(Float.class, "knobExpand"){
+    private Property<ShSwitchView, Float> knobExpandProperty = new Property<ShSwitchView, Float>(Float.class, "knobExpand") {
         @Override
-        public void set(ShSwitchView sv, Float knobExpandRate){
+        public void set(ShSwitchView sv, Float knobExpandRate) {
             sv.setKnobExpandRate(knobExpandRate);
         }
 
         @Override
-        public Float get(ShSwitchView sv){
+        public Float get(ShSwitchView sv) {
             return sv.getKnobExpandRate();
         }
     };
@@ -73,14 +73,14 @@ public class ShSwitchView extends View {
     //滑片移动动画
     private ObjectAnimator knobMoveAnimator;
     //属性定义
-    private Property<ShSwitchView, Float> knobMoveProperty = new Property<ShSwitchView, Float>(Float.class, "knobMove"){
+    private Property<ShSwitchView, Float> knobMoveProperty = new Property<ShSwitchView, Float>(Float.class, "knobMove") {
         @Override
-        public void set(ShSwitchView sv, Float knobMoveRate){
+        public void set(ShSwitchView sv, Float knobMoveRate) {
             sv.setKnobMoveRate(knobMoveRate);
         }
 
         @Override
-        public Float get(ShSwitchView sv){
+        public Float get(ShSwitchView sv) {
             return sv.getKnobMoveRate();
         }
     };
@@ -88,12 +88,12 @@ public class ShSwitchView extends View {
     // 手势定义相关
     //============================================
     private GestureDetector gestureDetector;
-    private GestureDetector.SimpleOnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener(){
+    private GestureDetector.SimpleOnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() {
         //
         @Override
-        public boolean onDown(MotionEvent event){
+        public boolean onDown(MotionEvent event) {
             //若view不可用，则不响应手势动作
-            if(!isEnabled()){
+            if (!isEnabled()) {
                 return false;
             }
             preIsOn = isOn;
@@ -107,36 +107,36 @@ public class ShSwitchView extends View {
         }
 
         @Override
-        public void onShowPress(MotionEvent event){
+        public void onShowPress(MotionEvent event) {
 
         }
 
         //一次点击up事件
         @Override
-        public boolean onSingleTapUp(MotionEvent event){
+        public boolean onSingleTapUp(MotionEvent event) {
             isOn = knobState;
 
-            if(preIsOn == isOn){
+            if (preIsOn == isOn) {
                 isOn = !isOn;
                 knobState = !knobState;
             }
 
             // 切换动画属性设置
             //-------------------------------
-            if(knobState){
-                if (reverseEnabled){
+            if (knobState) {
+                if (reverseEnabled) {
                     knobMoveAnimator.setFloatValues(knobMoveRate, 0.0F);
-                }else {
+                } else {
                     knobMoveAnimator.setFloatValues(knobMoveRate, 1.0F);
                 }
                 knobMoveAnimator.start();
 
                 innerContentAnimator.setFloatValues(innerContentRate, 0.0F);
                 innerContentAnimator.start();
-            }else{
+            } else {
                 if (reverseEnabled) {
                     knobMoveAnimator.setFloatValues(knobMoveRate, 1.0F);
-                }else{
+                } else {
                     knobMoveAnimator.setFloatValues(knobMoveRate, 0.0F);
                 }
                 knobMoveAnimator.start();
@@ -148,21 +148,22 @@ public class ShSwitchView extends View {
             knobExpandAnimator.setFloatValues(knobExpandRate, 0.0F);
             knobExpandAnimator.start();
 
-            if(ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn){
-                ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(isOn);
+            if (ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn) {
+                ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(ShSwitchView.this, isOn);
             }
 
             return true;
         }
+
         //在屏幕上拖动事件-手指移动就会执行
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if(e2.getX() > centerX){
-                if(!knobState){
+            if (e2.getX() > centerX) {
+                if (!knobState) {
                     knobState = !knobState;
                     if (reverseEnabled) {
                         knobMoveAnimator.setFloatValues(knobMoveRate, 0.0F);
-                    }else{
+                    } else {
                         knobMoveAnimator.setFloatValues(knobMoveRate, 1.0F);
                     }
                     knobMoveAnimator.start();
@@ -170,12 +171,12 @@ public class ShSwitchView extends View {
                     innerContentAnimator.setFloatValues(innerContentRate, 0.0F);
                     innerContentAnimator.start();
                 }
-            }else{
-                if(knobState){
+            } else {
+                if (knobState) {
                     knobState = !knobState;
                     if (reverseEnabled) {
                         knobMoveAnimator.setFloatValues(knobMoveRate, 1.0F);
-                    }else{
+                    } else {
                         knobMoveAnimator.setFloatValues(knobMoveRate, 0.0F);
                     }
                     knobMoveAnimator.start();
@@ -234,40 +235,45 @@ public class ShSwitchView extends View {
     /**
      * 状态切换监听
      */
-    public interface OnSwitchStateChangeListener{
+    public interface OnSwitchStateChangeListener {
         /**
          * 状态切换监听方法
+         *
+         * @param v    对应的view
          * @param isOn true开，false关
          */
-        void onSwitchStateChange(boolean isOn);
+        void onSwitchStateChange(View v, boolean isOn);
     }
 
     private OnSwitchStateChangeListener onSwitchStateChangeListener;
 
     /**
      * 默认构造器
+     *
      * @param context 上下文
      */
-    public ShSwitchView(Context context){
+    public ShSwitchView(Context context) {
         this(context, null);
     }
 
     /**
      * 构造器
+     *
      * @param context 上下文
-     * @param attrs 属性值集
+     * @param attrs   属性值集
      */
-    public ShSwitchView(Context context, AttributeSet attrs){
+    public ShSwitchView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
     /**
      * 构造器
-     * @param context 上下文
-     * @param attrs 属性值集
+     *
+     * @param context  上下文
+     * @param attrs    属性值集
      * @param defStyle 样式资源id
      */
-    public ShSwitchView(Context context, AttributeSet attrs, int defStyle){
+    public ShSwitchView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ShSwitchView);
@@ -296,13 +302,13 @@ public class ShSwitchView extends View {
         gestureDetector = new GestureDetector(context, gestureListener);
         gestureDetector.setIsLongpressEnabled(false);
 
-        if(Build.VERSION.SDK_INT >= 11){
+        if (Build.VERSION.SDK_INT >= 11) {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
-        if(reverseEnabled) {
+        if (reverseEnabled) {
             knobMoveRate = 1.0F;
-        }else {
+        } else {
             knobMoveRate = 0.0F;
         }
 
@@ -322,68 +328,71 @@ public class ShSwitchView extends View {
         knobMoveAnimator.setInterpolator(new DecelerateInterpolator());
     }
 
-    public void setOnSwitchStateChangeListener(OnSwitchStateChangeListener onSwitchStateChangeListener){
+    public void setOnSwitchStateChangeListener(OnSwitchStateChangeListener onSwitchStateChangeListener) {
         this.onSwitchStateChangeListener = onSwitchStateChangeListener;
     }
 
-    public OnSwitchStateChangeListener getOnSwitchStateChangeListener(){
+    public OnSwitchStateChangeListener getOnSwitchStateChangeListener() {
         return this.onSwitchStateChangeListener;
     }
 
     /**
      * 设置内域刷新速率
+     *
      * @param rate 速率
      */
-    void setInnerContentRate(float rate){
+    void setInnerContentRate(float rate) {
         this.innerContentRate = rate;
         //刷新Canvas-该方法的作用是告诉系统刷新当前控件的 “Canvas”，也就是触发一次：“onDraw(Canvas canvas)” 方法。
         invalidate();
     }
 
-    float getInnerContentRate(){
+    float getInnerContentRate() {
         return this.innerContentRate;
     }
 
     /**
      * 设置扩展伸缩速率
+     *
      * @param rate 速率
      */
-    void setKnobExpandRate(float rate){
+    void setKnobExpandRate(float rate) {
         this.knobExpandRate = rate;
         //刷新Canvas
         invalidate();
     }
 
-    float getKnobExpandRate(){
+    float getKnobExpandRate() {
         return this.knobExpandRate;
     }
 
     /**
      * 设置滑片滑动速率
+     *
      * @param rate 速率
      */
-    void setKnobMoveRate(float rate){
+    void setKnobMoveRate(float rate) {
         this.knobMoveRate = rate;
         //刷新Canvas
         invalidate();
     }
 
-    float getKnobMoveRate(){
+    float getKnobMoveRate() {
         return knobMoveRate;
     }
 
     @Override
-    protected void onAttachedToWindow(){
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         isAttachedToWindow = true;
         //是否重写-手动设置开关状态setOn
-        if(dirtyAnimation){
+        if (dirtyAnimation) {
             knobState = this.isOn;
-            if(knobState){
+            if (knobState) {
                 if (reverseEnabled) {
                     //滑片移动-移动至左边
                     knobMoveAnimator.setFloatValues(knobMoveRate, 0.0F);
-                }else{
+                } else {
                     //滑片移动-移动至右边
                     knobMoveAnimator.setFloatValues(knobMoveRate, 1.0F);
                 }
@@ -392,11 +401,11 @@ public class ShSwitchView extends View {
                 //遮罩收缩
                 innerContentAnimator.setFloatValues(innerContentRate, 0.0F);
                 innerContentAnimator.start();
-            }else{
+            } else {
                 if (reverseEnabled) {
                     //滑片移动-移动至右边
                     knobMoveAnimator.setFloatValues(knobMoveRate, 1.0F);
-                }else{
+                } else {
                     //滑片移动-移动至左边
                     knobMoveAnimator.setFloatValues(knobMoveRate, 0.0F);
                 }
@@ -410,8 +419,8 @@ public class ShSwitchView extends View {
             knobExpandAnimator.setFloatValues(knobExpandRate, 0.0F);
             knobExpandAnimator.start();
 
-            if(ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn){
-                ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(isOn);
+            if (ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn) {
+                ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(ShSwitchView.this, isOn);
             }
 
             dirtyAnimation = false;
@@ -419,19 +428,19 @@ public class ShSwitchView extends View {
     }
 
     @Override
-    protected void onDetachedFromWindow(){
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         isAttachedToWindow = false;
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         width = MeasureSpec.getSize(widthMeasureSpec);
         height = MeasureSpec.getSize(heightMeasureSpec);
 
         //make sure widget remain in a good appearance
-        if((float) height / (float) width < 0.33333F){
+        if ((float) height / (float) width < 0.33333F) {
             height = (int) ((float) width * 0.33333F);
 
             widthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.getMode(widthMeasureSpec));
@@ -460,35 +469,37 @@ public class ShSwitchView extends View {
 
         intrinsicKnobWidth = knobBound.height();
         knobMaxExpandWidth = (float) width * 0.7F;
-        if(knobMaxExpandWidth > knobBound.width() * 1.25F){
+        if (knobMaxExpandWidth > knobBound.width() * 1.25F) {
             knobMaxExpandWidth = knobBound.width() * 1.25F;
         }
     }
 
-    public boolean isOn(){
+    public boolean isOn() {
         return this.isOn;
     }
 
     /**
      * 设置开关状态
+     *
      * @param on true开，false关
      */
-    public void setOn(boolean on){
+    public void setOn(boolean on) {
         setOn(on, false);
     }
 
     /**
      * 设置开关状态
-     * @param on true开，false关
+     *
+     * @param on       true开，false关
      * @param animated 是否带动画效果：true是，false否
      */
-    public void setOn(boolean on, boolean animated){
+    public void setOn(boolean on, boolean animated) {
 
-        if(this.isOn == on){
+        if (this.isOn == on) {
             return;
         }
 
-        if(!isAttachedToWindow && animated){
+        if (!isAttachedToWindow && animated) {
             dirtyAnimation = true;
             this.isOn = on;
 
@@ -498,38 +509,38 @@ public class ShSwitchView extends View {
         this.isOn = on;
         knobState = this.isOn;
 
-        if(!animated){
-            if(on){
+        if (!animated) {
+            if (on) {
                 if (reverseEnabled) {
                     setKnobMoveRate(0.0F);
-                }else{
+                } else {
                     setKnobMoveRate(1.0F);
                 }
                 setInnerContentRate(0.0F);
-            }else{
+            } else {
                 if (reverseEnabled) {
                     setKnobMoveRate(1.0F);
-                }else{
+                } else {
                     setKnobMoveRate(0.0F);
                 }
                 setInnerContentRate(1.0F);
             }
             setKnobExpandRate(0.0F);
-        }else{
-            if(knobState){
+        } else {
+            if (knobState) {
                 if (reverseEnabled) {
                     knobMoveAnimator.setFloatValues(knobMoveRate, 0.0F);
-                }else {
+                } else {
                     knobMoveAnimator.setFloatValues(knobMoveRate, 1.0F);
                 }
                 knobMoveAnimator.start();
 
                 innerContentAnimator.setFloatValues(innerContentRate, 0.0F);
                 innerContentAnimator.start();
-            }else{
+            } else {
                 if (reverseEnabled) {
                     knobMoveAnimator.setFloatValues(knobMoveRate, 1.0F);
-                }else{
+                } else {
                     knobMoveAnimator.setFloatValues(knobMoveRate, 0.0F);
                 }
                 knobMoveAnimator.start();
@@ -541,34 +552,35 @@ public class ShSwitchView extends View {
             knobExpandAnimator.start();
         }
 
-        if(ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn){
-            ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(isOn);
+        if (ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn) {
+            ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(ShSwitchView.this, isOn);
         }
     }
 
     /**
      * 设置开状态颜色
+     *
      * @param tintColor 颜色资源值
      */
-    public void setTintColor(int tintColor){
+    public void setTintColor(int tintColor) {
         this.tintColor = tintColor;
         tempTintColor = this.tintColor;
     }
 
-    public int getTintColor(){
+    public int getTintColor() {
         return this.tintColor;
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event){
-        if(!isEnabled()){
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!isEnabled()) {
             return false;
         }
 
-        switch(event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                if(!knobState){
+                if (!knobState) {
                     //变化
                     innerContentAnimator = ObjectAnimator.ofFloat(ShSwitchView.this, innerContentProperty, innerContentRate, 1.0F);
                     //设置时间
@@ -586,8 +598,8 @@ public class ShSwitchView extends View {
 
                 isOn = knobState;
 
-                if(ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn){
-                    ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(isOn);
+                if (ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn) {
+                    ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(ShSwitchView.this, isOn);
                 }
 
                 break;
@@ -599,18 +611,18 @@ public class ShSwitchView extends View {
     }
 
     @Override
-    public void setEnabled(boolean enabled){
+    public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
 
-        if(enabled){
+        if (enabled) {
             this.tintColor = tempTintColor;
-        }else{
+        } else {
             this.tintColor = this.rGBColorTransform(0.5F, tempTintColor, 0xFFFFFFFF);
         }
     }
 
     @Override
-    public void onDraw(Canvas canvas){
+    public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         //innerContentCalculation begin - 扩展收缩遮罩
@@ -627,9 +639,9 @@ public class ShSwitchView extends View {
         //判断滑片是否在左边
         boolean left = knobBound.left + knobBound.width() / 2 > centerX;
 
-        if(left){
+        if (left) {
             knobBound.left = knobBound.right - w;
-        }else{
+        } else {
             knobBound.right = knobBound.left + w;
         }
         //knobExpandCalculation end
@@ -641,7 +653,7 @@ public class ShSwitchView extends View {
         //颜色变换
         if (reverseEnabled) {
             this.colorStep = rGBColorTransform(knobMoveRate, tintColor, BACKGROUND_COLOR);
-        }else{
+        } else {
             this.colorStep = rGBColorTransform(knobMoveRate, BACKGROUND_COLOR, tintColor);
         }
 
@@ -673,7 +685,7 @@ public class ShSwitchView extends View {
         canvas.drawRoundRect(knobBound, cornerRadius - outerStrokeWidth, cornerRadius - outerStrokeWidth, paint);
     }
 
-    private void drawRoundRect(float left, float top, float right, float bottom, float radius, Canvas canvas, Paint paint){
+    private void drawRoundRect(float left, float top, float right, float bottom, float radius, Canvas canvas, Paint paint) {
         tempForRoundRect.left = left;
         tempForRoundRect.top = top;
         tempForRoundRect.right = right;

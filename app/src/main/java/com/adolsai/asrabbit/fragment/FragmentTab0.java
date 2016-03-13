@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.adolsai.asrabbit.R;
+import com.adolsai.asrabbit.activity.SettingActivity;
 import com.adolsai.asrabbit.adapter.PartitionAdapter;
 import com.adolsai.asrabbit.base.AsRabbitBaseFragment;
 import com.adolsai.asrabbit.listener.RequestListener;
@@ -20,6 +21,7 @@ import com.adolsai.asrabbit.manager.PartitionManager;
 import com.adolsai.asrabbit.model.Partition;
 import com.adolsai.asrabbit.views.AsRabbitTitleBar;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
+import com.ht.baselib.utils.ActivityUtil;
 import com.ht.baselib.utils.LocalDisplay;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.utils.SoftInputMethodUtils;
@@ -36,16 +38,16 @@ import butterknife.ButterKnife;
 
 public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    @Bind(R.id.as_rabbit_title_bar_fragment0)
-    AsRabbitTitleBar asRabbitTitleBarFragment0;
+    @Bind(R.id.as_rabbit_title_bar)
+    AsRabbitTitleBar asRabbitTitleBar;
     @Bind(R.id.inner_swipe_list_view_fragment0_favourite)
     InnerSwipeListView innerSwipeListViewFragment0Favourite;
     @Bind(R.id.inner_swipe_list_view_fragment0_other)
     InnerSwipeListView innerSwipeListViewFragment0Other;
     @Bind(R.id.et_item_post_url)
     EditText etItemPostUrl;
-    @Bind(R.id.tv_item_cancel)
-    TextView tvItemCancel;
+    @Bind(R.id.tv_item_go)
+    TextView tvItemGo;
 
     private PartitionAdapter partitionFavouriteAdapter;
     private PartitionAdapter partitionOtherAdapter;
@@ -62,11 +64,15 @@ public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickLi
     @Override
     protected void initViews() {
         //初始化标题栏
-        asRabbitTitleBarFragment0.setIvBarLeftIcon(R.mipmap.icon_carrot);
-        asRabbitTitleBarFragment0.setTvBarCenterTitle(getString(R.string.fragment0_title));
-        asRabbitTitleBarFragment0.setIvBarRightIcon(R.mipmap.icon_setting);
+        asRabbitTitleBar.setIvBarLeftIcon(R.mipmap.icon_carrot);
+        asRabbitTitleBar.setTvBarCenterTitle(getString(R.string.fragment0_title));
+        asRabbitTitleBar.setIvBarRightIcon(R.mipmap.icon_setting);
         innerSwipeListViewFragment0Favourite.setOnItemClickListener(this);
         innerSwipeListViewFragment0Other.setOnItemClickListener(this);
+        innerSwipeListViewFragment0Other.setOnItemClickListener(this);
+        etItemPostUrl.setOnClickListener(this);
+        tvItemGo.setOnClickListener(this);
+
         //强制收回软键盘
         etItemPostUrl.post(new Runnable() {
             @Override
@@ -75,7 +81,6 @@ public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickLi
             }
         });
 
-        etItemPostUrl.setOnClickListener(this);
         etItemPostUrl.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -89,6 +94,40 @@ public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickLi
 
             @Override
             public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        asRabbitTitleBar.setAsRabbitTitleBarClick(new AsRabbitTitleBar.AsRabbitTitleBarClick() {
+            @Override
+            public void barLeftIconClick(View v) {
+
+            }
+
+            @Override
+            public void barLeftTipsClick(View v) {
+
+            }
+
+            @Override
+            public void barCenterTitleClick(View v) {
+
+            }
+
+            @Override
+            public void barRightTipsClick(View v) {
+
+            }
+
+            @Override
+            public void barRightIconClick(View v) {
+                //跳转到设置界面
+                ActivityUtil.startActivityByAnim(getActivity(), SettingActivity.class);
+
+            }
+
+            @Override
+            public void barRightIconExpandClick(View v) {
 
             }
         });
@@ -233,13 +272,17 @@ public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.et_item_post_url:
-                //弹出输入窗口
+                LogUtils.e("sharing", "rl_fragment0_go click");
+                etItemPostUrl.setCursorVisible(true);
                 SoftInputMethodUtils.showSoftInputMethod(mContext, etItemPostUrl);
-                tvItemCancel.setText("前往");
+                tvItemGo.setText("前往");
                 break;
-            case R.id.tv_item_cancel:
-                //前进到该url
+            case R.id.tv_item_go:
+                LogUtils.e("sharing", "跳转URl");
+                SoftInputMethodUtils.hideSoftInputMethod(mContext, etItemPostUrl);
+
                 break;
+
             default:
 
                 break;
