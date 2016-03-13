@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/base_title_bar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:minHeight="@dimen/common_item_height">
+    
+    <TextView
+        android:id="@+id/tv_partition_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/common_margin_left"
+        android:textSize="@dimen/text_size_16" />
+
+    <TextView
+        android:id="@+id/tv_partition_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/common_margin_right"
+        android:drawablePadding="10dp"
+        android:drawableRight="@mipmap/icon_right_arrow"
+        android:textSize="@dimen/text_size_14" />
+
+
+</RelativeLayout>

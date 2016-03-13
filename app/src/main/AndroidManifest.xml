@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.adolsai.asrabbit">
+
+    <!--
+      uses-permission 配置开始
+      =====================================================
+ -->
+    <!--电话权限，危险权限，需要问询用户-->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--位置定位权限，危险权限，需要问询用户-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--读写外置存储权限，危险权限，需要问询用户-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--读取媒体文件/拍照/录像权限，危险权限，需要问询用户-->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <!--一般权限，不需要问询用户-->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <!-- Bugly所需额外权限 by zmingchun-->
+    <!--Allows an application to read the low-level system log files.-->
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <!-- Bugly权限配置结束-->
+
+    <!--
+         uses-permission 配置结束
+         =====================================================
+    -->
+
+    <application
+        android:name=".app.AsRabbitApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:screenOrientation="portrait"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:windowSoftInputMode="stateUnchanged|adjustResize">
+        <activity android:name=".activity.MainActivity" />
+
+        <activity android:name=".activity.WelcomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            />
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ht.baselib" >
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name" >
+        <service
+                android:name="com.baidu.location.f"
+                android:enabled="true"
+                android:process=":remote" >
+            <intent-filter>
+                <action android:name="com.baidu.location.service_v2.2" >
+                </action>
+            </intent-filter>
+        </service>
+        <!-- meta-data需要写在application中 -->
+        <meta-data
+                android:name="com.baidu.lbsapi.API_KEY"
+                android:value="qhKoXFTUSAqGRvjURW6Bm07g" />
+
+
+        <!--权限问询过渡页-->
+        <activity
+            android:name="com.ht.baselib.manager.permission.PermissionsActivity"
+            />
+    </application>
+
+</manifest>

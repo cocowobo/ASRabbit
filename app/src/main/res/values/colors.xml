@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--基础颜色 -->
+    <color name="base_color">#3BD2C9</color>
+
+    <!--系统状态栏 背景色 -->
+    <color name="base_sys_bar_bg">#42B9B8</color>
+
+    <!--白色 -->
+    <color name="white">#FFFFFF</color>
+
+    <!--分割线颜色 -->
+    <color name="common_divider">#c8c7cc</color>
+
+    <color name="global_price_orange">#FF5800</color>
+</resources>

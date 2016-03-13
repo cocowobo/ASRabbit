@@ -1,0 +1,277 @@
+apply plugin: 'com.android.application'
+/**引入代码检查*/
+apply from: '../config/quality.gradle'
+/** 统计项目总方法数，以观察是否会超65536 */
+apply plugin: 'com.getkeepsafe.dexcount'
+/** 添加Bugly插件 */
+apply plugin: 'bugly'
+
+/**定义打包时间函数*/
+def packageTime() {
+    return new Date().format("yyyyMMdd-HHmm")
+}
+
+/**指定gradle以utf8编码进行java编译*/
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.0"
+    /**发布签名配置-通过读取配置文件设置或者利用Android Studio提供的打包功能**/
+    signingConfigs {
+        debug {}
+        release {}
+    }
+    /**默认配置*/
+    defaultConfig {
+        applicationId APPLICATION_ID
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode Integer.parseInt(VERSION_CODE)
+        versionName VERSION_NAME
+        ndk {
+            //模块名称
+            moduleName APP_NAME
+            //设置支持的SO库架构，默认是支持三个平台的"armeabi", "armeabi-v7a", "x86"；
+            abiFilters "armeabi", "armeabi-v7a"
+        }
+
+        /**开启multidex支持，dex突破65535的限制*/
+        multiDexEnabled true
+        /**默认是guanfang的渠道*/
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "aht"]
+    }
+
+    /**增加虚拟机堆内存大小*/
+    dexOptions {
+        javaMaxHeapSize "2048M"
+        preDexLibraries = false
+    }
+
+    sourceSets {
+        main {
+            //指明jniLibs的目录
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7 //由于Android Studio1.4目前编译的源码最高只支持1.7，1.8还没有完全支持
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    /**build时lint检查，若有错误或者警告是否终止：true是；false否*/
+    lintOptions {
+        abortOnError false
+        disable 'InvalidPackage'
+    }
+
+    /**构建打包配置*/
+    buildTypes {
+        debug {//开发环境
+            //是否允许调试
+            debuggable true
+            //是否混淆
+            minifyEnabled false
+            //混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //开启压缩
+            zipAlignEnabled true
+            //打包签名配置
+            signingConfig signingConfigs.debug
+            //清除无用资源
+            shrinkResources true
+
+            //自定义字段，是否显示业务码,正式发布的版本不启用该配置
+            buildConfigField "boolean", "IS_SHOW_LOG", "true"
+            //自定义字段，app 英文名称
+            buildConfigField "String", "APP_NAME", "\"${APP_NAME}\""
+            //自定义字段，信息加解密种子
+            buildConfigField "String", "ENCRYPT_SEED", "\"ht_seed#\""
+
+        }
+        release {//生产环境
+            //是否允许调试
+            debuggable false
+            //是否混淆
+            minifyEnabled true
+            //混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //开启压缩
+            zipAlignEnabled true
+            //清除无用资源
+            shrinkResources true
+            //打包签名配置
+            signingConfig signingConfigs.release
+
+            //自定义字段，是否显示业务码,正式发布的版本不启用该配置
+            buildConfigField "boolean", "IS_SHOW_LOG", "false"
+            //自定义字段，app 英文名称
+            buildConfigField "String", "APP_NAME", "\"${APP_NAME}\""
+            //自定义字段，信息加解密种子
+            buildConfigField "String", "ENCRYPT_SEED", "\"ht_seed#\""
+
+        }
+    }
+
+    /**
+     * 为了避免2.3机型runtime 的linearAlloclimit , 保持每一个dex体积<4M，设置每个dex的最大方法数为48000
+     */
+    applicationVariants.all {
+        variant ->
+            dex.doFirst {
+                dex ->
+                    if (dex.additionalParameters == null) {
+                        dex.additionalParameters = ['--multi-dex']
+                    } else {
+                        dex.additionalParameters += '--multi-dex'
+                    }
+
+                    // Add more additional parameters like this:
+                    dex.additionalParameters += '--set-max-idx-number=48000'
+            }
+    }
+
+    /**
+     * 修改生成的最终文件名
+     * rename the apk with the version name
+     * add output file sub folder by build type
+     * */
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                //输出apk文件夹
+                String outputDirName = outputFile.parent + "/${variant.buildType.name}"
+                File outputDirectory = new File(outputDirName)
+
+                //构建类型名称
+                String buildTypeName = "${variant.buildType.name}"
+                //输出apk名称格式
+                def fileName
+                if (buildTypeName.equals("debug") || buildTypeName.equals("beta")) {
+                    fileName = APP_NAME + "-v${variant.versionName}(${variant.versionCode})-${variant.productFlavors[0].name}-${variant.buildType.name}.apk".toLowerCase()
+                } else {//打包时用
+                    fileName = APP_NAME + "-v${variant.versionName}(${variant.versionCode})-${variant.productFlavors[0].name}-${packageTime()}-${variant.buildType.name}.apk".toLowerCase()
+                }
+                output.outputFile = new File(outputDirectory, fileName)
+            }
+        }
+    }
+
+    /**
+     * 渠道配置-批量设置（适用于渠道不多情况）
+     * <br/>最终改为结合360加固辅助打包
+     * */
+    productFlavors {
+        aht {/**000-本应用官网*/ }
+//        cqq { /**011-腾讯应用宝*/ }
+//        c360 { /**012-360手机助手*/ }
+//        cbaidu { /**013-百度助手*/ }
+//        c91 { /**014-91应用市场*/ }
+//        caz { /**015-安卓市场*/ }
+//        cwandoujia { /**016-豌豆荚应用商店*/ }
+//        cmi { /**017-小米应用商店*/ }
+//        chw { /**018-华为应用市场*/ }
+//        clenovo { /**019-联想乐商店*/ }
+//        cmm { /**020-移动MM*/ }
+    }
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/services/javax.annotation.processing.Processor' //for butterknife
+        exclude 'META-INF/MANIFEST.MF'
+    }
+}
+
+/*************************读取配置***************************/
+/**获取签名配置*/
+/***
+ * signing.properties文件放置于主应用module目录下，不加入git管理，内容为：
+ ##打包签名配置
+ [USERDATA]
+ STORE_FILE=../../android_demo_keystore.jks ##/path/to/your.jks
+ STORE_PASSWORD=androiddemo
+ KEY_ALIAS=androiddemo
+ KEY_PASSWORD=androiddemo
+ */
+File propFile = file('signing.properties');
+if (propFile.exists()) {
+    def Properties props = new Properties()
+    props.load(new FileInputStream(propFile))
+    if (props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+            props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+    } else {
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    android.buildTypes.release.signingConfig = null
+}
+
+/**
+ * 项目依赖全局配置
+ * Force Android Studio to Update Maven Snapshot Dependencies
+ * */
+configurations.all {
+    // check for updates every build（实时更新snapshot版本）
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+
+    //强制引用23.0.0版本，避免androidTestCompile 'com.android.support.test:runner:0.4' 自动引用23.0.1
+    resolutionStrategy.force 'com.android.support:support-annotations:23.0.0'
+}
+
+/**项目依赖配置*/
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':baselib')
+    //引用Bugly依赖包
+    compile 'com.tencent.bugly:crashreport:1.2.8'
+
+}
+
+/**bugly账号相关配置*/
+bugly {
+    appId = '900021046'          //注册时分配的App ID
+    appKey = 'RQdieotjNC0FQQqQ'  //注册时分配的App Key
+    execute = true               //插件开关
+    upload = true                 //上传开关
+}
+
+/*************************MultiDex task相关配置***************************/
+//multidex.keep列出一份启动App时需要加载的类的清单，并告诉编译器这些类要保留在主dex文件中
+//每次在编译的时候将multidex.keep文件中的内容添加到`maindexlist.txt"中
+
+android.applicationVariants.all { variant ->
+    task "fix${variant.name.capitalize()}MainDexClassList" << {
+        logger.info "Fixing main dex keep file for $variant.name"
+        File keepFile = new File("$buildDir/intermediates/multi-dex/${variant.productFlavors[0].name}/$variant.buildType.name/maindexlist.txt")
+
+        keepFile.withWriterAppend { w ->
+            // Get a reader for the input file
+            w.append('\n')
+            new File("${projectDir}/multidex.keep").withReader { r ->
+                // And write data from the input into the output
+                w << r << '\n'
+            }
+            logger.info "Updated main dex keep file for ${keepFile.getAbsolutePath()}\n$keepFile.text"
+        }
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    android.applicationVariants.all { variant ->
+        if (task.name == "create${variant.name.capitalize()}MainDexClassList") {
+            task.finalizedBy "fix${variant.name.capitalize()}MainDexClassList"
+        }
+    }
+}

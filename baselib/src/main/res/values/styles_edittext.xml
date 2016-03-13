@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--通用编辑框的style-->
+    <style name="HtCommonEditText">
+        <item name="android:layout_height">@dimen/ht_common_edittext_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/ht_global_main_black</item>
+        <item name="android:textColorHint">@color/ht_global_aux_black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+</resources>

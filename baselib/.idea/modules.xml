@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../basedemo/basedemo.iml" filepath="$PROJECT_DIR$/../basedemo/basedemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/baselib.iml" filepath="$PROJECT_DIR$/baselib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../htbaselib.iml" filepath="$PROJECT_DIR$/../htbaselib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../htmanager/htmanager.iml" filepath="$PROJECT_DIR$/../htmanager/htmanager.iml" />
+    </modules>
+  </component>
+</project>

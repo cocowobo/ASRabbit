@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--交互设计要求-全局颜色值-->
+    <!--主色-主体配色，用于需要突出的文字、按钮等（如需要突出的价格、购买按钮）-->
+    <color name="ht_global_main">#38D2C9</color>
+    <!--点压时的颜色-->
+    <color name="ht_global_press">#2DA39C</color>
+    <!--禁用时的颜色-->
+    <color name="ht_global_disabled">#C0E1DF</color>
+    <!--主体黑-用于主体重要文字信息（如标题文字）-->
+    <color name="ht_global_main_black">#222222</color>
+    <!--辅助黑-用于提示语、重要说明文字及图表，仅次于主体黑（如信息内容）-->
+    <color name="ht_global_aux_black">#6B6A72</color>
+    <!--主体灰-用于辅助说明文字及图表（如输入框的默认提示文字、默认缺省图Icon）-->
+    <color name="ht_global_main_gray">#A1A7AE</color>
+    <!--价格色-用于价格显示（如电商模块、账单流程、支付模块等和资金有关的高亮色）-->
+    <color name="ht_global_price_orange">#FF5800</color>
+
+    <!--控件不可用时上面的文字颜色 by zmingchun-->
+    <color name="ht_common_text_disabled">#C7C7C7</color>
+    <!--辅助按钮-不可点击状态文字颜色 by zmingchun-->
+    <color name="ht_ht_common_aux_btn_disabled_text">@color/ht_common_text_disabled</color>
+    <!--描边颜色-一般用于按钮描边  by zmingchun-->
+    <color name="ht_common_stroke">#C5C5C5</color>
+    <!-- 输入框提示文本颜色 by zmingchun -->
+    <color name="ht_input_hint_color">#c8c7cc</color>
+
+    <!--通用按钮不同点击状态下的颜色 by zmingchun-->
+    <color name="ht_common_btn_disabled">#EBEBEB</color>
+    <color name="ht_common_btn_normal">#F5F5F5</color>
+    <color name="ht_common_btn_press">#E4E4E4</color>
+
+    <!--辅助按钮不同点击状态下的颜色 by zmingchun-->
+    <color name="ht_common_aux_btn_disabled">#EBEBEB</color>
+    <color name="ht_common_aux_btn_normal">#FCFCFC</color>
+    <color name="ht_common_aux_btn_press">#E7E7E7</color>
+
+    <!--透明相关-->
+    <!--透明-->
+    <color name="transparent">#00000000</color>
+    <color name="ht_transparent60">#000000</color>
+    <color name="ht_transparent80">#CC000000</color>
+
+    <!-- 自定义Pickerview颜色-->
+    <color name="ht_wheel_timebtn_nor">#54a3fa</color>
+    <color name="ht_wheel_timebtn_pre">#CCCCCC</color>
+
+    <!-- 40%浅灰色 -->
+    <color name="ht_gray_light40">#b4b3b3</color>
+    <!-- 浅灰色 -->
+    <color name="ht_gray_purple9">#999999</color>
+
+    <!--占位图颜色-用于图片加载-->
+    <!-- 加载图片的占位图颜色-->
+    <color name="ht_imageView_load_placeholder0">#9f1f15</color>
+    <color name="ht_imageView_load_placeholder1">#84b118</color>
+    <color name="ht_imageView_load_placeholder2">#e98d08</color>
+    <color name="ht_imageView_load_placeholder3">#3b8be2</color>
+
+    <!-- 加载图片失败时的颜色-->
+    <color name="ht_imageView_load_error">#ff9999</color>
+    <!-- 按钮选择控件颜色-->
+    <color name="ht_dialog_action_sheet_blue">#4A90E2</color>
+    <!-- 日期选择控件颜色-->
+    <color name="ht_wheel_line_border">#D0D0D0</color>
+    <!-- 标题-->
+    <color name="base_titlebar_bg">#3BD2C9</color>
+    <color name="base_titlebar_text_common">#FFFFFF</color>
+</resources>

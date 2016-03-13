@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/base_title_bar"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:background="#3BD2C9">
+
+    <ImageView
+        android:id="@+id/iv_bar_left_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/common_margin_left"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_bar_left_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/iv_bar_left_icon"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_bar_center_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rl_bar_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/common_margin_right">
+
+        <TextView
+            android:id="@+id/tv_bar_right_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_bar_right_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_bar_right_icon_expand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@+id/rl_bar_right"
+        android:visibility="gone" />
+
+
+</RelativeLayout>

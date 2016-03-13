@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">BaseLib</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!--空字符串-->
+    <string name="null_or_empty">""</string>
+    <!-- 公共的提示-->
+    <string name="pub_loading_data">数据加载中，请稍候...</string>
+    <string name="pub_load_data_fail">获取数据失败</string>
+    <string name="pub_no_more_data">没有更多数据</string>
+    <string name="pub_push_data_fail">提交数据失败</string>
+    <string name="pub_has_no_data">暂无数据</string>
+    <string name="pub_input_error">格式错误，请重新输入</string>
+    <string name="pub_no_network_available">未检测到可用网络，请确保网络可用。</string>
+    <string name="ht_common_delete">删除</string>
+    <string name="ht_common_cancel">取消</string>
+    <string name="ht_common_submit">提交</string>
+    <string name="ht_common_submit_successfully">提交成功</string>
+    <string name="ht_common_loading_data">加载中...</string>
+
+    <!--自定义dialog-->
+    <string name="custom_dialog_default_tip">温馨提示</string>
+    <string name="custom_dialog_btn_confirm">确定</string>
+    <string name="custom_dialog_btn_cancel">取消</string>
+    <!--斜线分割符-->
+    <string name="ht_slash_text">/</string>
+
+    <!-- 自定义Pickerview 相关字符串-->
+    <string name="pickerview_cancel">取消</string>
+    <string name="pickerview_submit">确定</string>
+    <string name="pickerview_year">年</string>
+    <string name="pickerview_month">月</string>
+    <string name="pickerview_day">日</string>
+    <string name="pickerview_hours">时</string>
+    <string name="pickerview_minutes">分</string>
+    <string name="pickerview_seconds">秒</string>
+
+    <!--上下拉刷新-->
+    <string name="pull_to_refresh_pull_label">下拉刷新</string>
+    <string name="pull_to_refresh_release_label">松开即可刷新</string>
+    <string name="pull_to_refresh_refreshing_label">努力加载中…</string>
+    <!-- Just use standard Pull Down String when pulling up. These can be set for languages which require it -->
+    <string name="pull_to_refresh_from_bottom_pull_label">@string/pull_to_refresh_pull_label</string>
+    <string name="pull_to_refresh_from_bottom_release_label">@string/pull_to_refresh_release_label</string>
+    <string name="pull_to_refresh_from_bottom_refreshing_label">@string/pull_to_refresh_refreshing_label</string>
+    <string name="click_load_more">点击加载更多</string>
+    <string name="footer_view_loading">加载中...</string>
+    <!--上下拉刷新-->
+    <!--滑动删除listview-->
+    <string name="show_single_menu">show single menu</string>
+    <string name="no_slide">NO Slide</string>
+    <!--滑动删除listview-->
+
+    <!-- 图片选择器-->
+    <string name="folder_all">所有照片</string>
+    <string name="preview">预览</string>
+    <string name="msg_no_camera">没有系统相机</string>
+    <string name="msg_amount_limit">已经达到最高选择数量</string>
+    <string name="ht_download_file_successfully">图片已经成功下载</string>
+    <string name="ht_download_file_failed">图片下载失败</string>
+    <string name="ht_save_photo">保存图片</string>
+    <!-- 图片选择器-->
+
+    <!--权限问询相关-->
+    <string name="permission">权限(permission)</string>
+    <string name="no_permissions">应用需要必要的运行权限</string>
+    <string name="settings">设置</string>
+    <string name="help">帮助</string>
+    <string name="string_help_text">当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。</string>
+    <string name="quit">退出</string>
+
+    <!-- 扫描 -->
+    <string name="scan_hint">将二维码放入框内，即可自动扫描</string>
+    <string name="scan_title">扫描二维码</string>
+</resources>

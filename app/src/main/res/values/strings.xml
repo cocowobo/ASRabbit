@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">AsRabbit</string>
+    <!--Fragment0-->
+    <string name="fragment0_title">AsRabbit</string>
+    <!--Fragment1-->
+    <string name="fragment1_title">历史</string>
+    <!--Fragment2-->
+    <string name="fragment2_title">收藏</string>
+    <!--tab-->
+    <string name="tab0_name">最常查看</string>
+    <string name="tab1_name">历史记录</string>
+    <string name="tab2_name">个人收藏</string>
+
+    <!--公用-->
+    <string name="text_ok">确定</string>
+    <string name="text_cancel">取消</string>
+    <!--主界面tab的颜色-->
+    <string name="color_tab_normal">"#9299A6"</string>
+    <string name="color_bab_s">"#3bd2c9"</string>
+
+
+</resources>

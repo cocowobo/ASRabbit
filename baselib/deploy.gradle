@@ -1,0 +1,84 @@
+/**=================================发布至公司maven仓库=====================================*/
+/**引用maven插件发布aar包*/
+apply plugin: 'maven'
+
+/**指定gradle以utf8编码进行java编译*/
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+/**
+ * 判断是否发布正式版
+ * @return
+ */
+def isReleaseBuild() {
+    return COMPILE_TYPE.contains("SNAPSHOT") == false
+}
+
+/**
+ * 获取maven账号
+ * @return
+ */
+def getRepositoryUsername() {
+    return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
+}
+
+/**
+ * 获取maven密码
+ * @return
+ */
+def getRepositoryPassword() {
+    return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
+}
+
+/**
+ * 上传aar包至mavan库
+ */
+afterEvaluate { project ->
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                pom.groupId = GROUP
+                pom.artifactId = POM_ARTIFACT_ID
+                pom.version = new StringBuffer().append(VERSION_NAME).append("-").append(COMPILE_TYPE).toString()
+                repository(url:RELEASE_REPOSITORY_URL) {
+                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                }
+                snapshotRepository(url: SNAPSHOT_REPOSITORY_URL) {
+                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                }
+            }
+        }
+    }
+
+    task androidSourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.sourceFiles
+    }
+
+    task androidJavadocs(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += configurations.compile
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+    task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+        classifier = 'javadoc'
+        from androidJavadocs.destinationDir
+    }
+
+    androidJavadocs {
+        options{
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            author true
+            version true
+            links "http://docs.oracle.com/javase/7/docs/api"
+            title POM_ARTIFACT_ID
+        }
+    }
+
+    artifacts {
+        archives androidSourcesJar
+        //archives androidJavadocsJar
+    }
+}

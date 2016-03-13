@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Copyright 2015 Vincent Brison.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+    <suppress checks="[a-zA-Z0-9]*" files="R.java" />
+    <suppress checks="[a-zA-Z0-9]*" files="BuildConfig.java" />
+    <suppress checks="[a-zA-Z0-9]*" files="Test" />
+    <suppress checks="[a-zA-Z0-9]*" files=".*_.*Factory.java" />
+    <suppress checks="[a-zA-Z0-9]*" files=".*ViewInjector.java" />
+    <suppress checks="[a-zA-Z0-9]*" files=".*_MembersInjector.java" />
+
+    <!--baselib module例外规则-->
+    <!--排除检测MD5.java文件-->
+    <suppress checks="[a-zA-Z0-9]*" files="MD5.java" />
+    <!--排除检测Base64.java文件-->
+    <suppress checks="[a-zA-Z0-9]*" files="Base64.java" />
+    <!--排除检测BlurUtil.java文件-->
+    <suppress checks="[a-zA-Z0-9]*" files="BlurUtil.java" />
+
+    <!--排除检测包pulltorefresh（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]pulltorefresh[\\/]" />
+    <!--排除检测包PullToRefreshView（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]PullToRefreshView[\\/]" />
+    <!--排除检测包subview（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]pickerview[\\/]subview[\\/]" />
+    <!--排除检测包scan zxing（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]scan[\\/]zxing[\\/]" />
+    <!--排除检测包io（全路径）下的所有文件-->
+    <suppress checks="." files="libcore[\\/]io[\\/]" />
+    <!--排除检测包swipemenulistview（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]swipemenulistview[\\/]" />
+    <!--排除检测包photoview（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]photoview[\\/]" />
+    <!--排除检测包imageselector（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]imageselector[\\/]" />
+    <!--排除检测包com.ht.baselib.helper.download（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]helper[\\/]download[\\/]" />
+    <!--排除检测包wheelview（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]wheelview[\\/]" />
+    <!--排除检测包viewflow（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]viewflow[\\/]" />
+    <!--排除检测包bannerview（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]bannerview[\\/]" />
+    <!--排除检测包scan（全路径）下的所有文件-->
+    <suppress checks="." files="com[\\/]ht[\\/]baselib[\\/]views[\\/]scan[\\/]" />
+</suppressions>

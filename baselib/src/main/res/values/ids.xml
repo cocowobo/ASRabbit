@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--上下拉刷新-->
+    <item name="gridview" type="id" />
+    <item name="webview" type="id" />
+    <item name="scrollview" type="id" />
+    <!--上下拉刷新-->
+
+    <!--轮播bannner-->
+    <item name="cb_item_tag" type="id"></item>
+</resources>

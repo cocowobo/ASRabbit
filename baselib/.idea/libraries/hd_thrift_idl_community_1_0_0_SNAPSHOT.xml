@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="hd-thrift-idl-community-1.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.evergrande/hd-thrift-idl-community/1.0.0-SNAPSHOT/742e59b85f4170d530491ff15db142c075d22e9a/hd-thrift-idl-community-1.0.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.evergrande/hd-thrift-idl-community/1.0.0-SNAPSHOT/3f1f18be3231c6bea2e4396a90196887c31084a0/hd-thrift-idl-community-1.0.0-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
