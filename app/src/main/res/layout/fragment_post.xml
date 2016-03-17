@@ -17,19 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <SearchView
-                android:id="@+id/sv_post"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/common_item_height"
-                android:background="@color/common_divider"
-                android:inputType="textFilter"
-                android:queryHint="请输入您要查找的内容" />
-
             <com.adolsai.asrabbit.views.InnerSwipeListView
                 android:id="@+id/lv_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/sv_post"
                 android:background="@color/base_tab_white"
                 android:divider="@null"
                 android:listSelector="@android:color/transparent" />

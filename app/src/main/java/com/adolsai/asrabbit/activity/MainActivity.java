@@ -248,6 +248,7 @@ public class MainActivity extends AsRabbitBaseActivity implements View.OnClickLi
         //设置当前页的标签
         flag = TAB1;
         mainViewPager.setCurrentItem(flag, false);
+        fragmentTab0.refreshDate();
     }
 
     /**
@@ -260,6 +261,7 @@ public class MainActivity extends AsRabbitBaseActivity implements View.OnClickLi
         //设置当前页的标签
         flag = TAB2;
         mainViewPager.setCurrentItem(flag, false);
+        fragmentTab1.refreshDate();
     }
 
     /**
@@ -272,5 +274,6 @@ public class MainActivity extends AsRabbitBaseActivity implements View.OnClickLi
         ivTab0.setSelected(false);
         ivTab1.setSelected(false);
         ivTab2.setSelected(false);
+        fragmentTab2.refreshDate();
     }
 }

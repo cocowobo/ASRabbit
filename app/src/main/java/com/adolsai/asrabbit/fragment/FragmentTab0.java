@@ -3,11 +3,11 @@ package com.adolsai.asrabbit.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,7 +17,7 @@ import com.adolsai.asrabbit.activity.SettingActivity;
 import com.adolsai.asrabbit.adapter.PartitionAdapter;
 import com.adolsai.asrabbit.base.AsRabbitBaseFragment;
 import com.adolsai.asrabbit.listener.RequestListener;
-import com.adolsai.asrabbit.manager.PartitionManager;
+import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.Partition;
 import com.adolsai.asrabbit.views.AsRabbitTitleBar;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
@@ -36,7 +36,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class FragmentTab0 extends AsRabbitBaseFragment implements
+        View.OnClickListener, AdapterView.OnItemClickListener {
 
     @Bind(R.id.as_rabbit_title_bar)
     AsRabbitTitleBar asRabbitTitleBar;
@@ -73,30 +74,20 @@ public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickLi
         etItemPostUrl.setOnClickListener(this);
         tvItemGo.setOnClickListener(this);
 
-        //强制收回软键盘
-        etItemPostUrl.post(new Runnable() {
+        etItemPostUrl.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void run() {
-                SoftInputMethodUtils.hideSoftInputMethod(mContext, etItemPostUrl);
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    //do something;
+                    LogUtils.e("sharing", "搜索拉 ：" + etItemPostUrl.getText());
+                    return true;
+                }
+                return false;
             }
+
         });
 
-        etItemPostUrl.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         asRabbitTitleBar.setAsRabbitTitleBarClick(new AsRabbitTitleBar.AsRabbitTitleBarClick() {
             @Override
@@ -152,8 +143,8 @@ public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickLi
     }
 
 
-    private void refreshDate() {
-        PartitionManager.getFavouritePartition(new RequestListener() {
+    public void refreshDate() {
+        DataManager.getFavouritePartition(new RequestListener() {
             @Override
             public void getResult(Object result) {
                 if (result != null) {
@@ -164,7 +155,7 @@ public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickLi
             }
         });
 
-        PartitionManager.getOtherPartition(new RequestListener() {
+        DataManager.getOtherPartition(new RequestListener() {
             @Override
             public void getResult(Object result) {
                 if (result != null) {
@@ -272,13 +263,25 @@ public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.et_item_post_url:
-                LogUtils.e("sharing", "rl_fragment0_go click");
-                etItemPostUrl.setCursorVisible(true);
-                SoftInputMethodUtils.showSoftInputMethod(mContext, etItemPostUrl);
-                tvItemGo.setText("前往");
+                LogUtils.e("sharing", "et_item_post_url click1");
+                etItemPostUrl.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        etItemPostUrl.setFocusable(true);
+                        etItemPostUrl.setFocusableInTouchMode(true);
+                        etItemPostUrl.setCursorVisible(true);
+                        SoftInputMethodUtils.showSoftInputMethod(mContext, etItemPostUrl);
+                    }
+                });
+
+                tvItemGo.setText("取消");
+
                 break;
             case R.id.tv_item_go:
-                LogUtils.e("sharing", "跳转URl");
+                LogUtils.e("sharing", "tv_item_go click2");
+                tvItemGo.setText("");
+                etItemPostUrl.setText("");
+                etItemPostUrl.setCursorVisible(false);
                 SoftInputMethodUtils.hideSoftInputMethod(mContext, etItemPostUrl);
 
                 break;
@@ -295,4 +298,6 @@ public class FragmentTab0 extends AsRabbitBaseFragment implements View.OnClickLi
         Partition itemInfo = (Partition) parent.getItemAtPosition(position);//确认取的是adapte中的动态值
         LogUtils.e("sharing", "itemInfo is " + itemInfo.getTitle());
     }
+
+
 }

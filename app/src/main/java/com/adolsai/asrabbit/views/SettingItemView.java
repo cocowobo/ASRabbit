@@ -19,7 +19,8 @@ import com.ht.baselib.views.slideswitch.ShSwitchView;
  * @author hxm<br/>
  * @version 1.0 (2016-3-13 14:34)<br/>
  */
-public class SettingItemView extends RelativeLayout {
+public class SettingItemView extends RelativeLayout implements
+        View.OnClickListener, ShSwitchView.OnSwitchStateChangeListener {
     private TextView tvItemSettingHead;
     private TextView tvItemSettingTitle;
     private TextView tvItemSettingContent;
@@ -58,23 +59,9 @@ public class SettingItemView extends RelativeLayout {
         tvItemSettingTail = (TextView) findViewById(R.id.tv_item_setting_tail);
         swItemSetting = (ShSwitchView) findViewById(R.id.sw_item_setting);
         rlItemSettingRoot = (RelativeLayout) findViewById(R.id.rl_item_setting_root);
-        swItemSetting.setOnSwitchStateChangeListener(new ShSwitchView.OnSwitchStateChangeListener() {
-            @Override
-            public void onSwitchStateChange(View v, boolean isOn) {
-                if (settingItemViewListener != null) {
-                    settingItemViewListener.swItemSettingChange(v, isOn);
-                }
-            }
-        });
+        swItemSetting.setOnSwitchStateChangeListener(this);
 
-        rlItemSettingRoot.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (settingItemViewListener != null) {
-                    settingItemViewListener.rootOnClick(v);
-                }
-            }
-        });
+        rlItemSettingRoot.setOnClickListener(this);
     }
 
     /**
@@ -165,6 +152,20 @@ public class SettingItemView extends RelativeLayout {
 
     public void setSettingItemViewListener(SettingItemViewListener settingItemViewListener) {
         this.settingItemViewListener = settingItemViewListener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (settingItemViewListener != null) {
+            settingItemViewListener.rootOnClick(this);
+        }
+    }
+
+    @Override
+    public void onSwitchStateChange(boolean isOn) {
+        if (settingItemViewListener != null) {
+            settingItemViewListener.swItemSettingChange(this, isOn);
+        }
     }
 
 

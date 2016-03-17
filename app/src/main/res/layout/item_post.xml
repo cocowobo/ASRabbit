@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/base_title_bar"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:minHeight="@dimen/common_item_height">
+
+    <RelativeLayout
+        android:id="@+id/rl_post_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/post_plate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:drawableRight="@mipmap/icon_light"
+            android:gravity="center"
+            android:textColor="@color/base_second_text_color"
+            android:textSize="@dimen/text_size_14" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_post_read_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/base_second_text_color"
+                android:textSize="@dimen/text_size_14" />
+
+            <TextView
+                android:id="@+id/tv_post_read_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/base_second_text_color"
+                android:textSize="@dimen/text_size_14" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_post_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:drawableRight="@mipmap/icon_light"
+            android:gravity="center"
+            android:textColor="@color/base_second_text_color"
+            android:textSize="@dimen/text_size_14" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_post_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_post_information"
+        android:padding="8dp"
+        android:textColor="@color/base_first_text_color"
+        android:textSize="@dimen/text_size_16" />
+
+
+</RelativeLayout>

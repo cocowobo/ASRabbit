@@ -1,36 +1,40 @@
 package com.adolsai.asrabbit.fragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.adolsai.asrabbit.R;
-import com.adolsai.asrabbit.base.AsRabbitBaseFragment;
-import com.adolsai.asrabbit.views.AsRabbitTitleBar;
+import com.adolsai.asrabbit.listener.RequestListener;
+import com.adolsai.asrabbit.manager.DataManager;
+import com.adolsai.asrabbit.model.Post;
 
-import butterknife.Bind;
+import java.util.List;
 
-public class FragmentTab2 extends AsRabbitBaseFragment {
-    @Bind(R.id.as_rabbit_title_bar)
-    AsRabbitTitleBar asRabbitTitleBar;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        initFragment(inflater, R.layout.fragment_tab2);
-        return mMainView;
-    }
+public class FragmentTab2 extends FragmentPost {
 
 
     @Override
     protected void initViews() {
+        super.initViews();
         asRabbitTitleBar.setTvBarCenterTitle(getString(R.string.fragment2_title));
     }
 
+    /**
+     * 刷新数据
+     */
     @Override
-    protected void initData() {
+    public void refreshDate() {
+        DataManager.getCollectionPost(new RequestListener() {
+            @Override
+            public void getResult(Object result) {
+                if (lists != null) {
+                    lists.clear();
+                    lists.addAll((List) result);
+                    postAdapter.replaceAll(lists);
+                }
+            }
+        });
+    }
 
+    @Override
+    protected void updateAfterDelete(Post post) {
+        super.updateAfterDelete(post);
     }
 }

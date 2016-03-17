@@ -4,16 +4,18 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.adolsai.asrabbit.R;
+import com.adolsai.asrabbit.app.SharePreferenceKey;
 import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
 import com.adolsai.asrabbit.views.AsRabbitTitleBar;
 import com.adolsai.asrabbit.views.SettingItemView;
 import com.ht.baselib.utils.AppUtils;
 import com.ht.baselib.views.dialog.CustomToast;
+import com.orhanobut.hawk.Hawk;
 
 import butterknife.Bind;
 
 /**
- * <p>SettingActivity类 1、提供XXX功能；2、提供XXX方法</p>
+ * <p>SettingActivity类 </p>
  *
  * @author hxm<br/>
  * @version 1.0 (2016-3-13 14:26)<br/>
@@ -21,38 +23,38 @@ import butterknife.Bind;
 public class SettingActivity extends AsRabbitBaseActivity implements SettingItemView.SettingItemViewListener {
 
     @Bind(R.id.as_rabbit_title_bar)
-    AsRabbitTitleBar asRabbitTitleBar;
+    AsRabbitTitleBar asRabbitTitleBar;//标题栏
     @Bind(R.id.setting_item_view_model)
-    SettingItemView settingItemViewModel;
+    SettingItemView settingItemViewModel;//模式选择
     @Bind(R.id.setting_item_view_net)
-    SettingItemView settingItemViewNet;
+    SettingItemView settingItemViewNet;//网络设置
     @Bind(R.id.setting_item_view_picture)
-    SettingItemView settingItemViewPicture;
+    SettingItemView settingItemViewPicture;//图片压缩
     @Bind(R.id.setting_item_view_rich_text)
-    SettingItemView settingItemViewRichText;
+    SettingItemView settingItemViewRichText;//富文本无图模式
     @Bind(R.id.setting_item_view_rich_text1)
-    SettingItemView settingItemViewRichText1;
+    SettingItemView settingItemViewRichText1;//富文本使用流量时无图
     @Bind(R.id.setting_item_view_content)
-    SettingItemView settingItemViewContent;
+    SettingItemView settingItemViewContent;//层叠回复
     @Bind(R.id.setting_item_view_content1)
-    SettingItemView settingItemViewContent1;
+    SettingItemView settingItemViewContent1;//贴内导航条
     @Bind(R.id.setting_item_view_about)
-    SettingItemView settingItemViewAbout;
+    SettingItemView settingItemViewAbout;//版本号
     @Bind(R.id.setting_item_view_about_app)
-    SettingItemView settingItemViewAboutApp;
+    SettingItemView settingItemViewAboutApp;//关于APP
     @Bind(R.id.setting_item_view_user_agreement)
-    SettingItemView settingItemViewUserAgreement;
+    SettingItemView settingItemViewUserAgreement;//用户许可协议
     @Bind(R.id.setting_item_view_support)
-    SettingItemView settingItemViewSupport;
+    SettingItemView settingItemViewSupport;//建议反馈
 
-    private String dnsValue = "bbs.jjwxc.com";
+    private String dnsValue;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dnsValue = Hawk.get(SharePreferenceKey.SETTING_NET_DNS, "bbs.jjwxc.com");
         initActivity(R.layout.activity_setting, savedInstanceState);
-        CustomToast.showToast(mContext, "SettingActivity");
     }
 
     @Override
@@ -62,24 +64,21 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
         asRabbitTitleBar.setTvBarRightTips("完成");
         //初始化下面那些奇奇怪怪的item
         settingItemViewModel.initConfigs("显示", "夜间模式", "", "我想妈妈保证睡觉前不玩手机", false);
-        settingItemViewModel.setSwItemSettingStatus(true);
         settingItemViewNet.initConfigs("网络设置", "访问域名", dnsValue,
                 "仅在联网后不能打开任何帖子的时候修改，修改该选项会清空登录信息", true);
         settingItemViewPicture.initConfigs("上传", "压缩上传图片", "",
                 "压缩并限制图片的最大宽度为755px，GIF格式图片不压缩", false);
-        settingItemViewPicture.setSwItemSettingStatus(true);
         settingItemViewRichText.initConfigs("富文本", "无图模式", "", "", false);
-        settingItemViewRichText.setSwItemSettingStatus(true);
         settingItemViewRichText1.initConfigs("", "仅在使用流量时无图", "", "", false);
-        settingItemViewRichText1.setSwItemSettingStatus(true);
         settingItemViewContent.initConfigs("内容", "层叠回复", "", "", false);
-        settingItemViewContent.setSwItemSettingStatus(true);
         settingItemViewContent1.initConfigs("", "贴内导航条", "", "", false);
-        settingItemViewContent1.setSwItemSettingStatus(true);
         settingItemViewAbout.initConfigs("关于此APP", "版本号", AppUtils.getVersionName(mContext), "", false);
         settingItemViewAboutApp.initConfigs("", "关于此APP", "", "", true);
         settingItemViewUserAgreement.initConfigs("", "用户许可协议", "", "", true);
         settingItemViewSupport.initConfigs("", "建议/反馈", "", "", true);
+
+        //设置各个开关状态
+        updateSwButtonStatus();
 
         //注册各种事件
         asRabbitTitleBar.setAsRabbitTitleBarClick(new AsRabbitTitleBar.AsRabbitTitleBarClick() {
@@ -128,6 +127,7 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
         settingItemViewContent1.setSettingItemViewListener(this);
     }
 
+
     @Override
     protected void initData() {
 
@@ -138,15 +138,19 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
     public void rootOnClick(View v) {
         switch (v.getId()) {
             case R.id.setting_item_view_net:
+                //访问域名
                 CustomToast.showToast(mContext, "点击访问域名");
                 break;
             case R.id.setting_item_view_about_app:
+                //关于此APP
                 CustomToast.showToast(mContext, "点击关于此APP");
                 break;
             case R.id.setting_item_view_user_agreement:
+                //用户许可协议
                 CustomToast.showToast(mContext, "点击用户许可协议");
                 break;
             case R.id.setting_item_view_support:
+                //建议反馈
                 CustomToast.showToast(mContext, "点击建议反馈");
                 break;
             default:
@@ -158,25 +162,51 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
     public void swItemSettingChange(View v, boolean value) {
         switch (v.getId()) {
             case R.id.setting_item_view_model:
+                //夜间模式
                 CustomToast.showToast(mContext, "model isOn is " + value);
+                Hawk.put(SharePreferenceKey.SETTING_NIGHT_MODEL, value);
                 break;
             case R.id.setting_item_view_picture:
+                //上传图片
                 CustomToast.showToast(mContext, "picture isOn is " + value);
+                Hawk.put(SharePreferenceKey.SETTING_UPLOAD_PICIURE, value);
                 break;
             case R.id.setting_item_view_rich_text:
+                //无图模式
                 CustomToast.showToast(mContext, "rich_text isOn is " + value);
+                Hawk.put(SharePreferenceKey.SETTING_NO_PICTURE_3G, value);
                 break;
             case R.id.setting_item_view_rich_text1:
+                //仅在使用流量时无图
                 CustomToast.showToast(mContext, "rich_text1 isOn is " + value);
+                Hawk.put(SharePreferenceKey.SETTING_NO_PICTURE, value);
                 break;
             case R.id.setting_item_view_content:
+                //层叠回复
                 CustomToast.showToast(mContext, "content isOn is " + value);
+                Hawk.put(SharePreferenceKey.SETTING_REPLY, value);
                 break;
             case R.id.setting_item_view_content1:
+                //贴内导航条
                 CustomToast.showToast(mContext, "content1 isOn is " + value);
+                Hawk.put(SharePreferenceKey.SETTING_NAVIGATION_BAR, value);
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 更新各个选择开关的状态
+     */
+    private void updateSwButtonStatus() {
+        settingItemViewModel.setSwItemSettingStatus(Hawk.get(SharePreferenceKey.SETTING_NIGHT_MODEL, false));
+        settingItemViewPicture.setSwItemSettingStatus(Hawk.get(SharePreferenceKey.SETTING_UPLOAD_PICIURE, false));
+        settingItemViewRichText.setSwItemSettingStatus(Hawk.get(SharePreferenceKey.SETTING_NO_PICTURE, false));
+        settingItemViewRichText1.setSwItemSettingStatus(Hawk.get(SharePreferenceKey.SETTING_NO_PICTURE_3G, false));
+        settingItemViewContent.setSwItemSettingStatus(Hawk.get(SharePreferenceKey.SETTING_REPLY, false));
+        settingItemViewContent1.setSwItemSettingStatus(Hawk.get(SharePreferenceKey.SETTING_NAVIGATION_BAR, false));
+
+
     }
 }

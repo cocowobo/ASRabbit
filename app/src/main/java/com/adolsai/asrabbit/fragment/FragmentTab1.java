@@ -1,69 +1,109 @@
 package com.adolsai.asrabbit.fragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
+import android.content.DialogInterface;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.SearchView;
 
 import com.adolsai.asrabbit.R;
-import com.adolsai.asrabbit.base.AsRabbitBaseFragment;
+import com.adolsai.asrabbit.listener.RequestListener;
+import com.adolsai.asrabbit.manager.DataManager;
+import com.adolsai.asrabbit.model.Post;
 import com.adolsai.asrabbit.views.AsRabbitTitleBar;
-import com.ht.baselib.utils.LogUtils;
+import com.ht.baselib.views.pickerview.ActionSheetDialogBuilder;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import java.util.List;
 
 
-public class FragmentTab1 extends AsRabbitBaseFragment {
-    @Bind(R.id.as_rabbit_title_bar)
-    AsRabbitTitleBar asRabbitTitleBar;
-    @Bind(R.id.sv_history)
-    SearchView svHistory;
-    @Bind(R.id.lv_history)
-    ListView lvHistory;
+public class FragmentTab1 extends FragmentPost {
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        initFragment(inflater, R.layout.fragment_tab1);
-        ButterKnife.bind(this, mMainView);
-        return mMainView;
-    }
+    /**
+     * 清空所有消息的弹窗
+     */
+    protected ActionSheetDialogBuilder cleanAllBuilder;
 
 
     @Override
     protected void initViews() {
+        super.initViews();
         asRabbitTitleBar.setTvBarCenterTitle(getString(R.string.fragment1_title));
         asRabbitTitleBar.setIvBarRightIcon(R.drawable.selector_titlebar_delete);
-        lvHistory.setTextFilterEnabled(true);
-        svHistory.setSubmitButtonEnabled(false);
-        svHistory.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        asRabbitTitleBar.setAsRabbitTitleBarClick(new AsRabbitTitleBar.AsRabbitTitleBarClick() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                LogUtils.e("sharing", "onQueryTextSubmit query is" + query);
-                return false;
+            public void barLeftIconClick(View v) {
+
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                LogUtils.e("sharing", "onQueryTextChange newText is" + newText);
-                return false;
+            public void barLeftTipsClick(View v) {
+
+            }
+
+            @Override
+            public void barCenterTitleClick(View v) {
+
+            }
+
+            @Override
+            public void barRightTipsClick(View v) {
+
+            }
+
+            @Override
+            public void barRightIconClick(View v) {
+                //弹出窗口清空
+                if (cleanAllBuilder == null) {
+                    cleanAllBuilder = new ActionSheetDialogBuilder(getActivity());
+                    cleanAllBuilder.setTitleVisibility(true);
+                    cleanAllBuilder.setTitleVisibility(false);
+                    cleanAllBuilder.setTitleMessage("确定要删除所有历史记录吗？");
+                    cleanAllBuilder.setButtons("删除", null, "取消",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case ActionSheetDialogBuilder.BUTTON1:
+                                            //清除操作
+                                            postAdapter.clear(true);
+                                            break;
+
+                                        default:
+                                            break;
+                                    }
+                                }
+                            });
+                }
+                cleanAllBuilder.create().show();
+            }
+
+            @Override
+            public void barRightIconExpandClick(View v) {
+
             }
         });
 
     }
 
     @Override
-    protected void initData() {
-
+    protected void updateAfterDelete(Post post) {
+        super.updateAfterDelete(post);
     }
 
+    /**
+     * 刷新数据
+     */
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+    public void refreshDate() {
+        DataManager.getHistoryPost(new RequestListener() {
+            @Override
+            public void getResult(Object result) {
+                if (lists != null) {
+                    lists.clear();
+                    lists.addAll((List) result);
+                    postAdapter.replaceAll(lists);
+                }
+
+            }
+        });
     }
+
+
 }

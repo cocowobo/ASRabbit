@@ -149,7 +149,7 @@ public class ShSwitchView extends View {
             knobExpandAnimator.start();
 
             if (ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn) {
-                ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(ShSwitchView.this, isOn);
+                ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(isOn);
             }
 
             return true;
@@ -239,10 +239,9 @@ public class ShSwitchView extends View {
         /**
          * 状态切换监听方法
          *
-         * @param v    对应的view
          * @param isOn true开，false关
          */
-        void onSwitchStateChange(View v, boolean isOn);
+        void onSwitchStateChange(boolean isOn);
     }
 
     private OnSwitchStateChangeListener onSwitchStateChangeListener;
@@ -420,7 +419,7 @@ public class ShSwitchView extends View {
             knobExpandAnimator.start();
 
             if (ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn) {
-                ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(ShSwitchView.this, isOn);
+                ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(isOn);
             }
 
             dirtyAnimation = false;
@@ -553,7 +552,7 @@ public class ShSwitchView extends View {
         }
 
         if (ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn) {
-            ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(ShSwitchView.this, isOn);
+            ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(isOn);
         }
     }
 
@@ -599,7 +598,7 @@ public class ShSwitchView extends View {
                 isOn = knobState;
 
                 if (ShSwitchView.this.onSwitchStateChangeListener != null && isOn != preIsOn) {
-                    ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(ShSwitchView.this, isOn);
+                    ShSwitchView.this.onSwitchStateChangeListener.onSwitchStateChange(isOn);
                 }
 
                 break;
