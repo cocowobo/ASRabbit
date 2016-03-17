@@ -66,4 +66,19 @@
     <!-- 标题-->
     <color name="base_titlebar_bg">#3BD2C9</color>
     <color name="base_titlebar_text_common">#FFFFFF</color>
+
+    <!-- sweetSheet-->
+    <color name="indicator_normal">#fff0f0f0</color>
+    <color name="indicator_select">#969696</color>
+    <color name="white">#ffffffff</color>
+    <color name="theme_gray">#F5F5F5</color>
+    <color name="slider_color_normal">#ffa6a6a6</color>
+    <color name="slider_color">#ff969696</color>
+    <!-- materialRefresh-->
+    <color name="material_green">#ff4CAF50</color>
+    <color name="material_blue">#ff03A9F4</color>
+    <color name="material_blue_light">#9003A9F4</color>
+    <color name="material_blue_dark">#1976D2</color>
+    <color name="material_red">#ffF44336</color>
+    <color name="material_yellow">#ffFFEB3B</color>
 </resources>

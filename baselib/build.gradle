@@ -60,7 +60,10 @@ configurations.all {
 /**项目依赖配置*/
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:support-v4:22.2.0'
+    //瀑布流
+    compile 'com.android.support:recyclerview-v7:22.2.0'
     //依赖注入
     compile 'com.jakewharton:butterknife:7.0.1'
     //数据库
