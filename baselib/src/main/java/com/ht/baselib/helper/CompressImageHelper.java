@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 
 import com.ht.baselib.utils.FileUtils;
+import com.ht.baselib.utils.ImageUtils;
 import com.ht.baselib.utils.SDCardUtils;
 import com.ht.baselib.views.imageselector.bean.Image;
 
@@ -338,6 +339,19 @@ public class CompressImageHelper {
 
         if (bitmap == null) {
             bitmap = getImageThumbnail(pathName);
+        }
+
+        int j = ImageUtils.readPictureDegree(pathName);
+        Bitmap rotateBitmap = null;
+        if ((bitmap != null) && (j != 0)) {
+            try{
+                rotateBitmap = ImageUtils.rotaingImageView(j, bitmap);
+                bitmap.recycle();
+                bitmap = null;
+                return rotateBitmap;
+            } catch (OutOfMemoryError e) {
+                System.gc();
+            }
         }
         return bitmap;
     }

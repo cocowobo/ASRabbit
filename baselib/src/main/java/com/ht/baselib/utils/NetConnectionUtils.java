@@ -54,14 +54,16 @@ public class NetConnectionUtils {
             if (mobile == State.CONNECTED || wifi == State.CONNECTED) {
                 return true;
             }
-            State defaultNetWork = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET).getState();
-
-            if (defaultNetWork == State.CONNECTED) {
-                return true;
+            NetworkInfo networkInfoEthernet = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);
+            if (networkInfoEthernet != null) {
+                State defaultNetWork = networkInfoEthernet.getState();
+                if (defaultNetWork == State.CONNECTED) {
+                    return true;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return true;
+            return false;
         }
         return false;
     }

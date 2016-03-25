@@ -46,6 +46,7 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.ht.baselib.R;
 import com.ht.baselib.base.BaseActivity;
+import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.views.scan.custom.app.ScanParams;
 import com.ht.baselib.views.scan.custom.dimenscode.ScanHelper;
 import com.ht.baselib.views.scan.custom.utils.AssetsUtils;
@@ -535,6 +536,36 @@ public class CaptureActivity extends BaseActivity implements Callback {
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+        obtainResource();
+        playBeep = true;
+        AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
+        if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
+            playBeep = false;
+        }
+        // 初始化BiBi..声音
+        initBeepSound();
+        vibrate = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releaseResource();
+    }
+    private void releaseResource(){
+
+        if (handler != null) {
+            // 关闭相机预览
+            handler.quitSynchronously();
+            handler = null;
+        }
+        // 关闭闪光灯
+        cameraManager.offFlashLight();
+        // 释放相机
+        cameraManager.closeDriver();
+    }
+    private void obtainResource(){
+
         cameraManager = new CameraManager(getApplication());
         // 初始化扫描框
         chooseWhichFeatures(mFeatures);
@@ -549,36 +580,16 @@ public class CaptureActivity extends BaseActivity implements Callback {
         }
         decodeFormats = null;
         characterSet = null;
-        playBeep = true;
-        AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
-        if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-            playBeep = false;
-        }
-        // 初始化BiBi..声音
-        initBeepSound();
-        vibrate = true;
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (handler != null) {
-            // 关闭相机预览
-            handler.quitSynchronously();
-            handler = null;
-        }
-        // 关闭闪光灯
-        cameraManager.offFlashLight();
-        // 释放相机
-        cameraManager.closeDriver();
-    }
-
     @Override
     protected void onDestroy() {
         inactivityTimer.shutdown();
         super.onDestroy();
     }
-
+    public void continueScann(){
+        releaseResource();
+        obtainResource();
+    }
     /**
      * 初始化 打开相机 启动线程解析
      *
@@ -697,6 +708,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
      */
     private void showResult(final Result rawResult, Bitmap barcode) {
         String result = recode(rawResult.getText());
+        LogUtils.d("silence","result==="+result);
         if(dispatchResult(result)){
             return ;
         }

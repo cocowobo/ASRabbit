@@ -15,6 +15,8 @@
     <color name="ht_global_main_gray">#A1A7AE</color>
     <!--价格色-用于价格显示（如电商模块、账单流程、支付模块等和资金有关的高亮色）-->
     <color name="ht_global_price_orange">#FF5800</color>
+    <!--用户名蓝-用于朋友圈列表的用户名（如朋友圈的列表的用户名）-->
+    <color name="ht_global_username_blue">#415f93</color>
 
     <!--控件不可用时上面的文字颜色 by zmingchun-->
     <color name="ht_common_text_disabled">#C7C7C7</color>
@@ -40,6 +42,8 @@
     <color name="transparent">#00000000</color>
     <color name="ht_transparent60">#000000</color>
     <color name="ht_transparent80">#CC000000</color>
+    <!--90%透明-->
+    <color name="ht_transparent90">#10000000</color>
 
     <!-- 自定义Pickerview颜色-->
     <color name="ht_wheel_timebtn_nor">#54a3fa</color>
@@ -66,19 +70,4 @@
     <!-- 标题-->
     <color name="base_titlebar_bg">#3BD2C9</color>
     <color name="base_titlebar_text_common">#FFFFFF</color>
-
-    <!-- sweetSheet-->
-    <color name="indicator_normal">#fff0f0f0</color>
-    <color name="indicator_select">#969696</color>
-    <color name="white">#ffffffff</color>
-    <color name="theme_gray">#F5F5F5</color>
-    <color name="slider_color_normal">#ffa6a6a6</color>
-    <color name="slider_color">#ff969696</color>
-    <!-- materialRefresh-->
-    <color name="material_green">#ff4CAF50</color>
-    <color name="material_blue">#ff03A9F4</color>
-    <color name="material_blue_light">#9003A9F4</color>
-    <color name="material_blue_dark">#1976D2</color>
-    <color name="material_red">#ffF44336</color>
-    <color name="material_yellow">#ffFFEB3B</color>
 </resources>

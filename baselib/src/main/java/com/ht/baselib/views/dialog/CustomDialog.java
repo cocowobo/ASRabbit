@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -75,15 +77,24 @@ public final class CustomDialog extends Dialog{
 
     /**标题内容（主要内容），若为null则表示不显示*/
     private String mTitleText = null;
+    /**标题内容（主要内容），若为null则表示不显示，支持设置字体颜色、链接、大小的等*/
+    private SpannableString mSpannableTitleText = null;
     /**提示内容（辅助说明），若为null，则表示不显示*/
     private String mContent = null;
     /**提示内容（辅助说明），若为null，则表示不显示，支持设置字体颜色、链接、大小的等*/
     private SpannableString mSpannableContent = null;
 
+    /**提示图片资源id，仅支持本地图片, 若为-1，则表示不显示*/
+    private int confirmImageSourceId = -1;
+
     /**取消类按钮名称（左侧），若为null则表示不显示*/
     private String mCancelText = null;
+    /**取消类按钮名称（左侧），若为null则表示不显示*，支持设置字体颜色、链接、大小的等*/
+    private SpannableString mSpannableCancelText = null;
     /**确认类按钮名称（右侧），若为null则表示不显示*/
     private String mConfirmText = null;
+    /**确认类按钮名称（右侧），若为null则表示不显示，支持设置字体颜色、链接、大小的等*/
+    private SpannableString mSpannableConfirmText = null;
 
     /**第一个输入框hint内容*/
     private String mHintText = null;
@@ -91,6 +102,16 @@ public final class CustomDialog extends Dialog{
     private String mInputDefaultText = null;
     /**第一个输入框view*/
     private EditText mEditText = null;
+
+    /**第二个输入框view*/
+    private EditText mSecondEditText = null;
+    /**第二个输入框hint内容*/
+    private String mSecondHintText = null;
+    /**第二个输入框默认内容*/
+    private String mSecondInputDefaultText = null;
+
+    /**设置两个输入框的分割符*/
+    private String mConfirmViewLineText = null;
 
     /**确认类按钮view*/
     private Button mConfirmBtn = null;
@@ -103,13 +124,13 @@ public final class CustomDialog extends Dialog{
     /**弹出框含有的输入框个数：目前最多为2*/
     private int mMultiInputSize = 1;
 
-    /**第二个输入框view*/
-    private EditText mSecondEditText = null;
-    /**第二个输入框hint内容*/
-    private String mSecondHintText = null;
-    /**第二个输入框默认内容*/
-    private String mSecondInputDefaultText = null;
+    /**输入框值变化监听器，若为null，则默认采用默认处理*/
+    private DialogTextWatcher mDialogTextWatcher = null;
 
+    /**第一个输入框长度限制，若为null则不限制*/
+    private InputFilter[] mInputFilterOne = null;
+    /**第二个输入框长度限制，若为null则不限制*/
+    private InputFilter[] mInputFilterTwo = null;
     // 执行区
     //-----------------------------------------------
     /**
@@ -283,9 +304,9 @@ public final class CustomDialog extends Dialog{
     private void creatConfirmSubView(View rootView){
         //标题
         TextView confirmTip = (TextView) rootView.findViewById(R.id.confirm_tip);
-        if (!StringUtils.isBlank(mTitleText)) {
+        if (!StringUtils.isBlank(mTitleText) || null != mSpannableTitleText) {
             confirmTip.setVisibility(View.VISIBLE);
-            confirmTip.setText(mTitleText);
+            confirmTip.setText(!StringUtils.isBlank(mTitleText)?mTitleText:mSpannableTitleText);
         }else{
             confirmTip.setVisibility(View.GONE);
         }
@@ -303,10 +324,19 @@ public final class CustomDialog extends Dialog{
             }
         }
 
+        //图片
+        ImageView confirmImageView = (ImageView)rootView.findViewById(R.id.confirm_imageView);
+        if (confirmImageSourceId != -1) {
+            confirmImageView.setImageResource(confirmImageSourceId);
+            confirmImageView.setVisibility(View.VISIBLE);
+        }else{
+            confirmImageView.setVisibility(View.GONE);
+        }
+
         //取消按钮
         Button negativeButton = (Button) rootView.findViewById(R.id.negative_button);
-        if (!StringUtils.isBlank(mCancelText)) {
-            negativeButton.setText(mCancelText);
+        if (!StringUtils.isBlank(mCancelText) || null != mSpannableCancelText) {
+            negativeButton.setText(!StringUtils.isBlank(mCancelText)?mCancelText:mSpannableCancelText);
             negativeButton.setVisibility(View.VISIBLE);
             negativeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -324,13 +354,13 @@ public final class CustomDialog extends Dialog{
         }
         //确认按钮
         Button positiveButton = (Button) rootView.findViewById(R.id.positive_button);
-        if (!StringUtils.isBlank(mConfirmText)) {
-            if (!StringUtils.isBlank(mCancelText)){
+        if (!StringUtils.isBlank(mConfirmText) || null != mSpannableConfirmText) {
+            if (!StringUtils.isBlank(mCancelText) || null != mSpannableCancelText){
                 positiveButton.setTypeface(positiveButton.getTypeface(), Typeface.BOLD);
             }else{
                 positiveButton.setTypeface(positiveButton.getTypeface(), Typeface.NORMAL);
             }
-            positiveButton.setText(mConfirmText);
+            positiveButton.setText(!StringUtils.isBlank(mConfirmText)?mConfirmText:mSpannableConfirmText);
             positiveButton.setVisibility(View.VISIBLE);
             if (mControlEnable){
                 positiveButton.setEnabled(false);
@@ -379,12 +409,17 @@ public final class CustomDialog extends Dialog{
             confirmEdittext.addTextChangedListener(new TextWatcher() {
                 @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (checkInput()){
-                        getConfirmBtn().setEnabled(true);
-                    }else{
-                        if (mControlEnable){
-                            getConfirmBtn().setEnabled(false);
+                    if (null == mDialogTextWatcher) {
+                        if (checkInput()) {
+                            getConfirmBtn().setEnabled(true);
+                        } else {
+                            if (mControlEnable) {
+                                getConfirmBtn().setEnabled(false);
+                            }
                         }
+                    }else {
+                        //监听输入框变化
+                        mDialogTextWatcher.onTextChanged(getConfirmBtn(), getEditText(), getSecondEditText());
                     }
                 }
                 @Override public void afterTextChanged(Editable s) {}
@@ -408,10 +443,17 @@ public final class CustomDialog extends Dialog{
             if (!StringUtils.isBlank(mInputDefaultText)) {
                 confirmEdittext.setText(mInputDefaultText);
             }
+            if(null != mInputFilterOne){
+                confirmEdittext.setFilters(mInputFilterOne);
+            }
             this.setEditText(confirmEdittext);
 
             //含有多个输入框
             if (mMultiInputSize>1) {
+                if (!StringUtils.isBlank(mConfirmViewLineText)) {
+                    TextView confirmTextViewLine = (TextView) rootView.findViewById(R.id.confirm_textview_line);
+                    confirmTextViewLine.setText(mConfirmViewLineText);
+                }
                 //两个输入框间的斜线
                 rootView.findViewById(R.id.confirm_textview_line).setVisibility(View.VISIBLE);
                 //第二个输入框
@@ -420,12 +462,16 @@ public final class CustomDialog extends Dialog{
                 secondConfirmEdittext.addTextChangedListener(new TextWatcher() {
                     @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                     @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (checkInput()){
-                            getConfirmBtn().setEnabled(true);
-                        }else{
-                            if (mControlEnable){
-                                getConfirmBtn().setEnabled(false);
+                        if (null == mDialogTextWatcher) {
+                            if (checkInput()) {
+                                getConfirmBtn().setEnabled(true);
+                            } else {
+                                if (mControlEnable) {
+                                    getConfirmBtn().setEnabled(false);
+                                }
                             }
+                        }else {
+                            mDialogTextWatcher.onTextChanged(getConfirmBtn(), getEditText(), getSecondEditText());
                         }
                     }
                     @Override public void afterTextChanged(Editable s) {}
@@ -447,6 +493,9 @@ public final class CustomDialog extends Dialog{
                 }
                 if (!StringUtils.isBlank(mSecondInputDefaultText)) {
                     secondConfirmEdittext.setText(mSecondInputDefaultText);
+                }
+                if(null != mInputFilterTwo){
+                    secondConfirmEdittext.setFilters(mInputFilterTwo);
                 }
                 this.setSecondEditText(secondConfirmEdittext);
             }
@@ -544,7 +593,7 @@ public final class CustomDialog extends Dialog{
     }
 
     /**
-     * 检查输入内容是否满足启用按钮
+     * 检查输入内容是否满足启用按钮（只需要有内容即可）
      * @return true满足，false不满足
      */
     private boolean checkInput(){
@@ -607,6 +656,15 @@ public final class CustomDialog extends Dialog{
         this.mTitleText = title;
         return this;
     }
+    /**
+     * 设置标题内容，若为null则表示不显示
+     * @param spannableContent 标题内容(与mTitleText互斥)，可设置字体颜色、链接、大小等
+     * @return
+     */
+    public CustomDialog setSpannableTitle(SpannableString spannableContent) {
+        this.mSpannableTitleText = spannableContent;
+        return this;
+    }
 
     /**
      * 设置提示内容，若为null则显示默认内容
@@ -636,7 +694,15 @@ public final class CustomDialog extends Dialog{
         this.mCancelText = cancelStr;
         return this;
     }
-
+    /**
+     * 设置取消类按钮名称（左侧），若为null则表示不显示
+     * @param spannableContent 取消类按钮名称(与mCancelText互斥)，可设置字体颜色、链接、大小等
+     * @return
+     */
+    public CustomDialog setSpannableCancelBtnText(SpannableString spannableContent) {
+        this.mSpannableCancelText = spannableContent;
+        return this;
+    }
     /**
      * 确认类按钮名称（右侧），若为null则表示不显示
      * @param confirmStr 确认类按钮名称
@@ -644,6 +710,15 @@ public final class CustomDialog extends Dialog{
      * */
     public CustomDialog setConfirmBtnText(String confirmStr) {
         this.mConfirmText = confirmStr;
+        return this;
+    }
+    /**
+     * 确认类按钮名称（右侧），若为null则表示不显示
+     * @param spannableContent 确认类按钮名称(与mConfirmText互斥)，可设置字体颜色、链接、大小等
+     * @return
+     */
+    public CustomDialog setSpannableConfirmBtnText(SpannableString spannableContent) {
+        this.mSpannableConfirmText = spannableContent;
         return this;
     }
 
@@ -726,7 +801,52 @@ public final class CustomDialog extends Dialog{
         return this;
     }
 
-    //自定义方法类
+    /**
+     * 设置图片资源id
+     * @param confirmImageSourceId 图片资源id
+     */
+    public CustomDialog setConfirmImageSourceId(int confirmImageSourceId) {
+        this.confirmImageSourceId = confirmImageSourceId;
+        return this;
+    }
+
+    /**
+     * 设置两个输入框的分割符(仅当有两个输入框时才生效)
+     * @param confirmViewLineText 分隔符内容
+     */
+    public CustomDialog setConfirmViewLineText(String confirmViewLineText) {
+        this.mConfirmViewLineText = confirmViewLineText;
+        return this;
+    }
+
+    /**
+     * 设置输入框，内容变化监听器（一般用于控制确认按钮是否可用）
+     * @param textWatcher 监听器，若为null，则表示默认处理
+     */
+    public CustomDialog setDialogTextWatcher(DialogTextWatcher textWatcher) {
+        this.mDialogTextWatcher = textWatcher;
+        return this;
+    }
+
+    /**
+     * 设置第一个输入框的长度限制过滤器，若为null，则无限制
+     * @param inputFilterOne 过滤器
+     */
+    public CustomDialog setInputFilterOne(InputFilter[] inputFilterOne) {
+        this.mInputFilterOne = inputFilterOne;
+        return this;
+    }
+
+    /**
+     * 设置第二个输入框的长度限制过滤器，若为null，则无限制
+     * @param inputFilterTwo 过滤器
+     */
+    public CustomDialog setInputFilterTwo(InputFilter[] inputFilterTwo) {
+        this.mInputFilterTwo = inputFilterTwo;
+        return this;
+    }
+
+//自定义方法类
     //==============================================================================================
     /**
      * confirmDialog 按钮回调方法类
@@ -775,48 +895,24 @@ public final class CustomDialog extends Dialog{
         /**按钮回调方法默认构造方法*/
         public ButtonCallback() {
         }
-
-        /**
-         * 克隆方法
-         * @return
-         * @throws CloneNotSupportedException 找不到类异常
-         */
-        protected final Object clone() throws CloneNotSupportedException {
-            return super.clone();
-        }
-
-        /**
-         * equals 方法
-         * @param o 被比较对象
-         * @return
-         */
-        public final boolean equals(Object o) {
-            return super.equals(o);
-        }
-
-        /**
-         * finalize方法
-         * @throws Throwable 抛异常
-         */
-        protected final void finalize() throws Throwable {
-            super.finalize();
-        }
-
-        /**
-         * hashCode方法
-         * @return
-         */
-        public final int hashCode() {
-            return super.hashCode();
-        }
-
-        /**
-         * toString方法
-         * @return
-         */
-        public final String toString() {
-            return super.toString();
-        }
     }
 
+//    /**
+//     * confirmDialog 输入回调方法类(需要自主校验输入内容)
+//     */
+//    public abstract static class DialogTextWatcher {
+//        /**
+//         * 输入框输入值变化
+//         * @param confirmBtn 弹出框的确认按钮（需要控制是否可用）
+//         * @param firstEditText 触发变化的输入框对象1
+//         * @param secondeditText   触发变化的输入框对象2
+//         */
+//        public void onTextChanged(Button confirmBtn, EditText firstEditText, EditText secondeditText){
+//
+//        }
+//
+//        /**输入回调方法默认构造方法*/
+//        public DialogTextWatcher() {
+//        }
+//    }
 }

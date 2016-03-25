@@ -10,6 +10,7 @@ import android.view.animation.Interpolator;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.ht.baselib.utils.LocalDisplay;
 import com.ht.baselib.views.pulltorefresh.PullToRefreshSwipeMenuListView;
 
 /**
@@ -154,6 +155,9 @@ public class SwipeMenuListView extends ListView {
             case MotionEvent.ACTION_MOVE:
                 float dy = Math.abs((ev.getY() - mDownY));
                 float dx = Math.abs((ev.getX() - mDownX));
+                if(Math.abs(dx)>Math.abs(dy) || Math.abs(dx)> LocalDisplay.dp2px(5)){
+                    requestDisallowInterceptTouchEvent(true);
+                }
                 if (mTouchState == TOUCH_STATE_X) {
                     if (mTouchView != null) {
                         mTouchView.onSwipe(ev);
@@ -174,6 +178,7 @@ public class SwipeMenuListView extends ListView {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                requestDisallowInterceptTouchEvent(false);
                 if (mTouchState == TOUCH_STATE_X) {
                     if (mTouchView != null) {
                         mTouchView.onSwipe(ev);
@@ -189,6 +194,9 @@ public class SwipeMenuListView extends ListView {
                     super.onTouchEvent(ev);
                     return true;
                 }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                requestDisallowInterceptTouchEvent(false);
                 break;
         }
         return super.onTouchEvent(ev);

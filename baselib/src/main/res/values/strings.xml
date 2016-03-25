@@ -74,4 +74,8 @@
     <!-- 扫描 -->
     <string name="scan_hint">将二维码放入框内，即可自动扫描</string>
     <string name="scan_title">扫描二维码</string>
+
+    <!--更多文本-->
+    <string name="more_text_expand">展开</string>
+    <string name="more_text_shrink">收缩</string>
 </resources>

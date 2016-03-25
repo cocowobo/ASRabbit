@@ -60,17 +60,10 @@ configurations.all {
 /**项目依赖配置*/
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:support-v4:22.2.0'
-    //瀑布流
-    compile 'com.android.support:recyclerview-v7:22.2.0'
-    //依赖注入
+    compile 'com.android.support:appcompat-v7:23.0.0'
     compile 'com.jakewharton:butterknife:7.0.1'
-    //数据库
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.j256.ormlite:ormlite-core:4.48'
-    //动画
-    compile 'com.nineoldandroids:library:2.4.0'
     //图片加载工具-远程/本地
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
 
@@ -83,7 +76,7 @@ dependencies {
 
     //加密键值存储，替代SharedPreferences来存储关键数据
     //源码地址-----> https://github.com/orhanobut/hawk
-    compile 'com.orhanobut:hawk:1.18'
+    compile 'com.github.orhanobut:hawk:1.22'
 
     //EventBus是一款针对Android 优化的发布/订阅事件总线。
     //源码地址-----> https://github.com/greenrobot/EventBus

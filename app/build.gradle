@@ -222,18 +222,10 @@ if (propFile.exists()) {
  * 项目依赖全局配置
  * Force Android Studio to Update Maven Snapshot Dependencies
  * */
-configurations.all {
-    // check for updates every build（实时更新snapshot版本）
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-
-    //强制引用23.0.0版本，避免androidTestCompile 'com.android.support.test:runner:0.4' 自动引用23.0.1
-    resolutionStrategy.force 'com.android.support:support-annotations:23.0.0'
-}
 
 /**项目依赖配置*/
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':baselib')
     //引用Bugly依赖包
     compile 'com.tencent.bugly:crashreport:1.2.8'
 
