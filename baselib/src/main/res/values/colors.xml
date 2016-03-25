@@ -70,4 +70,12 @@
     <!-- 标题-->
     <color name="base_titlebar_bg">#3BD2C9</color>
     <color name="base_titlebar_text_common">#FFFFFF</color>
+
+    <!-- material库-->
+    <color name="material_green">#ff4CAF50</color>
+    <color name="material_blue">#ff03A9F4</color>
+    <color name="material_blue_light">#9003A9F4</color>
+    <color name="material_blue_dark">#1976D2</color>
+    <color name="material_red">#ffF44336</color>
+    <color name="material_yellow">#ffFFEB3B</color>
 </resources>

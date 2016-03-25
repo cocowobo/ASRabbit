@@ -78,4 +78,12 @@
     <!--更多文本-->
     <string name="more_text_expand">展开</string>
     <string name="more_text_shrink">收缩</string>
+
+    <!--material库-->
+    <integer-array name="material_colors">
+        <item>@color/material_red</item>
+        <item>@color/material_green</item>
+        <item>@color/material_blue</item>
+        <item>@color/material_yellow</item>
+    </integer-array>
 </resources>
