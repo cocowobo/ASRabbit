@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <com.mingle.widget.FreeGrowUpParentRelativeLayout
+    <com.ht.baselib.views.sweetsheet.widget.FreeGrowUpParentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/freeGrowUpParentF"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="@dimen/sheet_height"
-        app:offset="@dimen/arc_max_height"
         android:layout_gravity="bottom"
-        >
+        app:offset="@dimen/arc_max_height">
 
-        <com.mingle.widget.SweetView
+        <com.ht.baselib.views.sweetsheet.widget.SweetView
             android:id="@+id/sv"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv"
@@ -27,17 +25,16 @@
             android:layout_marginTop="70dp"
             android:clipChildren="false"
             android:layoutAnimation="@anim/rv_layout_animation"
-            android:overScrollMode="never"
-            />
+            android:overScrollMode="never" />
 
-        <com.mingle.widget.CRImageView
+        <com.ht.baselib.views.sweetsheet.widget.CRImageView
             android:id="@+id/sliderIM"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_marginTop="40dp"
             android:padding="10dp"
-            android:src="@drawable/ic_slider_line"/>
+            android:src="@drawable/ic_slider_line" />
 
-    </com.mingle.widget.FreeGrowUpParentRelativeLayout>
+    </com.ht.baselib.views.sweetsheet.widget.FreeGrowUpParentRelativeLayout>
 </FrameLayout>

@@ -50,7 +50,7 @@
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="stateUnchanged|adjustResize">
         <activity android:name=".activity.MainActivity" />
-
+        <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

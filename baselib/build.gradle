@@ -68,6 +68,10 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.j256.ormlite:ormlite-core:4.48'
+    compile 'me.relex:circleindicator:1.1.5@aar'
+    compile('com.github.ozodrukh:CircularReveal:1.1.1@aar') {
+        transitive = true;
+    }
     //图片加载工具-远程/本地
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
 

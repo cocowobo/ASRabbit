@@ -229,6 +229,7 @@ dependencies {
     compile project(':baselib')
     //引用Bugly依赖包
     compile 'com.tencent.bugly:crashreport:1.2.8'
+    compile 'tyrant:heartlayout:1.0.1'
 
 }
 

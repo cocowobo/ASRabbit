@@ -18,6 +18,7 @@ import java.util.List;
 public class ViewpagerAdapter extends PagerAdapter {
 
 
+
     List<MenuListViewHandler> mMenuListViewHandlers = null;
 
     public ViewpagerAdapter(List<MenuListViewHandler> menuListViewHandlers) {

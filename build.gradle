@@ -16,6 +16,9 @@ buildscript {
 
     //从上到下下载引用，上游找不到则往下游找
     repositories {
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
         maven { url "https://jitpack.io" }
         jcenter()
         mavenCentral()
@@ -24,6 +27,9 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
         maven { url "https://jitpack.io" }
         jcenter()
         mavenCentral()

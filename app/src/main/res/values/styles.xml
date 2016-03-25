@@ -1,13 +1,20 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Translucent.NoTitleBar" />
+    <style name="AppTheme" parent="BaseTheme" />
 
     <!--水平分割线-->
     <style name="CommonHorizontalDivider">
         <item name="android:background">@color/common_divider</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/common_divider</item>
+    </style>
+
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#795548</item>
+        <item name="colorPrimaryDark">#5D4037</item>
+        <item name="colorAccent">#795548</item>
+        <item name="android:windowBackground">@color/window_background</item>
     </style>
 
 </resources>

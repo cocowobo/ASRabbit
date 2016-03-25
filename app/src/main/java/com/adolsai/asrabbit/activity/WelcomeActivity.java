@@ -32,7 +32,7 @@ public class WelcomeActivity extends AsRabbitBaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ActivityUtil.startActivityByAnim(activity, MainActivity.class);
+                ActivityUtil.startActivityByAnim(activity, HomeActivity.class);
                 finish();
             }
         }, 1000);
