@@ -174,4 +174,5 @@
         </attr>
         <attr name="isLoadMore" format="boolean"></attr>
     </declare-styleable>
+
 </resources>
