@@ -60,7 +60,11 @@ configurations.all {
 /**项目依赖配置*/
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:cardview-v7:23.0.1'
+    compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.j256.ormlite:ormlite-core:4.48'
