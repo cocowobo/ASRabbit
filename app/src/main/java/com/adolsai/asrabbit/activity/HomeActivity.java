@@ -29,22 +29,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.adolsai.asrabbit.R;
-import com.adolsai.asrabbit.fragment.CategoryFragment;
+import com.adolsai.asrabbit.fragment.FavouriteFragment;
+import com.adolsai.asrabbit.fragment.HistoryFragment;
 import com.adolsai.asrabbit.fragment.HomeFragment;
-import com.adolsai.asrabbit.fragment.SubscribeFragment;
 import com.adolsai.asrabbit.utils.ScreenUtil;
 import com.adolsai.asrabbit.utils.StatusBarCompat;
 import com.adolsai.asrabbit.utils.VersionUtil;
 import com.ht.baselib.arcanimator.ArcAnimator;
 import com.ht.baselib.arcanimator.Side;
-import com.ht.baselib.views.sweetsheet.entity.MenuEntity;
-import com.ht.baselib.views.sweetsheet.sweetpick.BlurEffect;
-import com.ht.baselib.views.sweetsheet.sweetpick.Delegate;
-import com.ht.baselib.views.sweetsheet.sweetpick.RecyclerViewDelegate;
-import com.ht.baselib.views.sweetsheet.sweetpick.SweetSheet;
 import com.nineoldandroids.animation.ObjectAnimator;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,15 +53,13 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
     private String hideTag;
 
     private HomeFragment mHomeFragment;
-    private CategoryFragment mCategoryFragment;
-    private SubscribeFragment mSubscribeFragment;
+    private HistoryFragment mCategoryFragment;
+    private FavouriteFragment mSubscribeFragment;
     private SupportAnimator mAnimator;
 
     public static final String TAG_HOME = "Home";
-    public static final String TAG_CATEGORY = "Category";
-    public static final String TAG_SUBSCRIBE = "Subscribe";
-
-    private SweetSheet mSweetSheet;
+    public static final String TAG_HISTORY = "History";
+    public static final String TAG_FAVOURITE = "Favourite";
 
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
@@ -89,12 +80,9 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
     @Bind(R.id.nav_view)
     NavigationView mNavigationView;
 
-
-    private Intent mIntent;
-
     private boolean isFabHide = false;
 
-    private boolean isCategory = false;
+    private boolean isHistory = false;
 
     private boolean isHome = true;
 
@@ -115,62 +103,77 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         ButterKnife.unbind(this);
     }
 
-    private void setupRecyclerView() {
-
-        ArrayList<MenuEntity> list = new ArrayList<>();
-        //添加假数据
-        MenuEntity menuEntity1 = new MenuEntity();
-//        menuEntity1.iconId = R.drawable.recommend;
-        menuEntity1.title = "1";
-        MenuEntity menuEntity2 = new MenuEntity();
-//        menuEntity2.iconId = R.drawable.seven;
-        menuEntity2.title = "2";
-        MenuEntity menuEntity3 = new MenuEntity();
-//        menuEntity3.iconId = R.drawable.mouse;
-        menuEntity3.title = "3";
-        list.add(menuEntity1);
-        list.add(menuEntity2);
-        list.add(menuEntity3);
-
-        // SweetSheet 控件,根据 rl 确认位置
-        mSweetSheet = new SweetSheet(fl_home);
-
-        //设置数据源 (数据源支持设置 list 数组,也支持从菜单中获取)
-        mSweetSheet.setMenuList(list);
-        //根据设置不同的 Delegate 来显示不同的风格.
-        mSweetSheet.setDelegate(new RecyclerViewDelegate(false));
-        //根据设置不同Effect 来显示背景效果BlurEffect:模糊效果.DimEffect 变暗效果
-        mSweetSheet.setBackgroundEffect(new BlurEffect(8));
-        //设置点击事件
-        mSweetSheet.setOnMenuItemClickListener(new SweetSheet.OnMenuItemClickListener() {
-            @Override
-            public boolean onItemClick(int position, MenuEntity menuEntity1) {
-                showFab();
-
-//                //根据返回值, true 会关闭 SweetSheet ,false 则不会.
-//                Toast.makeText(HomeActivity.this, menuEntity1.title + "  " + position, Toast.LENGTH_SHORT).show();
-                handClick(position);
-                return true;
-            }
-        });
-        mSweetSheet.setBgListener(new Delegate.BgListener() {
-            @Override
-            public void onClick() {
-                closeMenu();
-            }
-        });
-
-        fab.setOnClickListener(this);
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
-    private void handClick(int position) {
-        switch (position) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+//            startActivity(new Intent(HomeActivity.this, AboutActivity.class));
+            return true;
+        }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab:
+                if (isHome) {
+                    //在主界面点击浮层按钮
+                } else {
+                    view_hide.setVisibility(View.VISIBLE);
+                    ArcAnimator.createArcAnimator(fab, ScreenUtil.getScreenWidth(getApplicationContext()) / 2, ScreenUtil.getStatusHeight(getApplicationContext()) + (toolbar.getHeight() / 2), 45.0f, Side.LEFT)
+                            .setDuration(500)
+                            .start();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCardView.setVisibility(View.VISIBLE);
+                            fab.setVisibility(View.GONE);
+                            iv_bottom_search.performClick();
+                        }
+                    }, 600);
+                }
+                break;
+
+            case R.id.view_hide:
+                edit_text_search.setText("");
+                iv_bottom_search.performClick();
+                break;
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            // 先隐藏搜索框
+            if (view_hide.isShown()) {
+                view_hide.performClick();
+            } else {
+                showCloseDialog();
+            }
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
 
+    }
+
+    /**
+     * 初始化直接面框架的fragment布局
+     */
     private void init() {
         view_hide.setOnClickListener(this);
         setSupportActionBar(toolbar);
@@ -187,22 +190,20 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         mHomeFragment = HomeFragment.newInstance();
         switchFragment(TAG_HOME, mHomeFragment);
 
-        setupRecyclerView();
-
-        mIntent = new Intent();
-
         handFabPathAndSearch();
+//        handFab(true);
     }
 
     /**
-     * 选择不同的Frament
+     * 根据不同的tag选择不同的Fragment
      *
-     * @param tag
-     * @param mFragment
+     * @param tag       标签
+     * @param mFragment 被选择的fragment
      */
     public void switchFragment(String tag, Fragment mFragment) {
-        if (hideTag == tag) return;
-
+        if (hideTag == tag) {
+            return;
+        }
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
 
@@ -224,12 +225,22 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         mFragmentTransaction.commit();
     }
 
+    /**
+     * 设置titleBar的标题
+     *
+     * @param str 字符串
+     */
     public void setTitle(String str) {
         if (toolbar != null) {
             toolbar.setTitle(str);
         }
     }
 
+    /**
+     * 侧边栏点击事件
+     *
+     * @param navigationView 侧边栏的view
+     */
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -237,38 +248,43 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
-
                         // 关闭搜索框、选择器
                         if (view_hide.isShown()) {
                             view_hide.performClick();
                         }
-                        closeMenu();
-
                         switch (menuItem.getItemId()) {
                             case R.id.nav_home:
-                                setTitle("最新漫画");
+                                setTitle("最常查看");
                                 handFab(false);
                                 fab.setImageResource(R.mipmap.ic_add_white_24dp);
                                 isHome = true;
-                                isCategory = false;
+                                isHistory = false;
 
                                 if (mHomeFragment == null) {
                                     mHomeFragment = HomeFragment.newInstance();
                                 }
                                 switchFragment(TAG_HOME, mHomeFragment);
                                 break;
-                            case R.id.nav_category:
+                            case R.id.nav_history:
 
-                                setCategoryFragment();
+                                setTitle("历史记录");
+                                isHome = false;
+                                fab.setImageResource(R.mipmap.ic_action_search);
+                                isHistory = true;
+                                handFab(false);
+                                if (mCategoryFragment == null) {
+                                    mCategoryFragment = HistoryFragment.newInstance();
+                                }
+                                switchFragment(TAG_HISTORY, mCategoryFragment);
 
                                 break;
-                            case R.id.nav_subscribe:
-//                                if (mSubscribeFragment == null) {
-//                                    mSubscribeFragment = SubscribeFragment.newInstance();
-//                                }
-                                setTitle("精选漫画");
+                            case R.id.nav_favourite:
+                                if (mSubscribeFragment == null) {
+                                    mSubscribeFragment = FavouriteFragment.newInstance();
+                                }
+                                setTitle("个人收藏");
                                 handFab(true);
-//                                switchFragment(TAG_SUBSCRIBE, new CardViewPagerFragment());
+//                                switchFragment(TAG_FAVOURITE, new CardViewPagerFragment());
                                 break;
                             case R.id.help:
                                 Toast.makeText(HomeActivity.this, "帮助", Toast.LENGTH_SHORT).show();
@@ -284,24 +300,14 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
                 });
     }
 
-    public void setCategoryFragment() {
-        setTitle("漫画分类");
-        isHome = false;
-        fab.setImageResource(R.mipmap.ic_action_search);
-        isCategory = true;
-        handFab(false);
-        if (mCategoryFragment == null) {
-            mCategoryFragment = CategoryFragment.newInstance();
-        }
-        switchFragment(TAG_CATEGORY, mCategoryFragment);
-    }
 
+    /**
+     * 处理浮层是否隐藏
+     *
+     * @param isFabHide 是否隐藏
+     */
     public void handFab(boolean isFabHide) {
         this.isFabHide = isFabHide;
-        animFab();
-    }
-
-    private void animFab() {
         if (isFabHide) {
             hideFab();
         } else {
@@ -309,76 +315,9 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-//        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            closeMenu();
-//            startActivity(new Intent(HomeActivity.this, AboutActivity.class));
-            return true;
-        }
-
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                closeMenu();
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fab:
-                if (isHome) {
-                    menuAndBtnAnim();
-                } else {
-                    view_hide.setVisibility(View.VISIBLE);
-                    ArcAnimator.createArcAnimator(fab, ScreenUtil.getScreenWidth(getApplicationContext()) / 2, ScreenUtil.getStatusHeight(getApplicationContext()) + (toolbar.getHeight() / 2), 45.0f, Side.LEFT)
-                            .setDuration(500)
-                            .start();
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mCardView.setVisibility(View.VISIBLE);
-                            fab.setVisibility(View.GONE);
-                            iv_bottom_search.performClick();
-                        }
-                    }, 600);
-
-
-//                    handFabPathAndSearch();
-                }
-//
-
-//                //set up clipView and coordinates where clipView will move
-
-
-                break;
-
-            case R.id.view_hide:
-                edit_text_search.setText("");
-                iv_bottom_search.performClick();
-                break;
-        }
-    }
-
+    /**
+     * 浮层按钮的点击事件
+     */
     private void handFabPathAndSearch() {
         iv_bottom_search.setOnClickListener(new OnClickListener() {
             @Override
@@ -461,7 +400,6 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
                         }
                     });
                 }
-
                 mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                 mAnimator.setDuration(600);
                 mAnimator.start();
@@ -469,53 +407,40 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         });
     }
 
+    /**
+     * 搜索
+     */
     private void searchData() {
         String result = edit_text_search.getText().toString().trim();
         edit_text_search.setText("");
 
         if (!TextUtils.isEmpty(result)) {
-//            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
-//            intent.putExtra("search", result);
-//            startActivity(intent);
+            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+            intent.putExtra("search", result);
+            startActivity(intent);
         } else {
-//            Toast.makeText(HomeActivity.this, "请输入漫画名字", Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeActivity.this, "请输入需要搜索的帖子信息", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    public void menuAndBtnAnim() {
-        mSweetSheet.toggle();
-        if (mSweetSheet.isShow()) {
-            hideFab();
-        }
-    }
 
+    /**
+     * 显示浮层按钮
+     */
     public void showFab() {
         if (fab != null) {
-//            ObjectAnimator animatorTX = ObjectAnimator.ofFloat(fab,"translationX",fab.getTranslationX(),0);
-////          ObjectAnimator animatorSX = ObjectAnimator.ofFloat(fab, "scaleX", 0, 1);
-////          ObjectAnimator animatorSY = ObjectAnimator.ofFloat(fab, "scaleY", 0, 1);
-//            ObjectAnimator animatorA = ObjectAnimator.ofFloat(fab,"alpha",0,1);
-//            AnimatorSet animSet = new AnimatorSet();
-//            animSet.play(animatorA).with(animatorTX);
-//            animSet.setDuration(500);
-//            animSet.start();
             fab.animate().scaleX(1.0f);
             fab.animate().scaleY(1.0f);
             fab.animate().translationX(0);
         }
     }
 
+    /**
+     * 隐藏浮层按钮
+     */
     public void hideFab() {
         if (fab != null) {
-//            ObjectAnimator animatorTX = ObjectAnimator.ofFloat(fab,"translationX",fab.getTranslationX(),200);
-////          ObjectAnimator animatorSX = ObjectAnimator.ofFloat(fab, "scaleX", 1, 0);
-////          ObjectAnimator animatorSY = ObjectAnimator.ofFloat(fab, "scaleY", 1,0);
-//            ObjectAnimator animatorA = ObjectAnimator.ofFloat(fab,"alpha",1,0);
-//            AnimatorSet animSet = new AnimatorSet();
-//            animSet.play(animatorA).with(animatorTX);
-//            animSet.setDuration(500);
-//            animSet.start();
             fab.animate().scaleX(0.1f);
             fab.animate().scaleY(0.1f);
             fab.animate().translationX(200);
@@ -523,29 +448,9 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
     }
 
 
-    public void closeMenu() {
-        if (mSweetSheet.isShow()) {
-            showFab();
-            mSweetSheet.dismiss();
-        }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            // 先隐藏搜索框
-            if (view_hide.isShown()) {
-                view_hide.performClick();
-            } else {
-                showCloseDialog();
-            }
-            return true;
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-
-    }
-
+    /**
+     * 显示退出的弹出窗口
+     */
     private void showCloseDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("温馨提示");
@@ -559,7 +464,6 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         builder.setNegativeButton("No", null);
         builder.show();
     }
-
 
     static float r(int a, int b) {
         return (float) Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));

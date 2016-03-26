@@ -7,7 +7,7 @@ import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.adolsai.asrabbit.activity.MainActivity;
+import com.adolsai.asrabbit.activity.HomeActivity;
 import com.ht.baselib.base.BaseApplication;
 import com.ht.baselib.utils.ActivityUtil;
 import com.ht.baselib.utils.StringUtils;
@@ -270,7 +270,7 @@ public class LocalAppUtil {
         ArrayList<Activity> activities = BaseApplication.mActivityList;
         if (activities != null && activities.size() > 0) {
             for (Activity a : activities) {
-                if (a instanceof MainActivity) {
+                if (a instanceof HomeActivity) {
                     return true;
                 }
             }

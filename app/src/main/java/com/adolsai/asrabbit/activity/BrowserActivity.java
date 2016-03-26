@@ -115,7 +115,7 @@ public class BrowserActivity extends AsRabbitBaseActivity {
     @Override
     public void onBackPressed() {
         if (!LocalAppUtil.isContainMainActivity()) {
-            ActivityUtil.startActivityByAnim(this, MainActivity.class);
+            ActivityUtil.startActivityByAnim(this, HomeActivity.class);
         }
         super.onBackPressed();
     }

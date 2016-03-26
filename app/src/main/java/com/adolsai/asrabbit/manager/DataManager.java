@@ -16,19 +16,25 @@ import java.util.List;
 public class DataManager {
 
     /**
-     * 获取喜欢的分区列表数据
+     * 获取分区列表数据
      *
      * @param listener 结果回调
      */
-    public static void getFavouritePartition(RequestListener listener) {
+    public static void getPartition(RequestListener listener) {
         List<Partition> list = new ArrayList<>();
         //TODO 获取数据源
-        list.add(new Partition("1", "创作交流"));
-        list.add(new Partition("2", "风雨读书声"));
-        list.add(new Partition("3", "自由交易区"));
-        list.add(new Partition("4", "评论专区"));
-        list.add(new Partition("5", "连载文库"));
-        list.add(new Partition("6", "网友留言区"));
+        list.add(new Partition("1", "创作交流", true));
+        list.add(new Partition("2", "风雨读书声", true));
+        list.add(new Partition("3", "自由交易区", true));
+        list.add(new Partition("4", "评论专区", true));
+        list.add(new Partition("5", "连载文库", true));
+        list.add(new Partition("6", "网友留言区", true));
+        list.add(new Partition("11", "图画乐园", false));
+        list.add(new Partition("12", "包月论坛", false));
+        list.add(new Partition("13", "妈咪宝贝", false));
+        list.add(new Partition("14", "名将传说", false));
+        list.add(new Partition("15", "凤凰觉", false));
+        list.add(new Partition("16", "流光水社", false));
         if (listener != null) {
             listener.getResult(list);
         }
@@ -36,24 +42,6 @@ public class DataManager {
 
     }
 
-    /**
-     * 获取其他数据集
-     *
-     * @param listener 结果回调
-     */
-    public static void getOtherPartition(RequestListener listener) {
-        List<Partition> list = new ArrayList<>();
-        //TODO 获取数据源
-        list.add(new Partition("11", "图画乐园"));
-        list.add(new Partition("12", "包月论坛"));
-        list.add(new Partition("13", "妈咪宝贝"));
-        list.add(new Partition("14", "名将传说"));
-        list.add(new Partition("15", "凤凰觉"));
-        list.add(new Partition("16", "流光水社"));
-        if (listener != null) {
-            listener.getResult(list);
-        }
-    }
 
     /**
      * 获取历史数据

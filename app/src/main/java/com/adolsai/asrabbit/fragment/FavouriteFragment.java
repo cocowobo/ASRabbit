@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 /**
  * Created by Administrator on 2015/10/9.
  */
-public class SubscribeFragment extends Fragment {
+public class FavouriteFragment extends Fragment {
 
-    public static SubscribeFragment newInstance() {
-        SubscribeFragment fragment = new SubscribeFragment();
+    public static FavouriteFragment newInstance() {
+        FavouriteFragment fragment = new FavouriteFragment();
         return fragment;
     }
 

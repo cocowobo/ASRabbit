@@ -478,7 +478,7 @@ public class MaterialRefreshLayout extends FrameLayout {
             }
 
             if (refreshListener != null) {
-                refreshListener.onfinish();
+                refreshListener.onFinish();
             }
         }
         isRefreshing = false;

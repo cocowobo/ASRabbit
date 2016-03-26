@@ -10,36 +10,27 @@ import android.view.ViewGroup;
 import com.adolsai.asrabbit.R;
 import com.ht.baselib.views.materialview.MaterialRefreshLayout;
 import com.ht.baselib.views.materialview.MaterialRefreshListener;
-import com.ht.baselib.views.viewselector.ViewSelectorLayout;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by Administrator on 2015/10/9.
  */
-public class CategoryFragment extends Fragment {
+public class HistoryFragment extends Fragment {
 
     @Bind(R.id.refreshlayout)
     MaterialRefreshLayout mMaterialRefreshLayout;
-    ViewSelectorLayout mViewSelectorLayout;
 
 
-//    private
-
-    public static CategoryFragment newInstance() {
-        CategoryFragment fragment = new CategoryFragment();
+    public static HistoryFragment newInstance() {
+        HistoryFragment fragment = new HistoryFragment();
         return fragment;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mViewSelectorLayout.show_LoadingView();
-//        getAvdData();
-
     }
 
 
@@ -52,9 +43,8 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_category, null);
-        mViewSelectorLayout = new ViewSelectorLayout(getActivity(), v);
         ButterKnife.bind(this, v);
-        return mViewSelectorLayout;
+        return v;
     }
 
     @Override
@@ -73,8 +63,8 @@ public class CategoryFragment extends Fragment {
             }
 
             @Override
-            public void onfinish() {
-                super.onfinish();
+            public void onFinish() {
+                super.onFinish();
             }
 
             @Override
@@ -96,7 +86,6 @@ public class CategoryFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        EventBus.getDefault().unregister(this);
     }
 
 

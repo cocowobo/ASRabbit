@@ -11,10 +11,13 @@ import java.io.Serializable;
 public class Partition implements Serializable {
     private String number;//区域编号
     private String title;//区域标题
+    private boolean isFavourite;//是否喜欢
 
-    public Partition(String number, String title) {
+
+    public Partition(String number, String title, boolean isFavourite) {
         this.number = number;
         this.title = title;
+        this.isFavourite = isFavourite;
     }
 
     public String getNumber() {
@@ -31,5 +34,13 @@ public class Partition implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setIsFavourite(boolean isFavourite) {
+        this.isFavourite = isFavourite;
     }
 }
