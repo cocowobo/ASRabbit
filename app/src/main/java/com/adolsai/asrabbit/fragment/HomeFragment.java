@@ -87,15 +87,6 @@ public class HomeFragment extends Fragment implements
         return v;
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        LogUtils.e("sharing", "setUserVisibleHint isVisibleToUser is " + isVisibleToUser);
-        if (isVisibleToUser) {
-            //用户主动切回到该界面，相当于Activity的onResume
-
-        }
-    }
 
     /**
      * 初始化界面元素
@@ -113,7 +104,6 @@ public class HomeFragment extends Fragment implements
         innerSwipeListViewFragment0Other.setOnItemClickListener(this);
         etItemPostUrl.setOnClickListener(this);
         tvItemGo.setOnClickListener(this);
-        refreshLayout.setLoadMore(false);
 
 
         etItemPostUrl.setOnEditorActionListener(new TextView.OnEditorActionListener() {

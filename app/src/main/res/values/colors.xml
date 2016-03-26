@@ -4,7 +4,7 @@
     <!--主色调 -->
     <color name="base_color">#d4859f</color>
     <!--系统通知栏颜色 -->
-    <color name="base_sys_bar_bg">#d4859f</color>
+    <color name="base_sys_bar_bg">#d4848f</color>
     <!--主要背景颜色 -->
     <color name="base_soft_bg">#F2F3F4</color>
     <!--白色 table背景 -->

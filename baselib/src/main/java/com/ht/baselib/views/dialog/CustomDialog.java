@@ -897,22 +897,22 @@ public final class CustomDialog extends Dialog{
         }
     }
 
-//    /**
-//     * confirmDialog 输入回调方法类(需要自主校验输入内容)
-//     */
-//    public abstract static class DialogTextWatcher {
-//        /**
-//         * 输入框输入值变化
-//         * @param confirmBtn 弹出框的确认按钮（需要控制是否可用）
-//         * @param firstEditText 触发变化的输入框对象1
-//         * @param secondeditText   触发变化的输入框对象2
-//         */
-//        public void onTextChanged(Button confirmBtn, EditText firstEditText, EditText secondeditText){
-//
-//        }
-//
-//        /**输入回调方法默认构造方法*/
-//        public DialogTextWatcher() {
-//        }
-//    }
+    /**
+     * confirmDialog 输入回调方法类(需要自主校验输入内容)
+     */
+    public abstract static class DialogTextWatcher {
+        /**
+         * 输入框输入值变化
+         * @param confirmBtn 弹出框的确认按钮（需要控制是否可用）
+         * @param firstEditText 触发变化的输入框对象1
+         * @param secondeditText   触发变化的输入框对象2
+         */
+        public void onTextChanged(Button confirmBtn, EditText firstEditText, EditText secondeditText){
+
+        }
+
+        /**输入回调方法默认构造方法*/
+        public DialogTextWatcher() {
+        }
+    }
 }

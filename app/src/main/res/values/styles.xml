@@ -12,9 +12,14 @@
 
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#795548</item>
-        <item name="colorPrimaryDark">#5D4037</item>
+        <item name="colorPrimaryDark">#d4848f</item>
         <item name="colorAccent">#795548</item>
         <item name="android:windowBackground">@color/window_background</item>
     </style>
+
+    <style name="TitleBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">#d4848f</item>
+    </style>
+
 
 </resources>

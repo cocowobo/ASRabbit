@@ -37,6 +37,7 @@ import com.adolsai.asrabbit.utils.StatusBarCompat;
 import com.adolsai.asrabbit.utils.VersionUtil;
 import com.ht.baselib.arcanimator.ArcAnimator;
 import com.ht.baselib.arcanimator.Side;
+import com.ht.baselib.utils.LogUtils;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 import butterknife.Bind;
@@ -93,8 +94,18 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         context = this;
-        StatusBarCompat.compat(this, getResources().getColor(R.color.brownness));
+        StatusBarCompat.compat(this, getResources().getColor(R.color.base_sys_bar_bg));
         init();
+        handFab(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtils.e("sharing", "HomeActivity onResume" + isHistory);
+        if (isHistory) {
+            handFab(false);
+        }
     }
 
     @Override
@@ -115,10 +126,12 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
 //            startActivity(new Intent(HomeActivity.this, AboutActivity.class));
+            handFab(true);
             return true;
         }
         switch (item.getItemId()) {
             case android.R.id.home:
+                handFab(true);
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
@@ -176,6 +189,7 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
      */
     private void init() {
         view_hide.setOnClickListener(this);
+        fab.setOnClickListener(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(R.mipmap.ic_menu);
@@ -191,7 +205,6 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         switchFragment(TAG_HOME, mHomeFragment);
 
         handFabPathAndSearch();
-//        handFab(true);
     }
 
     /**
@@ -255,7 +268,7 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
                         switch (menuItem.getItemId()) {
                             case R.id.nav_home:
                                 setTitle("最常查看");
-                                handFab(false);
+                                handFab(true);
                                 fab.setImageResource(R.mipmap.ic_add_white_24dp);
                                 isHome = true;
                                 isHistory = false;
@@ -291,8 +304,7 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
 //                                startActivity(new Intent(HomeActivity.this, AboutActivity.class));
                                 break;
                             case R.id.setting:
-                                Toast.makeText(HomeActivity.this, "待开发...", Toast.LENGTH_SHORT).show();
-//                                startActivity(new Intent(HomeActivity.this,SettingActivity.class));
+                                startActivity(new Intent(HomeActivity.this, SettingActivity.class));
                                 break;
                         }
                         return true;
@@ -430,6 +442,7 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
      */
     public void showFab() {
         if (fab != null) {
+            fab.setVisibility(View.VISIBLE);
             fab.animate().scaleX(1.0f);
             fab.animate().scaleY(1.0f);
             fab.animate().translationX(0);
@@ -444,6 +457,7 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
             fab.animate().scaleX(0.1f);
             fab.animate().scaleY(0.1f);
             fab.animate().translationX(200);
+            fab.setVisibility(View.GONE);
         }
     }
 
