@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ht.baselib.views.materialview.MaterialRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/refreshlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:overlay="false"
+    app:progress_colors="@array/material_colors"
+    app:wave_color="@color/window_background">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/as_rabbit_title_bar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp">
+
+            <com.adolsai.asrabbit.views.InnerSwipeListView
+                android:id="@+id/lv_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/base_tab_white"
+                android:divider="@null"
+                android:listSelector="@android:color/transparent" />
+        </RelativeLayout>
+    </ScrollView>
+
+
+</com.ht.baselib.views.materialview.MaterialRefreshLayout>
