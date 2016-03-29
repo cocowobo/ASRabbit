@@ -11,6 +11,7 @@ import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.adapter.PostAdapter;
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
+import com.adolsai.asrabbit.model.ErrorModel;
 import com.adolsai.asrabbit.model.Post;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
 import com.ht.baselib.views.materialview.MaterialRefreshLayout;
@@ -68,9 +69,12 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
             @Override
             public void getResult(Object result) {
                 if (result != null) {
-                    postLists.clear();
-                    postLists.addAll((List) result);
-                    postAdapter.replaceAll(postLists);
+                    if (result instanceof ErrorModel) {
+                        //错误处理
+                    } else {
+                        dealDate(result);
+                    }
+
                 }
                 if (listener != null) {
                     listener.getResult(true);
@@ -93,6 +97,13 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
+    }
+
+    private void dealDate(Object result) {
+        postLists.clear();
+        postLists.addAll((List) result);
+        postAdapter.replaceAll(postLists);
 
     }
 }

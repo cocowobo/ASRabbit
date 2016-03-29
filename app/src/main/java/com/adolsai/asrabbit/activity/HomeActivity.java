@@ -38,6 +38,7 @@ import com.adolsai.asrabbit.utils.VersionUtil;
 import com.ht.baselib.arcanimator.ArcAnimator;
 import com.ht.baselib.arcanimator.Side;
 import com.ht.baselib.utils.LogUtils;
+import com.ht.baselib.utils.SoftInputMethodUtils;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 import butterknife.Bind;
@@ -101,7 +102,6 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        LogUtils.e("sharing", "HomeActivity onResume" + isHistory);
         if (isHistory) {
             handFab(false);
         }
@@ -328,7 +328,6 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
      * @param isFabHide 是否隐藏
      */
     public void handFab(boolean isFabHide) {
-        LogUtils.e("sharing", "handFab fab is " + fab);
         if (isFabHide) {
             hideFab();
         } else {
@@ -343,6 +342,8 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         iv_bottom_search.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                //收回软键盘
+                SoftInputMethodUtils.hideSoftInputMethod(context, edit_text_search);
                 if (mAnimator != null && !mAnimator.isRunning()) {
                     mAnimator = mAnimator.reverse();
                     float curTranslationX = iv_bottom_search.getTranslationX();
@@ -451,10 +452,11 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
      */
     public void showFab() {
         if (fab != null) {
+            LogUtils.e("sharing", "showFab");
             fab.setVisibility(View.VISIBLE);
-//            fab.animate().scaleX(1.0f);
-//            fab.animate().scaleY(1.0f);
-//            fab.animate().translationX(0);
+            fab.animate().scaleX(1.0f);
+            fab.animate().scaleY(1.0f);
+            fab.animate().translationX(0);
         }
     }
 
@@ -463,9 +465,10 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
      */
     public void hideFab() {
         if (fab != null) {
-//            fab.animate().scaleX(0.1f);
-//            fab.animate().scaleY(0.1f);
-//            fab.animate().translationX(200);
+            LogUtils.e("sharing", "hideFab");
+            fab.animate().scaleX(0.1f);
+            fab.animate().scaleY(0.1f);
+            fab.animate().translationX(200);
             fab.setVisibility(View.GONE);
         }
     }

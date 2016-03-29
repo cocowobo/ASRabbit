@@ -18,11 +18,13 @@ import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.adapter.PartitionAdapter;
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
+import com.adolsai.asrabbit.model.ErrorModel;
 import com.adolsai.asrabbit.model.Partition;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
 import com.ht.baselib.utils.LocalDisplay;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.utils.SoftInputMethodUtils;
+import com.ht.baselib.views.dialog.CustomToast;
 import com.ht.baselib.views.materialview.MaterialRefreshLayout;
 import com.ht.baselib.views.materialview.MaterialRefreshListener;
 import com.ht.baselib.views.swipemenulistview.SwipeMenu;
@@ -72,7 +74,6 @@ public class HomeFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        LogUtils.e("sharing", " HomeFragment onResume  ");
 
     }
 
@@ -189,7 +190,13 @@ public class HomeFragment extends Fragment implements
             @Override
             public void getResult(Object result) {
                 if (result != null) {
-                    dealDate(result);
+                    if (result instanceof ErrorModel) {
+                        //错误
+                        CustomToast.showToast(context, ((ErrorModel) result).getErrorMsg());
+                    } else {
+                        dealDate(result);
+                    }
+
                 }
                 if (listener != null) {
                     listener.getResult(true);
