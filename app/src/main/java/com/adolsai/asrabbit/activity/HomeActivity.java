@@ -77,15 +77,14 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
     @Bind(R.id.edit_text_search)
     EditText edit_text_search;
     @Bind(R.id.view_hide)
-    View view_hide;
+    View viewHide;
     @Bind(R.id.nav_view)
     NavigationView mNavigationView;
 
-    private boolean isFabHide = false;
 
-    private boolean isHistory = false;
+    private static boolean isHistory = false;
 
-    private boolean isHome = true;
+    private static boolean isHome = true;
 
 
     @Override
@@ -116,15 +115,15 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_home) {
 //            startActivity(new Intent(HomeActivity.this, AboutActivity.class));
             handFab(true);
             return true;
@@ -145,7 +144,7 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
                 if (isHome) {
                     //在主界面点击浮层按钮
                 } else {
-                    view_hide.setVisibility(View.VISIBLE);
+                    viewHide.setVisibility(View.VISIBLE);
                     ArcAnimator.createArcAnimator(fab, ScreenUtil.getScreenWidth(getApplicationContext()) / 2, ScreenUtil.getStatusHeight(getApplicationContext()) + (toolbar.getHeight() / 2), 45.0f, Side.LEFT)
                             .setDuration(500)
                             .start();
@@ -172,8 +171,8 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             // 先隐藏搜索框
-            if (view_hide.isShown()) {
-                view_hide.performClick();
+            if (viewHide.isShown()) {
+                viewHide.performClick();
             } else {
                 showCloseDialog();
             }
@@ -188,10 +187,11 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
      * 初始化直接面框架的fragment布局
      */
     private void init() {
-        view_hide.setOnClickListener(this);
+        viewHide.setOnClickListener(this);
         fab.setOnClickListener(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         toolbar.setNavigationIcon(R.mipmap.ic_menu);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -205,6 +205,15 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         switchFragment(TAG_HOME, mHomeFragment);
 
         handFabPathAndSearch();
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                LogUtils.e("sharing", "item onclick");
+                return false;
+            }
+        });
+
     }
 
     /**
@@ -262,8 +271,8 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         // 关闭搜索框、选择器
-                        if (view_hide.isShown()) {
-                            view_hide.performClick();
+                        if (viewHide.isShown()) {
+                            viewHide.performClick();
                         }
                         switch (menuItem.getItemId()) {
                             case R.id.nav_home:
@@ -319,7 +328,7 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
      * @param isFabHide 是否隐藏
      */
     public void handFab(boolean isFabHide) {
-        this.isFabHide = isFabHide;
+        LogUtils.e("sharing", "handFab fab is " + fab);
         if (isFabHide) {
             hideFab();
         } else {
@@ -359,7 +368,7 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
                                         .setDuration(500)
                                         .start();
                             }
-                            view_hide.setVisibility(View.GONE);
+                            viewHide.setVisibility(View.GONE);
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -443,9 +452,9 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
     public void showFab() {
         if (fab != null) {
             fab.setVisibility(View.VISIBLE);
-            fab.animate().scaleX(1.0f);
-            fab.animate().scaleY(1.0f);
-            fab.animate().translationX(0);
+//            fab.animate().scaleX(1.0f);
+//            fab.animate().scaleY(1.0f);
+//            fab.animate().translationX(0);
         }
     }
 
@@ -454,9 +463,9 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
      */
     public void hideFab() {
         if (fab != null) {
-            fab.animate().scaleX(0.1f);
-            fab.animate().scaleY(0.1f);
-            fab.animate().translationX(200);
+//            fab.animate().scaleX(0.1f);
+//            fab.animate().scaleY(0.1f);
+//            fab.animate().translationX(200);
             fab.setVisibility(View.GONE);
         }
     }
