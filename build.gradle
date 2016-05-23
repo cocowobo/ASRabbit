@@ -4,7 +4,7 @@
 buildscript {
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'com.android.tools.build:gradle:2.1.0'
         //JDK1.8lambda编程风格支持（同时拓展支持JDK1.6\1.7）
         classpath 'me.tatarka:gradle-retrolambda:3.2.3'
         //A Gradle plugin to report the number of method references in your APK on every build.

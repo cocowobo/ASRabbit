@@ -11,7 +11,7 @@ tasks.withType(JavaCompile) {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 15
@@ -72,6 +72,8 @@ dependencies {
     compile('com.github.ozodrukh:CircularReveal:1.1.1@aar') {
         transitive = true;
     }
+    //一个专注于平滑滚动的 Android 图像加载和缓存库
+    compile 'com.github.bumptech.glide:glide:3.6.1'
     //图片加载工具-远程/本地
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
 

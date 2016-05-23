@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.adolsai.asrabbit.R;
+import com.adolsai.asrabbit.fragment.CardViewPagerFragment;
 import com.adolsai.asrabbit.fragment.FavouriteFragment;
 import com.adolsai.asrabbit.fragment.HistoryFragment;
 import com.adolsai.asrabbit.fragment.HomeFragment;
@@ -306,7 +307,7 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
                                 }
                                 setTitle("个人收藏");
                                 handFab(true);
-//                                switchFragment(TAG_FAVOURITE, new CardViewPagerFragment());
+                                switchFragment(TAG_FAVOURITE, new CardViewPagerFragment());
                                 break;
                             case R.id.help:
                                 Toast.makeText(HomeActivity.this, "帮助", Toast.LENGTH_SHORT).show();
