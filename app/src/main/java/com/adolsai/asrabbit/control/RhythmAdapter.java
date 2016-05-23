@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.model.Card;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;

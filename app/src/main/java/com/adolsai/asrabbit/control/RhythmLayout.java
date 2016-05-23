@@ -11,9 +11,9 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
-import com.cjj.mousepaint.R;
-import com.cjj.mousepaint.utils.AnimatorUtils;
-import com.cjj.mousepaint.utils.AppUtils;
+import com.adolsai.asrabbit.R;
+import com.adolsai.asrabbit.utils.AnimatorUtils;
+import com.ht.baselib.utils.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;

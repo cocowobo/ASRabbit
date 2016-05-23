@@ -40,3 +40,9 @@ allprojects {
 subprojects {
     task allDeps(type: DependencyReportTask) {}
 }
+
+/**手动让Android Studio使用Gradle 2.10*/
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
+

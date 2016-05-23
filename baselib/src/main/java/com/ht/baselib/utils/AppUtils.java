@@ -1,5 +1,6 @@
 package com.ht.baselib.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -8,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -230,5 +232,16 @@ public class AppUtils {
         }
 
         return umengChannelCache;
+    }
+
+    public static DisplayMetrics getScreenDisplayMetrics(Context context) {
+        DisplayMetrics localDisplayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
+        return localDisplayMetrics;
+    }
+
+    public static int getDrawableIdByName(Context context, String drawableName) {
+
+        return context.getResources().getIdentifier(drawableName, "drawable", context.getPackageName());
     }
 }
