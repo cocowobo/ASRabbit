@@ -11,7 +11,7 @@
         android:background="@drawable/home_icon_bg"
         android:padding="2dp">
 
-        <com.cjj.mousepaint.customview.RoundedImageView
+        <com.adolsai.asrabbit.views.RoundedImageView
             android:id="@+id/image_icon"
             android:layout_width="44dp"
             android:layout_height="44dp"

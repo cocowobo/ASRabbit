@@ -7,7 +7,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.adolsai.asrabbit.R;
@@ -17,10 +16,14 @@ import com.adolsai.asrabbit.control.IRhythmItemListener;
 import com.adolsai.asrabbit.control.RhythmAdapter;
 import com.adolsai.asrabbit.control.RhythmLayout;
 import com.adolsai.asrabbit.control.ViewPagerScroller;
+import com.adolsai.asrabbit.listener.RequestListener;
+import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.Card;
+import com.adolsai.asrabbit.model.ErrorModel;
 import com.adolsai.asrabbit.model.FavouritePost;
 import com.adolsai.asrabbit.utils.AnimatorUtils;
 import com.adolsai.asrabbit.utils.HexUtils;
+import com.ht.baselib.views.dialog.CustomToast;
 import com.ht.baselib.views.viewselector.ViewSelectorLayout;
 
 import java.lang.reflect.Field;
@@ -36,7 +39,6 @@ import java.util.List;
 public class CardViewPagerFragment extends AsRabbitBaseFragment {
 
     private View mMainView;
-    private Button mSideMenuOrBackBtn;
 
     private RhythmLayout mRhythmLayout;
 
@@ -45,12 +47,6 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
     private CardPagerAdapter mCardPagerAdapter;
 
     private int mPreColor;
-
-    private boolean mHasNext = true;
-
-    private boolean mIsRequesting;
-
-    private boolean isAdapterUpdated;
 
     private int mCurrentViewPagerPage;
 
@@ -89,9 +85,6 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
 
         public void onPageSelected(int position) {
             onAppPagerChange(position);
-//            if (mHasNext && (position > -10 + mCardList.size()) && !mIsRequesting) {
-////                fetchData();
-//            }
         }
     };
 
@@ -162,61 +155,50 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewSelectorLayout.show_LoadingView();
         fetchData();
 
     }
 
 
     private void fetchData() {
-//        AppDao.getInstance().subscribeByUser("0", new CallbackListener<AllBookModels>() {
-//            @Override
-//            public void onStringResult(String result) {
-//                super.onStringResult(result);
-//                Log.i("scirbe", "result---->" + result);
-//            }
-//
-//            @Override
-//            public void onSuccess(AllBookModels result) {
-//                super.onSuccess(result);
-//                mViewSelectorLayout.show_ContentView();
-//                handData(result.Return.List);
-//            }
-
-//            @Override
-//            public void onError(Exception e) {
-//                super.onError(e);
-//            }
-//        });
-
-//        ArrayList<Card> cardList = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            int m = i % 10;
-//            Card card = addData(m);
-//            cardList.add(card);
-//        }
-//        mPreColor = HexUtils.getHexColor(cardList.get(0).getBackgroundColor());
+        mViewSelectorLayout.show_LoadingView();
+        DataManager.getFavouritePost(new RequestListener() {
+            @Override
+            public void getResult(Object result) {
+                if (result instanceof ErrorModel) {
+                    //错误
+                    CustomToast.showToast(getActivity(), ((ErrorModel) result).getErrorMsg());
+                    mViewSelectorLayout.show_FailView();
+                } else {
+                    handData(result);
+                    mViewSelectorLayout.show_ContentView();
+                }
+            }
+        });
 
     }
 
-    private void handData(ArrayList<FavouritePost> list) {
-        ArrayList<Card> cardList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            Card card = new Card();
-            card.setId("id");
-            card.setTitle("title");
-            card.setSubTitle("SubTitle");
-            card.setDigest("Digest");
-            card.setAuthorName("AuthorName");
-            card.setUpNum(Integer.valueOf("1"));
-            card.setBackgroundColor("#795548");
-            card.setCoverImgerUrl(list.get(i).getFrontCoverUrl());
-            card.setIconUrl(list.get(i).getFrontCoverUrl());
-            cardList.add(card);
-        }
+    private void handData(Object result) {
+        if (result != null && result instanceof List) {
+            ArrayList<FavouritePost> list = (ArrayList<FavouritePost>) result;
+            ArrayList<Card> cardList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Card card = new Card();
+                card.setId("id");
+                card.setTitle("title");
+                card.setSubTitle("SubTitle");
+                card.setDigest("Digest");
+                card.setAuthorName("AuthorName");
+                card.setUpNum(Integer.valueOf("1"));
+                card.setBackgroundColor("#795548");
+                card.setCoverImgerUrl(list.get(i).getFrontCoverUrl());
+                card.setIconUrl(list.get(i).getFrontCoverUrl());
+                cardList.add(card);
+            }
 
-        updateAppAdapter(cardList);
-        onAppPagerChange(0);
+            updateAppAdapter(cardList);
+            onAppPagerChange(0);
+        }
     }
 
 

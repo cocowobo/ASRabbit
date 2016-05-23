@@ -73,6 +73,9 @@ public class CardFragment extends AsRabbitBaseFragment implements View.OnClickLi
         this.mCard = (Card) getArguments().getSerializable("card");
     }
 
+
+
+
     protected void initActions(View paramView) {
     }
 
@@ -91,10 +94,8 @@ public class CardFragment extends AsRabbitBaseFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_box_card:
-//                Intent intent = new Intent(
-//                        getActivity(), DetialActivity.class);
-//                intent.putExtra("bookId", mCard.getId());
-//                startActivity(intent);
+                //TODO 点击事件
+
                 break;
         }
     }
