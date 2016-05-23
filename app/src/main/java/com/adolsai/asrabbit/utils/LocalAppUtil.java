@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 
 import com.adolsai.asrabbit.activity.HomeActivity;
 import com.ht.baselib.base.BaseApplication;
@@ -277,5 +278,18 @@ public class LocalAppUtil {
         }
         return false;
     }
+
+    /**
+     * 获取屏幕参数
+     *
+     * @param context
+     * @return
+     */
+    public static DisplayMetrics getScreenDisplayMetrics(Context context) {
+        DisplayMetrics localDisplayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
+        return localDisplayMetrics;
+    }
+
 
 }

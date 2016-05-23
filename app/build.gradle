@@ -18,7 +18,7 @@ tasks.withType(JavaCompile) {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.3"
     /**发布签名配置-通过读取配置文件设置或者利用Android Studio提供的打包功能**/
     signingConfigs {
         debug {}
@@ -115,23 +115,23 @@ android {
         }
     }
 
-    /**
-     * 为了避免2.3机型runtime 的linearAlloclimit , 保持每一个dex体积<4M，设置每个dex的最大方法数为48000
-     */
-    applicationVariants.all {
-        variant ->
-            dex.doFirst {
-                dex ->
-                    if (dex.additionalParameters == null) {
-                        dex.additionalParameters = ['--multi-dex']
-                    } else {
-                        dex.additionalParameters += '--multi-dex'
-                    }
-
-                    // Add more additional parameters like this:
-                    dex.additionalParameters += '--set-max-idx-number=48000'
-            }
-    }
+//    /**
+//     * 为了避免2.3机型runtime 的linearAlloclimit , 保持每一个dex体积<4M，设置每个dex的最大方法数为48000
+//     */
+//    applicationVariants.all {
+//        variant ->
+//            dex.doFirst {
+//                dex ->
+//                    if (dex.additionalParameters == null) {
+//                        dex.additionalParameters = ['--multi-dex']
+//                    } else {
+//                        dex.additionalParameters += '--multi-dex'
+//                    }
+//
+//                    // Add more additional parameters like this:
+//                    dex.additionalParameters += '--set-max-idx-number=48000'
+//            }
+//    }
 
     /**
      * 修改生成的最终文件名
