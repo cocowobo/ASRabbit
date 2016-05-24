@@ -1,6 +1,5 @@
 package com.adolsai.asrabbit.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -24,11 +22,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.adolsai.asrabbit.R;
+import com.adolsai.asrabbit.app.GlobalStaticData;
+import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
 import com.adolsai.asrabbit.fragment.CardViewPagerFragment;
 import com.adolsai.asrabbit.fragment.FavouriteFragment;
 import com.adolsai.asrabbit.fragment.HistoryFragment;
@@ -38,19 +37,18 @@ import com.adolsai.asrabbit.utils.StatusBarCompat;
 import com.adolsai.asrabbit.utils.VersionUtil;
 import com.ht.baselib.arcanimator.ArcAnimator;
 import com.ht.baselib.arcanimator.Side;
+import com.ht.baselib.utils.ActivityUtil;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.utils.SoftInputMethodUtils;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.orhanobut.hawk.Hawk;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
 
-public class HomeActivity extends AppCompatActivity implements OnClickListener {
-    private Context context;
-
+public class HomeActivity extends AsRabbitBaseActivity implements OnClickListener {
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private String hideTag;
@@ -66,8 +64,6 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
 
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @Bind(R.id.fl_content_home)
-    FrameLayout fl_home;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.fab)
@@ -82,22 +78,71 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
     View viewHide;
     @Bind(R.id.nav_view)
     NavigationView mNavigationView;
-
+    @Bind(R.id.iv_nav_head)
+    ImageView ivNavHead;
 
     private static boolean isHistory = false;
-
+    private static boolean isFavourite = false;
     private static boolean isHome = true;
 
 
+    //***********************生命周期区**************************************************************
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        ButterKnife.bind(this);
-        context = this;
+        initActivity(R.layout.activity_home, savedInstanceState);
+    }
+
+    @Override
+    protected void initViews() {
         StatusBarCompat.compat(this, getResources().getColor(R.color.base_sys_bar_bg));
-        init();
+        viewHide.setOnClickListener(this);
+        fab.setOnClickListener(this);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setNavigationIcon(R.mipmap.ic_menu);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (mNavigationView != null) {
+            setupDrawerContent(mNavigationView);
+            mNavigationView.setCheckedItem(R.id.nav_home);
+        }
+
+        mHomeFragment = HomeFragment.newInstance();
+        switchFragment(TAG_HOME, mHomeFragment);
+
+        handFabPathAndSearch();
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.action_home) {
+                    LogUtils.e("点击关于");
+                    handFab(true);
+                    return true;
+                } else if (id == R.id.action_fav) {
+                    LogUtils.e("点击fav清除");
+                    handFab(true);
+                    return true;
+                } else if (id == R.id.action_history) {
+                    LogUtils.e("点击his清除");
+                    handFab(true);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
         handFab(true);
+        ivNavHead.setOnClickListener(this);
+    }
+
+    @Override
+    protected void initData() {
+
     }
 
     @Override
@@ -105,39 +150,60 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         super.onResume();
         if (isHistory) {
             handFab(false);
+        } else {
+            handFab(true);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        /**
+         * 此方法用于初始化菜单，其中menu参数就是即将要显示的Menu实例。 返回true则显示该menu,false 则不显示;
+         * (只会在第一次初始化菜单时调用) Inflate the menu; this adds items to the action bar
+         * if it is present.
+         */
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        /**
+         * 在onCreateOptionsMenu执行后，菜单被显示前调用；如果菜单已经被创建，则在菜单显示前被调用。 同样的，
+         * 返回true则显示该menu,false 则不显示; （可以通过此方法动态的改变菜单的状态，比如加载不同的菜单等） TODO
+         * Auto-generated method stub
+         */
+        LogUtils.e("onPrepareOptionsMenu");
+        menu.clear();
+        if (isHome) {
+            getMenuInflater().inflate(R.menu.menu_home, menu);
+        } else if (isHistory) {
+            getMenuInflater().inflate(R.menu.menu_history, menu);
+        } else if (isFavourite) {
+            getMenuInflater().inflate(R.menu.menu_favourite, menu);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        /**
+         * 菜单项被点击时调用，也就是菜单项的监听方法。
+         * 通过这几个方法，可以得知，对于Activity，同一时间只能显示和监听一个Menu 对象。 TODO Auto-generated
+         * method stub
+         */
         int id = item.getItemId();
-        if (id == R.id.action_home) {
-//            startActivity(new Intent(HomeActivity.this, AboutActivity.class));
+        if (id == android.R.id.home) {
+            //点击拉开侧边栏
             handFab(true);
+            mDrawerLayout.openDrawer(GravityCompat.START);
             return true;
-        }
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                handFab(true);
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    //************************事件处理区***************************************************************
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -165,6 +231,15 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
                 edit_text_search.setText("");
                 iv_bottom_search.performClick();
                 break;
+            case R.id.iv_nav_head:
+                if (!Hawk.get(GlobalStaticData.IS_LOGIN, false)) {
+                    //未登陆，跳转到登陆界面
+                    ActivityUtil.startActivity(activity, LoginActivity.class);
+                }
+
+                break;
+            default:
+                break;
         }
     }
 
@@ -185,37 +260,175 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
     }
 
     /**
-     * 初始化直接面框架的fragment布局
+     * 侧边栏点击事件
+     *
+     * @param navigationView 侧边栏的view
      */
-    private void init() {
-        viewHide.setOnClickListener(this);
-        fab.setOnClickListener(this);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        // 关闭搜索框、选择器
+                        if (viewHide.isShown()) {
+                            viewHide.performClick();
+                        }
+                        switch (menuItem.getItemId()) {
+                            case R.id.nav_home:
+                                setTitle("最常查看");
+                                handFab(true);
+                                fab.setImageResource(R.mipmap.ic_add_white_24dp);
+                                isHome = true;
+                                isFavourite = false;
+                                isHistory = false;
 
-        toolbar.setNavigationIcon(R.mipmap.ic_menu);
+                                if (mHomeFragment == null) {
+                                    mHomeFragment = HomeFragment.newInstance();
+                                }
+                                switchFragment(TAG_HOME, mHomeFragment);
+                                break;
+                            case R.id.nav_history:
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (mNavigationView != null) {
-            setupDrawerContent(mNavigationView);
-            mNavigationView.setCheckedItem(R.id.nav_home);
-        }
+                                setTitle("历史记录");
+                                isHome = false;
+                                isFavourite = false;
+                                fab.setImageResource(R.mipmap.ic_action_search);
+                                isHistory = true;
+                                handFab(false);
+                                if (mCategoryFragment == null) {
+                                    mCategoryFragment = HistoryFragment.newInstance();
+                                }
+                                switchFragment(TAG_HISTORY, mCategoryFragment);
 
-        mHomeFragment = HomeFragment.newInstance();
-        switchFragment(TAG_HOME, mHomeFragment);
+                                break;
+                            case R.id.nav_favourite:
+                                if (mSubscribeFragment == null) {
+                                    mSubscribeFragment = FavouriteFragment.newInstance();
+                                }
+                                isFavourite = true;
+                                isHome = false;
+                                isHistory = false;
+                                setTitle("个人收藏");
+                                handFab(true);
+                                switchFragment(TAG_FAVOURITE, new CardViewPagerFragment());
+                                break;
+                            case R.id.help:
+                                Toast.makeText(HomeActivity.this, "帮助", Toast.LENGTH_SHORT).show();
+//                                startActivity(new Intent(HomeActivity.this, AboutActivity.class));
+                                break;
+                            case R.id.setting:
+                                startActivity(new Intent(HomeActivity.this, SettingActivity.class));
+                                break;
+                        }
+                        return true;
+                    }
+                });
+    }
 
-        handFabPathAndSearch();
-
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+    /**
+     * 浮层按钮的点击事件
+     */
+    private void handFabPathAndSearch() {
+        iv_bottom_search.setOnClickListener(new OnClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                LogUtils.e("sharing", "item onclick");
-                return false;
+            public void onClick(View v) {
+                //收回软键盘
+                SoftInputMethodUtils.hideSoftInputMethod(mContext, edit_text_search);
+                if (mAnimator != null && !mAnimator.isRunning()) {
+                    mAnimator = mAnimator.reverse();
+                    float curTranslationX = iv_bottom_search.getTranslationX();
+                    final ObjectAnimator animator = ObjectAnimator.ofFloat(iv_bottom_search, "translationX", curTranslationX, 0);
+                    animator.setDuration(600);
+                    mAnimator.addListener(new SupportAnimator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart() {
+                            animator.start();
+                        }
+
+                        @Override
+                        public void onAnimationEnd() {
+                            mAnimator = null;
+                            fab.setVisibility(View.VISIBLE);
+                            mCardView.setVisibility(View.GONE);
+                            if (VersionUtil.checkVersionIntMoreThan19()) {
+                                ArcAnimator.createArcAnimator(fab, ScreenUtil.getScreenWidth(mContext)
+                                                - fab.getWidth() / 2 - ScreenUtil.dip2px(mContext, 16),
+                                        ScreenUtil.getScreenHeight(mContext) - fab.getHeight()
+                                                - ScreenUtil.dip2px(mContext, 16), 45.0f, Side.LEFT)
+                                        .setDuration(500)
+                                        .start();
+                            } else {
+                                ArcAnimator.createArcAnimator(fab, ScreenUtil.getScreenWidth(mContext)
+                                                - fab.getWidth() / 2 - ScreenUtil.dip2px(mContext, 16),
+                                        ScreenUtil.getScreenHeight(mContext) - fab.getHeight() / 2
+                                                - ScreenUtil.dip2px(mContext, 16), 45.0f, Side.LEFT)
+                                        .setDuration(500)
+                                        .start();
+                            }
+                            viewHide.setVisibility(View.GONE);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    searchData();
+                                }
+                            }, 500);
+
+                        }
+
+                        @Override
+                        public void onAnimationCancel() {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat() {
+
+                        }
+                    });
+                } else if (mAnimator != null) {
+                    mAnimator.cancel();
+                    return;
+                } else {
+                    int cx = mCardView.getRight();
+                    int cy = mCardView.getBottom();
+                    float curTranslationX = iv_bottom_search.getTranslationX();
+                    final ObjectAnimator animator = ObjectAnimator.ofFloat(iv_bottom_search, "translationX", curTranslationX, cx / 2 - ScreenUtil.dip2px(mContext, 24));
+                    animator.setDuration(600);
+                    float radius = r(mCardView.getWidth(), mCardView.getHeight());
+                    mAnimator = ViewAnimationUtils.createCircularReveal(mCardView, cx / 2, cy - ScreenUtil.dip2px(mContext, 32), ScreenUtil.dip2px(mContext, 20), radius);
+                    mAnimator.addListener(new SupportAnimator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart() {
+                            animator.start();
+                        }
+
+                        @Override
+                        public void onAnimationEnd() {
+
+                        }
+
+                        @Override
+                        public void onAnimationCancel() {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat() {
+
+                        }
+                    });
+                }
+                mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                mAnimator.setDuration(600);
+                mAnimator.start();
             }
         });
-
     }
+
+
+    //****************自定义方法区*********************************************************************
 
     /**
      * 根据不同的tag选择不同的Fragment
@@ -260,70 +473,6 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
     }
 
     /**
-     * 侧边栏点击事件
-     *
-     * @param navigationView 侧边栏的view
-     */
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        // 关闭搜索框、选择器
-                        if (viewHide.isShown()) {
-                            viewHide.performClick();
-                        }
-                        switch (menuItem.getItemId()) {
-                            case R.id.nav_home:
-                                setTitle("最常查看");
-                                handFab(true);
-                                fab.setImageResource(R.mipmap.ic_add_white_24dp);
-                                isHome = true;
-                                isHistory = false;
-
-                                if (mHomeFragment == null) {
-                                    mHomeFragment = HomeFragment.newInstance();
-                                }
-                                switchFragment(TAG_HOME, mHomeFragment);
-                                break;
-                            case R.id.nav_history:
-
-                                setTitle("历史记录");
-                                isHome = false;
-                                fab.setImageResource(R.mipmap.ic_action_search);
-                                isHistory = true;
-                                handFab(false);
-                                if (mCategoryFragment == null) {
-                                    mCategoryFragment = HistoryFragment.newInstance();
-                                }
-                                switchFragment(TAG_HISTORY, mCategoryFragment);
-
-                                break;
-                            case R.id.nav_favourite:
-                                if (mSubscribeFragment == null) {
-                                    mSubscribeFragment = FavouriteFragment.newInstance();
-                                }
-                                setTitle("个人收藏");
-                                handFab(true);
-                                switchFragment(TAG_FAVOURITE, new CardViewPagerFragment());
-                                break;
-                            case R.id.help:
-                                Toast.makeText(HomeActivity.this, "帮助", Toast.LENGTH_SHORT).show();
-//                                startActivity(new Intent(HomeActivity.this, AboutActivity.class));
-                                break;
-                            case R.id.setting:
-                                startActivity(new Intent(HomeActivity.this, SettingActivity.class));
-                                break;
-                        }
-                        return true;
-                    }
-                });
-    }
-
-
-    /**
      * 处理浮层是否隐藏
      *
      * @param isFabHide 是否隐藏
@@ -334,100 +483,6 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
         } else {
             showFab();
         }
-    }
-
-    /**
-     * 浮层按钮的点击事件
-     */
-    private void handFabPathAndSearch() {
-        iv_bottom_search.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //收回软键盘
-                SoftInputMethodUtils.hideSoftInputMethod(context, edit_text_search);
-                if (mAnimator != null && !mAnimator.isRunning()) {
-                    mAnimator = mAnimator.reverse();
-                    float curTranslationX = iv_bottom_search.getTranslationX();
-                    final ObjectAnimator animator = ObjectAnimator.ofFloat(iv_bottom_search, "translationX", curTranslationX, 0);
-                    animator.setDuration(600);
-                    mAnimator.addListener(new SupportAnimator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart() {
-                            animator.start();
-                        }
-
-                        @Override
-                        public void onAnimationEnd() {
-                            mAnimator = null;
-                            fab.setVisibility(View.VISIBLE);
-                            mCardView.setVisibility(View.GONE);
-                            if (VersionUtil.checkVersionIntMoreThan19()) {
-                                ArcAnimator.createArcAnimator(fab, ScreenUtil.getScreenWidth(context) - fab.getWidth() / 2 - ScreenUtil.dip2px(context, 16), ScreenUtil.getScreenHeight(context) - fab.getHeight() - ScreenUtil.dip2px(context, 16), 45.0f, Side.LEFT)
-                                        .setDuration(500)
-                                        .start();
-                            } else {
-                                ArcAnimator.createArcAnimator(fab, ScreenUtil.getScreenWidth(context) - fab.getWidth() / 2 - ScreenUtil.dip2px(context, 16), ScreenUtil.getScreenHeight(context) - fab.getHeight() / 2 - ScreenUtil.dip2px(context, 16), 45.0f, Side.LEFT)
-                                        .setDuration(500)
-                                        .start();
-                            }
-                            viewHide.setVisibility(View.GONE);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    searchData();
-                                }
-                            }, 500);
-
-                        }
-
-                        @Override
-                        public void onAnimationCancel() {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat() {
-
-                        }
-                    });
-                } else if (mAnimator != null) {
-                    mAnimator.cancel();
-                    return;
-                } else {
-                    int cx = mCardView.getRight();
-                    int cy = mCardView.getBottom();
-                    float curTranslationX = iv_bottom_search.getTranslationX();
-                    final ObjectAnimator animator = ObjectAnimator.ofFloat(iv_bottom_search, "translationX", curTranslationX, cx / 2 - ScreenUtil.dip2px(context, 24));
-                    animator.setDuration(600);
-                    float radius = r(mCardView.getWidth(), mCardView.getHeight());
-                    mAnimator = ViewAnimationUtils.createCircularReveal(mCardView, cx / 2, cy - ScreenUtil.dip2px(context, 32), ScreenUtil.dip2px(context, 20), radius);
-                    mAnimator.addListener(new SupportAnimator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart() {
-                            animator.start();
-                        }
-
-                        @Override
-                        public void onAnimationEnd() {
-
-                        }
-
-                        @Override
-                        public void onAnimationCancel() {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat() {
-
-                        }
-                    });
-                }
-                mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-                mAnimator.setDuration(600);
-                mAnimator.start();
-            }
-        });
     }
 
     /**
@@ -453,7 +508,6 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
      */
     public void showFab() {
         if (fab != null) {
-            LogUtils.e("sharing", "showFab");
             fab.setVisibility(View.VISIBLE);
             fab.animate().scaleX(1.0f);
             fab.animate().scaleY(1.0f);
@@ -466,7 +520,6 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener {
      */
     public void hideFab() {
         if (fab != null) {
-            LogUtils.e("sharing", "hideFab");
             fab.animate().scaleX(0.1f);
             fab.animate().scaleY(0.1f);
             fab.animate().translationX(200);

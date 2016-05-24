@@ -88,7 +88,6 @@ public class HomeFragment extends Fragment implements
         return v;
     }
 
-
     /**
      * 初始化界面元素
      */

@@ -1,22 +1,21 @@
 package com.adolsai.asrabbit.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.adolsai.asrabbit.R;
+import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
 import com.adolsai.asrabbit.utils.StatusBarCompat;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2015/11/9.
  */
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AsRabbitBaseActivity {
     @Bind(R.id.lv_search)
     ListView mListView;
     @Bind(R.id.toolbar)
@@ -27,24 +26,26 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        ButterKnife.bind(this);
-        StatusBarCompat.compat(this, getResources().getColor(R.color.brownness));
+        initActivity(R.layout.activity_search, savedInstanceState);
 
-        search = getIntent().getStringExtra("search");
-
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("搜索结果");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        getSearchData();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
+    protected void initViews() {
+        StatusBarCompat.compat(this, getResources().getColor(R.color.brownness));
+
     }
+
+    @Override
+    protected void initData() {
+        search = getIntent().getStringExtra("search");
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("搜索结果");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSearchData();
+
+    }
+
 
     private void getSearchData() {
 //        AppDao.getInstance().searchComicData(search, new CallbackListener<SearchComicModel>() {

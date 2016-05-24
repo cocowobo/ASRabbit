@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 
 import com.ht.baselib.R;
@@ -19,7 +19,7 @@ import com.ht.baselib.views.slidefinish.SlideFinishLayout;
  * @author zmingchun
  * @version 1.0（2015-10-19）
  */
-public class BaseActivity extends FragmentActivity {
+public class BaseActivity extends AppCompatActivity {
     //变量区 start======================================
     protected Context mContext;
     protected Activity activity;

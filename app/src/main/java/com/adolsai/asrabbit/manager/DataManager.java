@@ -16,15 +16,9 @@ public class DataManager {
      * @param listener 结果回调
      */
     public static void getPartition(final RequestListener listener) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (listener != null) {
-                    listener.getResult(DataSourceManager.getPartitionData());
-                }
-            }
-        }).start();
-
+        if (listener != null) {
+            listener.getResult(DataSourceManager.getPartitionData());
+        }
 
     }
 
@@ -35,17 +29,9 @@ public class DataManager {
      * @param listener 回调函数
      */
     public static void getHistoryPost(final RequestListener listener) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                if (listener != null) {
-                    listener.getResult(DataSourceManager.getHistoryPostData());
-                }
-            }
-        }).start();
-
-
+        if (listener != null) {
+            listener.getResult(DataSourceManager.getHistoryPostData());
+        }
     }
 
     /**
@@ -54,12 +40,41 @@ public class DataManager {
      * @param listener 回调函数
      */
     public static void getFavouritePost(final RequestListener listener) {
+        if (listener != null) {
+            listener.getResult(DataSourceManager.getFavouritePostData());
+        }
+
+    }
+
+    /**
+     * 登陆方法
+     *
+     * @param account  账号
+     * @param pwd      密码
+     * @param listener 回调
+     */
+    public static void toLogin(final String account, final String pwd, final RequestListener listener) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (listener != null) {
-                    listener.getResult(DataSourceManager.getFavouritePostData());
-                }
+
+            }
+        }).start();
+
+    }
+
+    /**
+     * 注册方法
+     *
+     * @param account  账号
+     * @param pwd      密码
+     * @param listener 回调
+     */
+    public static void toRegister(final String account, final String pwd, final RequestListener listener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
             }
         }).start();
     }

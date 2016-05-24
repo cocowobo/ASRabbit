@@ -1,5 +1,6 @@
 package com.adolsai.asrabbit.base;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,11 +18,13 @@ import butterknife.ButterKnife;
  * @version 1.0 (2016/3/1 11:04)<br/>
  */
 public abstract class AsRabbitBaseActivity extends BaseActivity {
+    private ProgressDialog progressDialog;
 
     //=======================================生命周期区===============================================
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressDialog = new ProgressDialog(this);
     }
 
     //=======================================抽象方法区===============================================
@@ -72,6 +75,25 @@ public abstract class AsRabbitBaseActivity extends BaseActivity {
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setTintColor(getResources().getColor(colorId));
+        }
+    }
+
+    public void closeProDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+    }
+
+    public void showProDialog(String str) {
+        if (progressDialog != null) {
+            progressDialog.setMessage(str);
+            progressDialog.show();
+        }
+    }
+
+    public void showProDialog() {
+        if (progressDialog != null) {
+            progressDialog.show();
         }
     }
 

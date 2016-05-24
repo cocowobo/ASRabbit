@@ -41,4 +41,6 @@
     <dimen name="rhythm_max_translation_y">40dp</dimen>
     <dimen name="rhythm_view_init_translation_y">50dp</dimen>
 
+    <dimen name="btn_height">48dp</dimen>
+
 </resources>

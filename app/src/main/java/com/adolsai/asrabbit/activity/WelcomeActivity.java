@@ -1,11 +1,16 @@
 package com.adolsai.asrabbit.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
 import com.ht.baselib.utils.ActivityUtil;
+import com.umeng.analytics.MobclickAgent;
+
+import butterknife.Bind;
 
 /**
  * <p>WelcomeActivity类 1、提供XXX功能；2、提供XXX方法</p>
@@ -15,6 +20,9 @@ import com.ht.baselib.utils.ActivityUtil;
  */
 public class WelcomeActivity extends AsRabbitBaseActivity {
 
+    @Bind(R.id.iv_splash)
+    ImageView ivSplash;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,19 +31,42 @@ public class WelcomeActivity extends AsRabbitBaseActivity {
 
     @Override
     protected void initViews() {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.splash);
+        ivSplash.startAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ActivityUtil.startActivityByAnim(activity, HomeActivity.class);
+                finish();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
     }
 
     @Override
     protected void initData() {
-        //延时1秒跳转到主界面
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ActivityUtil.startActivityByAnim(activity, HomeActivity.class);
-                finish();
-            }
-        }, 1000);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

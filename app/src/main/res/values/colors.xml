@@ -3,6 +3,7 @@
 
     <!--主色调 -->
     <color name="base_color">#d4859f</color>
+    <color name="base_color_dark">#FFBC4B70</color>
     <!--系统通知栏颜色 -->
     <color name="base_sys_bar_bg">#d4848f</color>
     <!--主要背景颜色 -->
