@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.adapter.PostAdapter;
@@ -14,6 +15,7 @@ import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.ErrorModel;
 import com.adolsai.asrabbit.model.Post;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
+import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.views.materialview.MaterialRefreshLayout;
 import com.ht.baselib.views.materialview.MaterialRefreshListener;
 
@@ -26,7 +28,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2015/10/9.
  */
-public class HistoryFragment extends Fragment implements View.OnClickListener {
+public class HistoryFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     @Bind(R.id.refreshlayout)
     MaterialRefreshLayout mMaterialRefreshLayout;
@@ -93,17 +95,21 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
                 mMaterialRefreshLayout.finishRefresh();
             }
         });
+        lvHistory.setOnItemClickListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
 
     private void dealDate(Object result) {
         postLists.clear();
         postLists.addAll((List) result);
         postAdapter.replaceAll(postLists);
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Post currPost = (Post) parent.getItemAtPosition(position);
+        LogUtils.e("onItemClick currPost is " + currPost.getContent());
 
     }
 }
