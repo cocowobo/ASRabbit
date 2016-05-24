@@ -1,5 +1,6 @@
 package com.adolsai.asrabbit.manager;
 
+import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.model.FavouritePost;
 import com.adolsai.asrabbit.model.Partition;
 import com.adolsai.asrabbit.model.Post;
@@ -70,6 +71,24 @@ public class DataSourceManager {
         list.add(new FavouritePost("闲情", "一周前", " @5L", "收藏", "不知道写什么数据好了"));
         list.add(new FavouritePost("闲情", "一个月前", " @6L", "收藏", "算了，哎。。。"));
         return list;
+    }
+
+    /**
+     * 清除个人收藏数据
+     *
+     * @param listener 回调
+     */
+    public static void cleanFavouriteData(RequestListener listener) {
+
+    }
+
+    /**
+     * 清除历史数据
+     *
+     * @param listener 回调
+     */
+    public static void cleanHistoryData(RequestListener listener) {
+
     }
 
 

@@ -1,6 +1,9 @@
 package com.adolsai.asrabbit.manager;
 
 import com.adolsai.asrabbit.listener.RequestListener;
+import com.adolsai.asrabbit.model.Partition;
+
+import java.util.List;
 
 /**
  * <p>PartitionManager类 1、提供XXX功能；2、提供XXX方法</p>
@@ -16,10 +19,15 @@ public class DataManager {
      * @param listener 结果回调
      */
     public static void getPartition(final RequestListener listener) {
-        if (listener != null) {
-            listener.getResult(DataSourceManager.getPartitionData());
-        }
-
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Partition> results = DataSourceManager.getPartitionData();
+                if (listener != null && results != null) {
+                    listener.getResult(results);
+                }
+            }
+        }).start();
     }
 
 
@@ -29,9 +37,15 @@ public class DataManager {
      * @param listener 回调函数
      */
     public static void getHistoryPost(final RequestListener listener) {
-        if (listener != null) {
-            listener.getResult(DataSourceManager.getHistoryPostData());
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (listener != null) {
+                    listener.getResult(DataSourceManager.getHistoryPostData());
+                }
+            }
+        }).start();
+
     }
 
     /**
@@ -40,9 +54,15 @@ public class DataManager {
      * @param listener 回调函数
      */
     public static void getFavouritePost(final RequestListener listener) {
-        if (listener != null) {
-            listener.getResult(DataSourceManager.getFavouritePostData());
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (listener != null) {
+                    listener.getResult(DataSourceManager.getFavouritePostData());
+                }
+            }
+        }).start();
+
 
     }
 
@@ -78,4 +98,15 @@ public class DataManager {
             }
         }).start();
     }
+
+    /**
+     * 根据关键字搜索
+     *
+     * @param key      关键字
+     * @param listener 回调
+     */
+    public static void searchByKey(final String key, final RequestListener listener) {
+
+    }
+
 }

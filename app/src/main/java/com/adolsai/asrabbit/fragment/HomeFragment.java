@@ -1,10 +1,8 @@
 package com.adolsai.asrabbit.fragment;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +14,14 @@ import android.widget.TextView;
 
 import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.adapter.PartitionAdapter;
+import com.adolsai.asrabbit.base.AsRabbitBaseFragment;
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
-import com.adolsai.asrabbit.model.ErrorModel;
 import com.adolsai.asrabbit.model.Partition;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
 import com.ht.baselib.utils.LocalDisplay;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.utils.SoftInputMethodUtils;
-import com.ht.baselib.views.dialog.CustomToast;
 import com.ht.baselib.views.materialview.MaterialRefreshLayout;
 import com.ht.baselib.views.materialview.MaterialRefreshListener;
 import com.ht.baselib.views.swipemenulistview.SwipeMenu;
@@ -36,15 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by cjj on 2015/10/9.
  */
-public class HomeFragment extends Fragment implements
+public class HomeFragment extends AsRabbitBaseFragment implements
         View.OnClickListener, AdapterView.OnItemClickListener {
     private static HomeFragment homeFragment;
-    private Context context;
     @Bind(R.id.refreshlayout)
     MaterialRefreshLayout refreshLayout;
     @Bind(R.id.et_item_post_url)
@@ -62,11 +57,6 @@ public class HomeFragment extends Fragment implements
     private List<Partition> favouriteLists;//喜欢的分区数据源
     private List<Partition> otherLists;//其他的分区数据源
 
-    public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        return fragment;
-    }
-
     public static HomeFragment getInstance() {
         if (homeFragment == null) {
             homeFragment = new HomeFragment();
@@ -74,32 +64,24 @@ public class HomeFragment extends Fragment implements
         return homeFragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
+    //******************生命周期*******************************************************************
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_home, null);
-        context = getContext();
-        ButterKnife.bind(this, v);
-        initView();
-        getData(null);
-        return v;
+        initFragment(inflater, R.layout.fragment_home);
+        return mMainView;
     }
 
-    /**
-     * 初始化界面元素
-     */
-    private void initView() {
+
+    @Override
+    protected void initData() {
+        getData();
+
+    }
+
+    @Override
+    protected void initViews() {
         favouriteLists = new ArrayList<>();
         otherLists = new ArrayList<>();
         partitionFavouriteAdapter = new PartitionAdapter(context, favouriteLists);
@@ -131,27 +113,14 @@ public class HomeFragment extends Fragment implements
             @Override
             public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
                 //下拉刷新
-                getData(new RequestListener() {
-                    @Override
-                    public void getResult(Object result) {
-                        if (refreshLayout != null) {
-                            refreshLayout.finishRefresh();
-                        }
-                    }
-                });
+                getData();
             }
         });
 
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-
-
+    //************************事件区*****************************************************************
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -189,29 +158,21 @@ public class HomeFragment extends Fragment implements
         LogUtils.e("sharing", "itemInfo is " + itemInfo.getTitle());
     }
 
+    //****************自定义方法区********************************************************************
+
     /**
      * 获取数据
      */
-    public void getData(final RequestListener listener) {
+    public void getData() {
         DataManager.getPartition(new RequestListener() {
             @Override
             public void getResult(Object result) {
                 if (result != null) {
-                    if (result instanceof ErrorModel) {
-                        //错误
-                        CustomToast.showToast(context, ((ErrorModel) result).getErrorMsg());
-                    } else {
-                        dealDate(result);
-                    }
-
-                }
-                if (listener != null) {
-                    listener.getResult(true);
+                    dealDate(result);
                 }
 
             }
         });
-
     }
 
     /**
@@ -227,16 +188,36 @@ public class HomeFragment extends Fragment implements
             if (tempLists.get(i).isFavourite()) {
                 //喜欢的
                 favouriteLists.add(tempLists.get(i));
-                partitionFavouriteAdapter.replaceAll(favouriteLists);
             } else {
                 //其他的
                 otherLists.add(tempLists.get(i));
-                partitionOtherAdapter.replaceAll(otherLists);
             }
 
         }
+        updateUI();
+    }
+
+    /**
+     * 更新UI
+     */
+    private void updateUI() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (partitionFavouriteAdapter != null) {
+                    partitionFavouriteAdapter.replaceAll(favouriteLists);
+                }
+                if (partitionOtherAdapter != null) {
+                    partitionOtherAdapter.replaceAll(otherLists);
+                }
+                if (refreshLayout != null) {
+                    refreshLayout.finishRefresh();
+                }
+            }
+        });
 
     }
+
 
     /**
      * 初始化左滑删除的一些监听和设置

@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -31,6 +30,7 @@ import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
 import com.adolsai.asrabbit.fragment.CardViewPagerFragment;
 import com.adolsai.asrabbit.fragment.HistoryFragment;
 import com.adolsai.asrabbit.fragment.HomeFragment;
+import com.adolsai.asrabbit.utils.DialogUtils;
 import com.adolsai.asrabbit.utils.ScreenUtil;
 import com.adolsai.asrabbit.utils.StatusBarCompat;
 import com.adolsai.asrabbit.utils.VersionUtil;
@@ -106,7 +106,7 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
             mNavigationView.setCheckedItem(R.id.nav_home);
         }
 
-        switchFragment(TAG_HOME, HomeFragment.newInstance());
+        switchFragment(TAG_HOME, HomeFragment.getInstance());
 
         handFabPathAndSearch();
 
@@ -121,10 +121,22 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
                 } else if (id == R.id.action_fav) {
                     LogUtils.e("点击fav清除");
                     handFab(true);
+                    DialogUtils.showDialog(mContext, "温馨提示", "小伙伴，你确定要清除全部收藏吗", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //清除全部收藏数据
+                        }
+                    });
                     return true;
                 } else if (id == R.id.action_history) {
                     LogUtils.e("点击his清除");
                     handFab(true);
+                    DialogUtils.showDialog(mContext, "温馨提示", "小伙伴，你确定要清除全部历史吗", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //清除全部历史数据
+                        }
+                    });
                     return true;
                 } else {
                     return false;
@@ -245,7 +257,12 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
             if (viewHide.isShown()) {
                 viewHide.performClick();
             } else {
-                showCloseDialog();
+                DialogUtils.showDialog(mContext, "温馨提示", "小伙伴，你确定要离开我吗", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        System.exit(0);
+                    }
+                });
             }
             return true;
         } else {
@@ -512,23 +529,6 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
         }
     }
 
-
-    /**
-     * 显示退出的弹出窗口
-     */
-    private void showCloseDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("温馨提示");
-        builder.setMessage("小伙伴,您确定要离开我吗");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                System.exit(0);
-            }
-        });
-        builder.setNegativeButton("No", null);
-        builder.show();
-    }
 
     static float r(int a, int b) {
         return (float) Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
