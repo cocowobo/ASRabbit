@@ -37,6 +37,7 @@ import java.util.List;
  * Description:
  */
 public class CardViewPagerFragment extends AsRabbitBaseFragment {
+    private static CardViewPagerFragment FavFragment;
 
     private View mMainView;
 
@@ -55,9 +56,6 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
 
 
     private RhythmAdapter mRhythmAdapter;
-
-    private static CardViewPagerFragment mFragment;
-
 
     private IRhythmItemListener rhythmItemListener = new IRhythmItemListener() {
         public void onRhythmItemChanged(int paramInt) {
@@ -89,10 +87,10 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
     };
 
     public static CardViewPagerFragment getInstance() {
-        if (mFragment == null) {
-            mFragment = new CardViewPagerFragment();
+        if (FavFragment == null) {
+            FavFragment = new CardViewPagerFragment();
         }
-        return mFragment;
+        return FavFragment;
     }
 
 

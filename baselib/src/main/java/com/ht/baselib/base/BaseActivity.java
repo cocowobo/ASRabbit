@@ -60,7 +60,7 @@ public class BaseActivity extends AppCompatActivity {
      * @return 是否允许
      */
     protected boolean enableSlideFinish() {
-        return true;
+        return false;
     }
     //事件区 start========================================
 }

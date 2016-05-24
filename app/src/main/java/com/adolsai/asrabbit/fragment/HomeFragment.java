@@ -43,6 +43,7 @@ import butterknife.ButterKnife;
  */
 public class HomeFragment extends Fragment implements
         View.OnClickListener, AdapterView.OnItemClickListener {
+    private static HomeFragment homeFragment;
     private Context context;
     @Bind(R.id.refreshlayout)
     MaterialRefreshLayout refreshLayout;
@@ -64,6 +65,13 @@ public class HomeFragment extends Fragment implements
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
+    }
+
+    public static HomeFragment getInstance() {
+        if (homeFragment == null) {
+            homeFragment = new HomeFragment();
+        }
+        return homeFragment;
     }
 
     @Override

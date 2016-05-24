@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2015/10/9.
  */
 public class HistoryFragment extends Fragment implements AdapterView.OnItemClickListener {
-
+    private static HistoryFragment HisFragment;
     @Bind(R.id.refreshlayout)
     MaterialRefreshLayout mMaterialRefreshLayout;
     @Bind(R.id.lv_history)
@@ -38,11 +38,13 @@ public class HistoryFragment extends Fragment implements AdapterView.OnItemClick
     private PostAdapter postAdapter;
     private List<Post> postLists;
 
-    public static HistoryFragment newInstance() {
-        HistoryFragment fragment = new HistoryFragment();
-        return fragment;
-    }
 
+    public static HistoryFragment getInstance() {
+        if (HisFragment == null) {
+            HisFragment = new HistoryFragment();
+        }
+        return HisFragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

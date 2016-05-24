@@ -90,7 +90,7 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
 
             @Override
             public void barLeftTipsClick(View v) {
-
+                finish();
             }
 
             @Override

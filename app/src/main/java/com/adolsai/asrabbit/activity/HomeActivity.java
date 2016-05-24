@@ -29,7 +29,6 @@ import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.app.GlobalStaticData;
 import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
 import com.adolsai.asrabbit.fragment.CardViewPagerFragment;
-import com.adolsai.asrabbit.fragment.FavouriteFragment;
 import com.adolsai.asrabbit.fragment.HistoryFragment;
 import com.adolsai.asrabbit.fragment.HomeFragment;
 import com.adolsai.asrabbit.utils.ScreenUtil;
@@ -53,9 +52,6 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
     private FragmentTransaction mFragmentTransaction;
     private String hideTag;
 
-    private HomeFragment mHomeFragment;
-    private HistoryFragment mCategoryFragment;
-    private FavouriteFragment mSubscribeFragment;
     private SupportAnimator mAnimator;
 
     public static final String TAG_HOME = "Home";
@@ -110,8 +106,7 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
             mNavigationView.setCheckedItem(R.id.nav_home);
         }
 
-        mHomeFragment = HomeFragment.newInstance();
-        switchFragment(TAG_HOME, mHomeFragment);
+        switchFragment(TAG_HOME, HomeFragment.newInstance());
 
         handFabPathAndSearch();
 
@@ -283,11 +278,7 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
                                 isHome = true;
                                 isFavourite = false;
                                 isHistory = false;
-
-                                if (mHomeFragment == null) {
-                                    mHomeFragment = HomeFragment.newInstance();
-                                }
-                                switchFragment(TAG_HOME, mHomeFragment);
+                                switchFragment(TAG_HOME, HomeFragment.getInstance());
                                 break;
                             case R.id.nav_history:
 
@@ -297,22 +288,16 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
                                 fab.setImageResource(R.mipmap.ic_action_search);
                                 isHistory = true;
                                 handFab(false);
-                                if (mCategoryFragment == null) {
-                                    mCategoryFragment = HistoryFragment.newInstance();
-                                }
-                                switchFragment(TAG_HISTORY, mCategoryFragment);
+                                switchFragment(TAG_HISTORY, HistoryFragment.getInstance());
 
                                 break;
                             case R.id.nav_favourite:
-                                if (mSubscribeFragment == null) {
-                                    mSubscribeFragment = FavouriteFragment.newInstance();
-                                }
                                 isFavourite = true;
                                 isHome = false;
                                 isHistory = false;
                                 setTitle("个人收藏");
                                 handFab(true);
-                                switchFragment(TAG_FAVOURITE, new CardViewPagerFragment());
+                                switchFragment(TAG_FAVOURITE, CardViewPagerFragment.getInstance());
                                 break;
                             case R.id.help:
                                 Toast.makeText(HomeActivity.this, "帮助", Toast.LENGTH_SHORT).show();
