@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.RelativeLayout;
 
@@ -19,11 +20,9 @@ import com.adolsai.asrabbit.control.ViewPagerScroller;
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.Card;
-import com.adolsai.asrabbit.model.ErrorModel;
 import com.adolsai.asrabbit.model.FavouritePost;
 import com.adolsai.asrabbit.utils.AnimatorUtils;
 import com.adolsai.asrabbit.utils.HexUtils;
-import com.ht.baselib.views.dialog.CustomToast;
 import com.ht.baselib.views.viewselector.ViewSelectorLayout;
 
 import java.lang.reflect.Field;
@@ -37,8 +36,9 @@ import java.util.List;
  * Description:
  */
 public class CardViewPagerFragment extends AsRabbitBaseFragment {
+    private static CardViewPagerFragment FavFragment;
 
-    private View mMainView;
+    private View mCardMainView;
 
     private RhythmLayout mRhythmLayout;
 
@@ -56,19 +56,67 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
 
     private RhythmAdapter mRhythmAdapter;
 
-    private static CardViewPagerFragment mFragment;
+    /**
+     * 构造方法
+     *
+     * @return CardViewPagerFragment
+     */
+    public static CardViewPagerFragment getInstance() {
+        if (FavFragment == null) {
+            FavFragment = new CardViewPagerFragment();
+        }
+        return FavFragment;
+    }
 
+    //********生命周期*******************************************************************************
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        initFragment(inflater, R.layout.fragment_niceapp);
+        mViewSelectorLayout = new ViewSelectorLayout(getActivity(), mMainView);
+        mCardMainView = mMainView.findViewById(R.id.main_view);
+        mRhythmLayout = (RhythmLayout) mCardMainView.findViewById(R.id.box_rhythm);
+        mViewPager = (ViewPager) mCardMainView.findViewById(R.id.pager);
+
+        setViewPagerScrollSpeed(mViewPager, 400);
+        mRhythmLayout.setScrollRhythmStartDelayTime(400);
+        int height = (int) mRhythmLayout.getRhythmItemWidth() + (int) TypedValue.applyDimension(1, 10.0F, getResources().getDisplayMetrics());
+        mRhythmLayout.getLayoutParams().height = height;
+        ((RelativeLayout.LayoutParams) mViewPager.getLayoutParams()).bottomMargin = height;
+        mRhythmLayout.setRhythmListener(rhythmItemListener);
+        mViewPager.setOnPageChangeListener(onPageChangeListener);
+        return mViewSelectorLayout;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        fetchData();
+    }
+
+
+    @Override
+    protected void initData() {
+        mCardList = new ArrayList<>();
+
+    }
+
+    @Override
+    protected void initViews() {
+
+    }
+
+    //**************事件区****************************************************************************
 
     private IRhythmItemListener rhythmItemListener = new IRhythmItemListener() {
         public void onRhythmItemChanged(int paramInt) {
         }
 
         public void onSelected(final int paramInt) {
-            CardViewPagerFragment.this.mHandler.postDelayed(new Runnable() {
-                public void run() {
-                    mViewPager.setCurrentItem(paramInt);
-                }
-            }, 100L);
+            mViewPager.setCurrentItem(paramInt);
+
         }
 
         public void onStartSwipe() {
@@ -88,96 +136,28 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
         }
     };
 
-    public static CardViewPagerFragment getInstance() {
-        if (mFragment == null) {
-            mFragment = new CardViewPagerFragment();
-        }
-        return mFragment;
-    }
 
+    //*************自定义方法区***********************************************************************
 
-    @Override
-    protected View initViews(LayoutInflater inflater) {
-        View view = inflater.inflate(R.layout.fragment_niceapp, null);
-
-        mViewSelectorLayout = new ViewSelectorLayout(getActivity(), view);
-
-        mMainView = view.findViewById(R.id.main_view);
-
-        mRhythmLayout = (RhythmLayout) view.findViewById(R.id.box_rhythm);
-        mViewPager = (ViewPager) view.findViewById(R.id.pager);
-
-        setViewPagerScrollSpeed(mViewPager, 400);
-        mRhythmLayout.setScrollRhythmStartDelayTime(400);
-        int height = (int) mRhythmLayout.getRhythmItemWidth() + (int) TypedValue.applyDimension(1, 10.0F, getResources().getDisplayMetrics());
-        mRhythmLayout.getLayoutParams().height = height;
-        ((RelativeLayout.LayoutParams) mViewPager.getLayoutParams()).bottomMargin = height;
-        return mViewSelectorLayout;
-    }
-
-
-    @Override
-    protected void initActions(View paramView) {
-        mRhythmLayout.setRhythmListener(rhythmItemListener);
-        mViewPager.setOnPageChangeListener(onPageChangeListener);
-    }
-
-    @Override
-    protected void initData() {
-        mCardList = new ArrayList<>();
-    }
-
-
-    private void setViewPagerScrollSpeed(ViewPager viewPager, int speed) {
-        try {
-            Field field = ViewPager.class.getDeclaredField("mScroller");
-            field.setAccessible(true);
-            ViewPagerScroller viewPagerScroller = new ViewPagerScroller(viewPager.getContext(), new OvershootInterpolator(0.6F));
-            field.set(viewPager, viewPagerScroller);
-            viewPagerScroller.setDuration(speed);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void onAppPagerChange(int position) {
-        mRhythmLayout.showRhythmAtPosition(position);
-        Card post = this.mCardList.get(position);
-        int currColor = HexUtils.getHexColor(post.getBackgroundColor());
-        AnimatorUtils.showBackgroundColorAnimation(this.mMainView, mPreColor, currColor, 400);
-        mPreColor = currColor;
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        fetchData();
-
-    }
-
-
+    /**
+     * 获取数据
+     */
     private void fetchData() {
         mViewSelectorLayout.show_LoadingView();
         DataManager.getFavouritePost(new RequestListener() {
             @Override
             public void getResult(Object result) {
-                if (result instanceof ErrorModel) {
-                    //错误
-                    CustomToast.showToast(getActivity(), ((ErrorModel) result).getErrorMsg());
-                    mViewSelectorLayout.show_FailView();
-                } else {
-                    handData(result);
-                    mViewSelectorLayout.show_ContentView();
-                }
+                handData(result);
             }
         });
 
     }
 
+    /**
+     * 处理数据
+     *
+     * @param result result
+     */
     private void handData(Object result) {
         if (result != null && result instanceof List) {
             ArrayList<FavouritePost> list = (ArrayList<FavouritePost>) result;
@@ -196,23 +176,46 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
                 cardList.add(card);
             }
 
-            updateAppAdapter(cardList);
-            onAppPagerChange(0);
+            updateUI(cardList);
+
         }
     }
 
+    /**
+     * 更新UI
+     *
+     * @param cardList cardList
+     */
+    private void updateUI(final List<Card> cardList) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateAppAdapter(cardList);
+                onAppPagerChange(0);
+                if (mViewSelectorLayout != null) {
+                    mViewSelectorLayout.show_ContentView();
+                }
 
+            }
+        });
+
+    }
+
+
+    /**
+     * 更新适配器
+     *
+     * @param cardList cardList
+     */
     private void updateAppAdapter(List<Card> cardList) {
         if ((getActivity() == null) || (getActivity().isFinishing())) {
             return;
         }
-
         if (cardList.isEmpty()) {
-            this.mMainView.setBackgroundColor(this.mPreColor);
+            this.mCardMainView.setBackgroundColor(this.mPreColor);
             return;
         }
         int size = mCardList.size();
-
         if (mCardPagerAdapter == null) {
             mCurrentViewPagerPage = 0;
             mCardPagerAdapter = new CardPagerAdapter(getActivity().getSupportFragmentManager(), cardList);
@@ -229,6 +232,11 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
             mViewPager.setCurrentItem(1 + mViewPager.getCurrentItem(), true);
     }
 
+    /**
+     * 添加下面的图标的数据
+     *
+     * @param cardList cardList
+     */
     private void addCardIconsToDock(final List<Card> cardList) {
         if (mRhythmAdapter == null) {
             resetRhythmLayout(cardList);
@@ -238,6 +246,11 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
         mRhythmAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 刷新layout
+     *
+     * @param cardList
+     */
     private void resetRhythmLayout(List<Card> cardList) {
         if (getActivity() == null)
             return;
@@ -247,5 +260,39 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
         mRhythmLayout.setAdapter(mRhythmAdapter);
     }
 
+    /**
+     * 设置滚动速度
+     *
+     * @param viewPager viewPager
+     * @param speed     speed
+     */
+    private void setViewPagerScrollSpeed(ViewPager viewPager, int speed) {
+        try {
+            Field field = ViewPager.class.getDeclaredField("mScroller");
+            field.setAccessible(true);
+            ViewPagerScroller viewPagerScroller = new ViewPagerScroller(viewPager.getContext(), new OvershootInterpolator(0.6F));
+            field.set(viewPager, viewPagerScroller);
+            viewPagerScroller.setDuration(speed);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 改变页数
+     *
+     * @param position position
+     */
+    private void onAppPagerChange(int position) {
+        mRhythmLayout.showRhythmAtPosition(position);
+        Card post = this.mCardList.get(position);
+        int currColor = HexUtils.getHexColor(post.getBackgroundColor());
+        AnimatorUtils.showBackgroundColorAnimation(this.mCardMainView, mPreColor, currColor, 400);
+        mPreColor = currColor;
+
+    }
 
 }

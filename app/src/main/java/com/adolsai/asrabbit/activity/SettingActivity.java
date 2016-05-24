@@ -62,6 +62,7 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
         //初始化标题栏
         asRabbitTitleBar.setTvBarCenterTitle("Settings");
         asRabbitTitleBar.setTvBarRightTips("完成");
+        asRabbitTitleBar.setTvBarLeftTips("返回");
         //初始化下面那些奇奇怪怪的item
         settingItemViewModel.initConfigs("显示", "夜间模式", "", "我想妈妈保证睡觉前不玩手机", false);
         settingItemViewNet.initConfigs("网络设置", "访问域名", dnsValue,
@@ -89,7 +90,7 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
 
             @Override
             public void barLeftTipsClick(View v) {
-
+                finish();
             }
 
             @Override

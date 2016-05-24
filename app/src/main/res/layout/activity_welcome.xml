@@ -7,10 +7,12 @@
     android:fitsSystemWindows="true"
     tools:context=".activity.WelcomeActivity">
 
-    <TextView
+    <ImageView
+        android:id="@+id/iv_splash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="这是欢迎页" />
+        android:scaleType="fitXY"
+        android:src="@mipmap/bg_welcome" />
 
 
 </RelativeLayout>
