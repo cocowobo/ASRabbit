@@ -24,6 +24,7 @@
     <color name="input_hint_public_color">#a1a7ae</color>
     <color name="public_divider">#C8C7CC</color>
     <color name="global_aux_black">#6B6A72</color>
+    <color name="titlebar_text_disabled">#2DA39C</color>
 
 
 
