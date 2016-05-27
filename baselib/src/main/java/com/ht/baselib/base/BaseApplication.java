@@ -12,10 +12,8 @@ import com.ht.baselib.helper.ResourcesHelper;
 import com.ht.baselib.manager.CrashManager;
 import com.ht.baselib.manager.ImageLoaderManager;
 import com.ht.baselib.utils.LocalDisplay;
-import com.ht.baselib.utils.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,20 +23,15 @@ import java.util.List;
  * @version 1.0 (2015/10/19)
  */
 public class BaseApplication extends Application {
-    /**管理Activity的List,主要用于退出应用程序时（完全退出），Finish所有Activity;
-       需要在每一个Activity的OnCreate,OnDestory中，正确调用addActivity和removeActivity*/
+    /**
+     * 管理Activity的List,主要用于退出应用程序时（完全退出），Finish所有Activity;
+     * 需要在每一个Activity的OnCreate,OnDestory中，正确调用addActivity和removeActivity
+     */
     public static ArrayList<Activity> mActivityList = new ArrayList<>();
 
     private static BaseApplication instance;
 
-    /**登录Token*/
-    protected String token="";
-    /**登录Token对应的Key*/
-    protected String tokenKey = "";
-    /**请求报头(Thrift)*/
-    protected HashMap<String,String> thriftHeaderMap = new HashMap<String,String>();
-
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -126,74 +119,20 @@ public class BaseApplication extends Application {
 
     /**
      * 获取句柄
+     *
      * @return
      */
-    public Handler getHandler(){
+    public Handler getHandler() {
 
-        return  this.handler;
+        return this.handler;
     }
 
     /**
      * 处理消息
+     *
      * @param msg 消息
      */
-    protected  void dealMessage(Message msg){}
-
-    /**
-     * 获取Token信息
-     */
-    public String getToken() {
-        return token;
+    protected void dealMessage(Message msg) {
     }
 
-    /**
-     * 设置Token
-     * @param token token信息
-     */
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    /**
-     * 获取TokenKey
-     * @return
-     */
-    public String getTokenKey() {
-        return tokenKey;
-    }
-
-    /**
-     * 设置TokenKey
-     * @param tokenKey key值
-     */
-    public void setTokenKey(String tokenKey) {
-        this.tokenKey = tokenKey;
-    }
-
-    /**
-     * 获取Thrift请求头
-     * @return
-     */
-    public HashMap<String, String> getThriftHeaderMap() {
-        return thriftHeaderMap;
-    }
-
-    /**
-     * 设置Thrift请求头
-     * @param thriftHeaderMap 请求头键值对
-     */
-    public void setThriftHeaderMap(HashMap<String, String> thriftHeaderMap) {
-        this.thriftHeaderMap = thriftHeaderMap;
-    }
-
-    /**
-     * 添加Thrift请求头
-     * @param key 键
-     * @param value 值
-     */
-    public void addThriftHeader(String key,String value){
-        if (!StringUtils.isBlank(key)){
-            this.thriftHeaderMap.put(key,value);
-        }
-    }
 }

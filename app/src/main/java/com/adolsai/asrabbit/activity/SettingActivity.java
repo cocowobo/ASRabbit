@@ -1,15 +1,20 @@
 package com.adolsai.asrabbit.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.adolsai.asrabbit.R;
+import com.adolsai.asrabbit.app.GlobalUrl;
 import com.adolsai.asrabbit.app.SharePreferenceKey;
 import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
 import com.adolsai.asrabbit.views.AsRabbitTitleBar;
 import com.adolsai.asrabbit.views.SettingItemView;
+import com.ht.baselib.utils.ActivityUtil;
 import com.ht.baselib.utils.AppUtils;
 import com.ht.baselib.views.dialog.CustomToast;
+import com.ht.baselib.views.pickerview.ActionSheetDialogBuilder;
 import com.orhanobut.hawk.Hawk;
 
 import butterknife.Bind;
@@ -49,11 +54,13 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
 
     private String dnsValue;
 
+    private ActionSheetDialogBuilder DomainNameBuilder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dnsValue = Hawk.get(SharePreferenceKey.SETTING_NET_DNS, "bbs.jjwxc.com");
+        dnsValue = Hawk.get(SharePreferenceKey.SETTING_NET_DNS, GlobalUrl.DNS_COM);
         initActivity(R.layout.activity_setting, savedInstanceState);
     }
 
@@ -61,7 +68,6 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
     protected void initViews() {
         //初始化标题栏
         asRabbitTitleBar.setTvBarCenterTitle("Settings");
-        asRabbitTitleBar.setTvBarRightTips("完成");
         asRabbitTitleBar.setTvBarLeftTips("返回");
         //初始化下面那些奇奇怪怪的item
         settingItemViewModel.initConfigs("显示", "夜间模式", "", "我想妈妈保证睡觉前不玩手机", false);
@@ -100,8 +106,6 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
 
             @Override
             public void barRightTipsClick(View v) {
-                //点击完成，保存好配置信息，然后结束界面咯
-                finish();
             }
 
             @Override
@@ -140,19 +144,21 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
         switch (v.getId()) {
             case R.id.setting_item_view_net:
                 //访问域名
-                CustomToast.showToast(mContext, "点击访问域名");
+                selectDomainName();
                 break;
             case R.id.setting_item_view_about_app:
                 //关于此APP
-                CustomToast.showToast(mContext, "点击关于此APP");
+                Intent aboutIntent = BrowserActivity.createIntent(activity, "关于此APP", GlobalUrl.ABOUT_URL);
+                ActivityUtil.startActivity(activity, aboutIntent);
                 break;
             case R.id.setting_item_view_user_agreement:
                 //用户许可协议
-                CustomToast.showToast(mContext, "点击用户许可协议");
+                Intent agreementIntent = BrowserActivity.createIntent(activity, "用户许可协议", GlobalUrl.AGREEMENT_URL);
+                ActivityUtil.startActivity(activity, agreementIntent);
                 break;
             case R.id.setting_item_view_support:
                 //建议反馈
-                CustomToast.showToast(mContext, "点击建议反馈");
+                ActivityUtil.startActivity(activity, FeedBackActivity.class);
                 break;
             default:
                 break;
@@ -207,7 +213,36 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
         settingItemViewRichText1.setSwItemSettingStatus(Hawk.get(SharePreferenceKey.SETTING_NO_PICTURE_3G, false));
         settingItemViewContent.setSwItemSettingStatus(Hawk.get(SharePreferenceKey.SETTING_REPLY, false));
         settingItemViewContent1.setSwItemSettingStatus(Hawk.get(SharePreferenceKey.SETTING_NAVIGATION_BAR, false));
+    }
 
+    /**
+     * 选择域名
+     */
+    private void selectDomainName() {
+        if (DomainNameBuilder == null) {
+            DomainNameBuilder = new ActionSheetDialogBuilder(mContext);
+            DomainNameBuilder.setTitleVisibility(true);
+            DomainNameBuilder.setTitleMessage("请选择访问域名");
+            DomainNameBuilder.setButtons(GlobalUrl.DNS_COM, GlobalUrl.DNS_NET, "取消",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case ActionSheetDialogBuilder.BUTTON1:
+                                    Hawk.put(SharePreferenceKey.SETTING_NET_DNS, GlobalUrl.DNS_COM);
+                                    settingItemViewNet.setTvItemSettingContentText(GlobalUrl.DNS_COM, true);
+                                    break;
 
+                                case ActionSheetDialogBuilder.BUTTON2:
+                                    Hawk.put(SharePreferenceKey.SETTING_NET_DNS, GlobalUrl.DNS_NET);
+                                    settingItemViewNet.setTvItemSettingContentText(GlobalUrl.DNS_NET, true);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    });
+        }
+        DomainNameBuilder.create().show();
     }
 }

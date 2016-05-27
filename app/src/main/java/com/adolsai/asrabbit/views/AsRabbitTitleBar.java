@@ -211,6 +211,10 @@ public class AsRabbitTitleBar extends RelativeLayout implements View.OnClickList
         this.asRabbitTitleBarClick = asRabbitTitleBarClick;
     }
 
+    public TextView getTvBarRightTips() {
+        return tvBarRightTips;
+    }
+
 
     /**
      * 控件点击事件接口
