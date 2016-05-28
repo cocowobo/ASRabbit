@@ -40,7 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="请输入邮箱"
+                    android:hint="请输入邮箱（暂不支持第三方方账号/手机号)"
                     android:textColor="@color/material_orange"
                     android:textSize="14sp" />
 
