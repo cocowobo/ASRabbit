@@ -1,9 +1,13 @@
 package com.adolsai.asrabbit.manager;
 
+import android.content.Context;
+
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.model.FavouritePost;
 import com.adolsai.asrabbit.model.Partition;
 import com.adolsai.asrabbit.model.Post;
+import com.ht.baselib.utils.LogUtils;
+import com.ht.baselib.utils.ResourceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,21 +25,14 @@ public class DataSourceManager {
      *
      * @return
      */
-    public static List<Partition> getPartitionData() {
-        List<Partition> list = new ArrayList<>();
-        //TODO 获取数据源
-        list.add(new Partition("1", "创作交流", true));
-        list.add(new Partition("2", "风雨读书声", true));
-        list.add(new Partition("3", "自由交易区", true));
-        list.add(new Partition("4", "评论专区", true));
-        list.add(new Partition("5", "连载文库", true));
-        list.add(new Partition("6", "网友留言区", true));
-        list.add(new Partition("11", "图画乐园", false));
-        list.add(new Partition("12", "包月论坛", false));
-        list.add(new Partition("13", "妈咪宝贝", false));
-        list.add(new Partition("14", "名将传说", false));
-        list.add(new Partition("15", "凤凰觉", false));
-        list.add(new Partition("16", "流光水社", false));
+    public static List< Partition.BoardListBean> getPartitionData(Context context) {
+        //从本地json中获取数据源
+        String result = ResourceUtils.getFileFromAssets(context, "BoardList.json");
+        LogUtils.e("result is " + result);
+
+
+        List< Partition.BoardListBean> list = new ArrayList<>();
+
         return list;
     }
 

@@ -1,5 +1,7 @@
 package com.adolsai.asrabbit.manager;
 
+import android.content.Context;
+
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.model.Partition;
 
@@ -16,13 +18,14 @@ public class DataManager {
     /**
      * 获取分区列表数据
      *
+     * @param context  上下文
      * @param listener 结果回调
      */
-    public static void getPartition(final RequestListener listener) {
+    public static void getPartition(final Context context, final RequestListener listener) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<Partition> results = DataSourceManager.getPartitionData();
+                List<Partition.BoardListBean> results = DataSourceManager.getPartitionData(context);
                 if (listener != null && results != null) {
                     listener.getResult(results);
                 }

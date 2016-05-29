@@ -54,8 +54,8 @@ public class HomeFragment extends AsRabbitBaseFragment implements
     private PartitionAdapter partitionFavouriteAdapter;
     private PartitionAdapter partitionOtherAdapter;
 
-    private List<Partition> favouriteLists;//喜欢的分区数据源
-    private List<Partition> otherLists;//其他的分区数据源
+    private List<Partition.BoardListBean> favouriteLists;//喜欢的分区数据源
+    private List<Partition.BoardListBean> otherLists;//其他的分区数据源
 
     public static HomeFragment getInstance() {
         if (homeFragment == null) {
@@ -154,8 +154,8 @@ public class HomeFragment extends AsRabbitBaseFragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Partition itemInfo = (Partition) parent.getItemAtPosition(position);//确认取的是adapte中的动态值
-        LogUtils.e("sharing", "itemInfo is " + itemInfo.getTitle());
+        Partition.BoardListBean itemInfo = (Partition.BoardListBean) parent.getItemAtPosition(position);//确认取的是adapte中的动态值
+        LogUtils.e("sharing", "itemInfo is " + itemInfo.getName());
     }
 
     //****************自定义方法区********************************************************************
@@ -164,7 +164,7 @@ public class HomeFragment extends AsRabbitBaseFragment implements
      * 获取数据
      */
     public void getData() {
-        DataManager.getPartition(new RequestListener() {
+        DataManager.getPartition(context, new RequestListener() {
             @Override
             public void getResult(Object result) {
                 if (result != null) {
@@ -181,7 +181,7 @@ public class HomeFragment extends AsRabbitBaseFragment implements
      * @param result 数据源
      */
     private void dealDate(Object result) {
-        List<Partition> tempLists = (List) result;
+        List<Partition.BoardListBean> tempLists = (List) result;
         favouriteLists.clear();
         otherLists.clear();
         for (int i = 0; i < tempLists.size(); i++) {
@@ -272,7 +272,7 @@ public class HomeFragment extends AsRabbitBaseFragment implements
         innerSwipeListViewFragment0Favourite.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Partition itemInfo = partitionFavouriteAdapter.getAllItem().get(position);//确认取的是adapte中的动态值
+                Partition.BoardListBean itemInfo = partitionFavouriteAdapter.getAllItem().get(position);//确认取的是adapte中的动态值
                 switch (index) {
                     case 0: {//删除
                         //TODO 更新数据源
@@ -291,7 +291,7 @@ public class HomeFragment extends AsRabbitBaseFragment implements
         innerSwipeListViewFragment0Other.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Partition itemInfo = partitionOtherAdapter.getAllItem().get(position);//确认取的是adapte中的动态值
+                Partition.BoardListBean itemInfo = partitionOtherAdapter.getAllItem().get(position);//确认取的是adapte中的动态值
                 switch (index) {
                     case 0: {//添加
                         //TODO 更新数据源
