@@ -14,9 +14,10 @@ import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.Post;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.ht.baselib.utils.LogUtils;
-import com.ht.baselib.views.materialview.MaterialRefreshLayout;
-import com.ht.baselib.views.materialview.MaterialRefreshListener;
+import com.ht.baselib.views.dialog.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
     @Bind(R.id.lv_history)
     InnerSwipeListView lvHistory;
 
+    private CustomDialog customDialog;
     private PostAdapter postAdapter;
     private List<Post> postLists;
 
@@ -57,6 +59,18 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
         return mMainView;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mMaterialRefreshLayout != null) {
+            mMaterialRefreshLayout.finishRefresh();
+            mMaterialRefreshLayout.finishRefreshLoadMore();
+        }
+        if (customDialog != null) {
+            customDialog.dismiss();
+        }
+    }
+
 
     @Override
     protected void initData() {
@@ -65,6 +79,8 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
 
     @Override
     protected void initViews() {
+        LogUtils.e("history initview");
+        customDialog = CustomDialog.newLoadingInstance(activity);
         postLists = new ArrayList<>();
         postAdapter = new PostAdapter(getActivity(), postLists);
         lvHistory.setAdapter(postAdapter);
@@ -76,6 +92,10 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
             }
         });
         lvHistory.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void backToFragment() {
     }
 
 
@@ -93,6 +113,9 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
      * 获取数据
      */
     private void getDate() {
+        if (customDialog != null) {
+            customDialog.show();
+        }
         DataManager.getHistoryPost(new RequestListener() {
             @Override
             public void getResult(Object result) {
@@ -128,6 +151,9 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
                 }
                 if (mMaterialRefreshLayout != null) {
                     mMaterialRefreshLayout.finishRefresh();
+                }
+                if (customDialog != null) {
+                    customDialog.dismiss();
                 }
             }
         });

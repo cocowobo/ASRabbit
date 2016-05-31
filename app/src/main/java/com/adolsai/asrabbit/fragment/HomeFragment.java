@@ -13,21 +13,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.adolsai.asrabbit.R;
+import com.adolsai.asrabbit.activity.PartitionListActivity;
 import com.adolsai.asrabbit.adapter.PartitionAdapter;
+import com.adolsai.asrabbit.app.GlobalStaticData;
 import com.adolsai.asrabbit.base.AsRabbitBaseFragment;
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.Partition;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
+import com.ht.baselib.utils.ActivityUtil;
 import com.ht.baselib.utils.LocalDisplay;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.utils.SoftInputMethodUtils;
-import com.ht.baselib.views.materialview.MaterialRefreshLayout;
-import com.ht.baselib.views.materialview.MaterialRefreshListener;
+import com.ht.baselib.views.dialog.CustomDialog;
 import com.ht.baselib.views.swipemenulistview.SwipeMenu;
 import com.ht.baselib.views.swipemenulistview.SwipeMenuCreator;
 import com.ht.baselib.views.swipemenulistview.SwipeMenuItem;
 import com.ht.baselib.views.swipemenulistview.SwipeMenuListView;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,11 +56,16 @@ public class HomeFragment extends AsRabbitBaseFragment implements
     @Bind(R.id.inner_swipe_list_view_fragment0_other)
     InnerSwipeListView innerSwipeListViewFragment0Other;
 
+    private CustomDialog customDialog;
+
     private PartitionAdapter partitionFavouriteAdapter;
     private PartitionAdapter partitionOtherAdapter;
 
-    private List<Partition> favouriteLists;//喜欢的分区数据源
-    private List<Partition> otherLists;//其他的分区数据源
+    private static Object dataObj;//数据源
+
+    private ArrayList<Partition.BoardListBean> favouriteLists;//喜欢的分区数据源
+    private ArrayList<Partition.BoardListBean> otherLists;//其他的分区数据源
+
 
     public static HomeFragment getInstance() {
         if (homeFragment == null) {
@@ -73,6 +83,18 @@ public class HomeFragment extends AsRabbitBaseFragment implements
         return mMainView;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (refreshLayout != null) {
+            refreshLayout.finishRefresh();
+            refreshLayout.finishRefreshLoadMore();
+        }
+        if (customDialog != null) {
+            customDialog.dismiss();
+        }
+    }
+
 
     @Override
     protected void initData() {
@@ -82,6 +104,8 @@ public class HomeFragment extends AsRabbitBaseFragment implements
 
     @Override
     protected void initViews() {
+        LogUtils.e("home initview");
+        customDialog = CustomDialog.newLoadingInstance(activity);
         favouriteLists = new ArrayList<>();
         otherLists = new ArrayList<>();
         partitionFavouriteAdapter = new PartitionAdapter(context, favouriteLists);
@@ -111,11 +135,22 @@ public class HomeFragment extends AsRabbitBaseFragment implements
         });
         refreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
-            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
-                //下拉刷新
+            public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+                //下拉刷新...
                 getData();
             }
+
+            @Override
+            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+                //上拉加载更多...
+            }
         });
+
+
+    }
+
+    @Override
+    public void backToFragment() {
 
     }
 
@@ -154,8 +189,9 @@ public class HomeFragment extends AsRabbitBaseFragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Partition itemInfo = (Partition) parent.getItemAtPosition(position);//确认取的是adapte中的动态值
-        LogUtils.e("sharing", "itemInfo is " + itemInfo.getTitle());
+        Partition.BoardListBean itemInfo = (Partition.BoardListBean) parent.getItemAtPosition(position);//确认取的是adapte中的动态值
+        LogUtils.e("sharing", "itemInfo is " + itemInfo.getId());
+        ActivityUtil.startActivity(activity, PartitionListActivity.createIntent(activity, itemInfo));
     }
 
     //****************自定义方法区********************************************************************
@@ -164,11 +200,15 @@ public class HomeFragment extends AsRabbitBaseFragment implements
      * 获取数据
      */
     public void getData() {
-        DataManager.getPartition(new RequestListener() {
+        if (customDialog != null) {
+            customDialog.show();
+        }
+        DataManager.getPartition(context, new RequestListener() {
             @Override
             public void getResult(Object result) {
                 if (result != null) {
-                    dealDate(result);
+                    dataObj = result;
+                    dealDate(dataObj);
                 }
 
             }
@@ -181,20 +221,24 @@ public class HomeFragment extends AsRabbitBaseFragment implements
      * @param result 数据源
      */
     private void dealDate(Object result) {
-        List<Partition> tempLists = (List) result;
-        favouriteLists.clear();
-        otherLists.clear();
-        for (int i = 0; i < tempLists.size(); i++) {
-            if (tempLists.get(i).isFavourite()) {
-                //喜欢的
-                favouriteLists.add(tempLists.get(i));
-            } else {
-                //其他的
-                otherLists.add(tempLists.get(i));
-            }
+        if (result != null) {
+            List<String> tempFavouriteIds = Hawk.get(GlobalStaticData.IS_FAVOURITE_PARTITION_IDS, new ArrayList<String>());
+            List<Partition.BoardListBean> tempLists = (List) result;
+            favouriteLists.clear();
+            otherLists.clear();
+            for (int i = 0; i < tempLists.size(); i++) {
+                if (tempFavouriteIds.contains(tempLists.get(i).getId())) {
+                    //喜欢的
+                    favouriteLists.add(tempLists.get(i));
+                } else {
+                    //其他的
+                    otherLists.add(tempLists.get(i));
+                }
 
+            }
+            updateUI();
         }
-        updateUI();
+
     }
 
     /**
@@ -212,6 +256,10 @@ public class HomeFragment extends AsRabbitBaseFragment implements
                 }
                 if (refreshLayout != null) {
                     refreshLayout.finishRefresh();
+                    refreshLayout.finishRefreshLoadMore();
+                }
+                if (customDialog != null) {
+                    customDialog.dismiss();
                 }
             }
         });
@@ -272,14 +320,11 @@ public class HomeFragment extends AsRabbitBaseFragment implements
         innerSwipeListViewFragment0Favourite.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Partition itemInfo = partitionFavouriteAdapter.getAllItem().get(position);//确认取的是adapte中的动态值
+                Partition.BoardListBean itemInfo = partitionFavouriteAdapter.getAllItem().get(position);//确认取的是adapte中的动态值
                 switch (index) {
                     case 0: {//删除
-                        //TODO 更新数据源
+                        dealItemInfo(false, itemInfo);
 
-                        //刷新界面
-                        partitionFavouriteAdapter.remove(itemInfo);
-                        partitionOtherAdapter.add(itemInfo);
                     }
                     break;
                     default:
@@ -291,14 +336,10 @@ public class HomeFragment extends AsRabbitBaseFragment implements
         innerSwipeListViewFragment0Other.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Partition itemInfo = partitionOtherAdapter.getAllItem().get(position);//确认取的是adapte中的动态值
+                Partition.BoardListBean itemInfo = partitionOtherAdapter.getAllItem().get(position);//确认取的是adapte中的动态值
                 switch (index) {
                     case 0: {//添加
-                        //TODO 更新数据源
-
-                        //刷新界面
-                        partitionOtherAdapter.remove(itemInfo);
-                        partitionFavouriteAdapter.add(itemInfo);
+                        dealItemInfo(true, itemInfo);
                     }
                     break;
                     default:
@@ -317,6 +358,34 @@ public class HomeFragment extends AsRabbitBaseFragment implements
         etItemPostUrl.setText("");
         etItemPostUrl.setCursorVisible(false);
         SoftInputMethodUtils.hideSoftInputMethod(context, etItemPostUrl);
+    }
+
+
+    /**
+     * 处理添加和删除喜欢
+     *
+     * @param value true 喜欢 false 删除喜欢
+     */
+    /**
+     * 处理添加和删除喜欢
+     *
+     * @param value true 喜欢 false 删除喜欢
+     * @param item  要处理的数据
+     */
+    private void dealItemInfo(boolean value, Partition.BoardListBean item) {
+        List<String> tempInfo = Hawk.
+                get(GlobalStaticData.IS_FAVOURITE_PARTITION_IDS, new ArrayList<String>());
+        if (value) {
+            if (!tempInfo.contains(item.getId())) {
+                tempInfo.add(item.getId());
+            }
+        } else {
+            tempInfo.remove(item.getId());
+        }
+
+        Hawk.put(GlobalStaticData.IS_FAVOURITE_PARTITION_IDS, tempInfo);
+
+        dealDate(dataObj);
     }
 
 }

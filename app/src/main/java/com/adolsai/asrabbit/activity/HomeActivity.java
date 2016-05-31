@@ -81,6 +81,10 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
     private static boolean isFavourite = false;
     private static boolean isHome = true;
 
+    private static HomeFragment homeFragment;
+    private static HistoryFragment historyFragment;
+    private static CardViewPagerFragment cardViewPagerFragment;
+
 
     //***********************生命周期区**************************************************************
     @Override
@@ -91,6 +95,9 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
 
     @Override
     protected void initViews() {
+        homeFragment = HomeFragment.getInstance();
+        historyFragment = HistoryFragment.getInstance();
+        cardViewPagerFragment = CardViewPagerFragment.getInstance();
         StatusBarCompat.compat(this, getResources().getColor(R.color.base_sys_bar_bg));
         viewHide.setOnClickListener(this);
         fab.setOnClickListener(this);
@@ -106,7 +113,7 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
             mNavigationView.setCheckedItem(R.id.nav_home);
         }
 
-        switchFragment(TAG_HOME, HomeFragment.getInstance());
+        switchFragment(TAG_HOME, homeFragment);
 
         handFabPathAndSearch();
 
@@ -295,17 +302,18 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
                                 isHome = true;
                                 isFavourite = false;
                                 isHistory = false;
-                                switchFragment(TAG_HOME, HomeFragment.getInstance());
+                                switchFragment(TAG_HOME, homeFragment);
+                                homeFragment.backToFragment();
                                 break;
                             case R.id.nav_history:
-
                                 setTitle("历史记录");
                                 isHome = false;
                                 isFavourite = false;
                                 fab.setImageResource(R.mipmap.ic_action_search);
                                 isHistory = true;
                                 handFab(false);
-                                switchFragment(TAG_HISTORY, HistoryFragment.getInstance());
+                                switchFragment(TAG_HISTORY, historyFragment);
+                                historyFragment.backToFragment();
 
                                 break;
                             case R.id.nav_favourite:
@@ -314,7 +322,8 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
                                 isHistory = false;
                                 setTitle("个人收藏");
                                 handFab(true);
-                                switchFragment(TAG_FAVOURITE, CardViewPagerFragment.getInstance());
+                                switchFragment(TAG_FAVOURITE, cardViewPagerFragment);
+                                cardViewPagerFragment.backToFragment();
                                 break;
                             case R.id.help:
                                 Toast.makeText(HomeActivity.this, "帮助", Toast.LENGTH_SHORT).show();

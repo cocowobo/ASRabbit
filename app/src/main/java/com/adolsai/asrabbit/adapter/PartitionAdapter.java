@@ -18,9 +18,9 @@ import java.util.List;
  * @author hxm<br/>
  * @version 1.0 (2016/3/3 18:06)<br/>
  */
-public class PartitionAdapter extends BaseAdapter<Partition> {
+public class PartitionAdapter extends BaseAdapter<Partition.BoardListBean> {
 
-    public PartitionAdapter(Context context, List<Partition> lists) {
+    public PartitionAdapter(Context context, List<Partition.BoardListBean> lists) {
         super(context, lists);
     }
 
@@ -34,10 +34,10 @@ public class PartitionAdapter extends BaseAdapter<Partition> {
         TextView tvPartitionTitle = SparseViewHelper.getView(convertView, R.id.tv_partition_title);
         View cutLine = SparseViewHelper.getView(convertView, R.id.cut_line);
         View cutLine1 = SparseViewHelper.getView(convertView, R.id.cut_line1);
-        Partition partition = getItem(position);
-        if (partition != null) {
-            tvPartitionNumber.setText(partition.getNumber());
-            tvPartitionTitle.setText(partition.getTitle());
+        Partition.BoardListBean curr = getItem(position);
+        if (curr != null) {
+            tvPartitionNumber.setText(curr.getId());
+            tvPartitionTitle.setText(curr.getName());
             cutLine.setVisibility(View.VISIBLE);
             cutLine1.setVisibility(View.GONE);
         }

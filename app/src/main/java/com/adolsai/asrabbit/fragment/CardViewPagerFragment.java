@@ -23,7 +23,8 @@ import com.adolsai.asrabbit.model.Card;
 import com.adolsai.asrabbit.model.FavouritePost;
 import com.adolsai.asrabbit.utils.AnimatorUtils;
 import com.adolsai.asrabbit.utils.HexUtils;
-import com.ht.baselib.views.viewselector.ViewSelectorLayout;
+import com.ht.baselib.utils.LogUtils;
+import com.ht.baselib.views.dialog.CustomDialog;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -50,11 +51,12 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
 
     private int mCurrentViewPagerPage;
 
-    private ViewSelectorLayout mViewSelectorLayout;
     private List<Card> mCardList;
 
 
     private RhythmAdapter mRhythmAdapter;
+
+    private CustomDialog customDialog;
 
     /**
      * 构造方法
@@ -75,7 +77,6 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initFragment(inflater, R.layout.fragment_niceapp);
-        mViewSelectorLayout = new ViewSelectorLayout(getActivity(), mMainView);
         mCardMainView = mMainView.findViewById(R.id.main_view);
         mRhythmLayout = (RhythmLayout) mCardMainView.findViewById(R.id.box_rhythm);
         mViewPager = (ViewPager) mCardMainView.findViewById(R.id.pager);
@@ -87,7 +88,7 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
         ((RelativeLayout.LayoutParams) mViewPager.getLayoutParams()).bottomMargin = height;
         mRhythmLayout.setRhythmListener(rhythmItemListener);
         mViewPager.setOnPageChangeListener(onPageChangeListener);
-        return mViewSelectorLayout;
+        return mCardMainView;
     }
 
     @Override
@@ -105,6 +106,13 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
 
     @Override
     protected void initViews() {
+        LogUtils.e("card initview");
+        customDialog = CustomDialog.newLoadingInstance(activity);
+
+    }
+
+    @Override
+    public void backToFragment() {
 
     }
 
@@ -143,7 +151,9 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
      * 获取数据
      */
     private void fetchData() {
-        mViewSelectorLayout.show_LoadingView();
+        if (customDialog != null) {
+            customDialog.show();
+        }
         DataManager.getFavouritePost(new RequestListener() {
             @Override
             public void getResult(Object result) {
@@ -192,8 +202,8 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
             public void run() {
                 updateAppAdapter(cardList);
                 onAppPagerChange(0);
-                if (mViewSelectorLayout != null) {
-                    mViewSelectorLayout.show_ContentView();
+                if (customDialog != null) {
+                    customDialog.dismiss();
                 }
 
             }
