@@ -115,12 +115,16 @@ public final class TaskManager implements Runnable {
         Message msg = handler.obtainMessage();
         msg.obj = cmd;
         msg.what = REQUEST_RESULT;
+        cmd.setSuccess(false);
         try {
+            cmd.setSuccess(true);
             cmd.setRspObject(executeComCmd(cmd));
         } catch (Exception e) {
+            cmd.setSuccess(false);
             cmd.setRspObject(e);
             LogUtils.we(e);
         } catch (OutOfMemoryError omm) {
+            cmd.setSuccess(false);
             System.gc();
             System.runFinalization();
             Exception oomE = new Exception("----------Exception of OOM------------");
