@@ -27,6 +27,7 @@ import com.ht.baselib.utils.ActivityUtil;
 import com.ht.baselib.utils.LocalDisplay;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.utils.SoftInputMethodUtils;
+import com.ht.baselib.views.dialog.CustomDialog;
 import com.ht.baselib.views.swipemenulistview.SwipeMenu;
 import com.ht.baselib.views.swipemenulistview.SwipeMenuCreator;
 import com.ht.baselib.views.swipemenulistview.SwipeMenuItem;
@@ -55,6 +56,8 @@ public class HomeFragment extends AsRabbitBaseFragment implements
     @Bind(R.id.inner_swipe_list_view_fragment0_other)
     InnerSwipeListView innerSwipeListViewFragment0Other;
 
+    private CustomDialog customDialog;
+
     private PartitionAdapter partitionFavouriteAdapter;
     private PartitionAdapter partitionOtherAdapter;
 
@@ -80,6 +83,18 @@ public class HomeFragment extends AsRabbitBaseFragment implements
         return mMainView;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (refreshLayout != null) {
+            refreshLayout.finishRefresh();
+            refreshLayout.finishRefreshLoadMore();
+        }
+        if (customDialog != null) {
+            customDialog.dismiss();
+        }
+    }
+
 
     @Override
     protected void initData() {
@@ -89,6 +104,8 @@ public class HomeFragment extends AsRabbitBaseFragment implements
 
     @Override
     protected void initViews() {
+        LogUtils.e("home initview");
+        customDialog = CustomDialog.newLoadingInstance(activity);
         favouriteLists = new ArrayList<>();
         otherLists = new ArrayList<>();
         partitionFavouriteAdapter = new PartitionAdapter(context, favouriteLists);
@@ -129,6 +146,11 @@ public class HomeFragment extends AsRabbitBaseFragment implements
             }
         });
 
+
+    }
+
+    @Override
+    public void backToFragment() {
 
     }
 
@@ -178,6 +200,9 @@ public class HomeFragment extends AsRabbitBaseFragment implements
      * 获取数据
      */
     public void getData() {
+        if (customDialog != null) {
+            customDialog.show();
+        }
         DataManager.getPartition(context, new RequestListener() {
             @Override
             public void getResult(Object result) {
@@ -232,6 +257,9 @@ public class HomeFragment extends AsRabbitBaseFragment implements
                 if (refreshLayout != null) {
                     refreshLayout.finishRefresh();
                     refreshLayout.finishRefreshLoadMore();
+                }
+                if (customDialog != null) {
+                    customDialog.dismiss();
                 }
             }
         });

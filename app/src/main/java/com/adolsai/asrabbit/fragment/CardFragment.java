@@ -88,6 +88,11 @@ public class CardFragment extends AsRabbitBaseFragment implements View.OnClickLi
         mBravoNumText = ((TextView) mMainView.findViewById(R.id.text_bravos));
     }
 
+    @Override
+    public void backToFragment() {
+
+    }
+
     //*****************事件区**********************************************************************
     @Override
     public void onClick(View v) {

@@ -29,6 +29,8 @@ public abstract class AsRabbitBaseFragment extends Fragment {
 
     protected abstract void initViews();
 
+    public abstract void backToFragment();
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
