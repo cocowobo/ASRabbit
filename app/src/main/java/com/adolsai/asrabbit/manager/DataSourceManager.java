@@ -2,10 +2,17 @@ package com.adolsai.asrabbit.manager;
 
 import android.content.Context;
 
+import com.adolsai.asrabbit.app.GlobalUrl;
+import com.adolsai.asrabbit.app.GlobalUrlId;
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.model.FavouritePost;
 import com.adolsai.asrabbit.model.Partition;
 import com.adolsai.asrabbit.model.Post;
+import com.ht.baselib.network.Command;
+import com.ht.baselib.network.JsonCommand;
+import com.ht.baselib.network.RspListener;
+import com.ht.baselib.network.TaskManager;
+import com.ht.baselib.utils.GsonUtil;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.utils.ResourceUtils;
 
@@ -25,14 +32,15 @@ public class DataSourceManager {
      *
      * @return
      */
-    public static List< Partition.BoardListBean> getPartitionData(Context context) {
+    public static List<Partition.BoardListBean> getPartitionData(Context context) {
+        List<Partition.BoardListBean> list = new ArrayList<>();
         //从本地json中获取数据源
         String result = ResourceUtils.getFileFromAssets(context, "BoardList.json");
-        LogUtils.e("result is " + result);
-
-
-        List< Partition.BoardListBean> list = new ArrayList<>();
-
+        //解析数据源
+        Partition currPartition = GsonUtil.jsonToBean(result, Partition.class);
+        if (currPartition != null) {
+            list.addAll(currPartition.getBoardList());
+        }
         return list;
     }
 
@@ -85,6 +93,25 @@ public class DataSourceManager {
      * @param listener 回调
      */
     public static void cleanHistoryData(RequestListener listener) {
+
+    }
+
+
+    public static void getBroadListData(String broadId, int page, RequestListener listener) {
+        JsonCommand jsonCommand = new JsonCommand(GlobalUrlId.BroadListDataId,
+                GlobalUrl.getBoardUrlByIdAndPage(broadId, page), new RspListener() {
+            @Override
+            public void onSuccess(Command cmd, Object obj) {
+                LogUtils.e("getBroadListData onSuccess obj is " + obj.toString());
+
+            }
+
+            @Override
+            public void onFailure(Command cmd) {
+                LogUtils.e("getBroadListData onFailure");
+            }
+        });
+        TaskManager.getInstance().addCommand(jsonCommand);
 
     }
 

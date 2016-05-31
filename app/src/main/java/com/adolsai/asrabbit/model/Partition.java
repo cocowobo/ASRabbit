@@ -45,11 +45,6 @@ public class Partition implements Serializable {
          */
         private List<CategoriesBean> categories;
 
-        /**
-         * 是否喜欢
-         */
-        private boolean isFavourite;
-
         public String getId() {
             return id;
         }
@@ -82,13 +77,6 @@ public class Partition implements Serializable {
             this.categories = categories;
         }
 
-        public boolean isFavourite() {
-            return isFavourite;
-        }
-
-        public void setIsFavourite(boolean isFavourite) {
-            this.isFavourite = isFavourite;
-        }
 
         /**
          * 区域中话题分类对象
@@ -135,7 +123,6 @@ public class Partition implements Serializable {
                     ", state='" + state + '\'' +
                     ", name='" + name + '\'' +
                     ", categories=" + categories +
-                    ", isFavourite=" + isFavourite +
                     '}';
         }
     }

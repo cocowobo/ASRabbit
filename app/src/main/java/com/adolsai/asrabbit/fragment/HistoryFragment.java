@@ -14,9 +14,9 @@ import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.Post;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.ht.baselib.utils.LogUtils;
-import com.ht.baselib.views.materialview.MaterialRefreshLayout;
-import com.ht.baselib.views.materialview.MaterialRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;

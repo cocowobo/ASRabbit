@@ -57,6 +57,7 @@
         <activity android:name=".activity.AgreementActivity" />
         <activity android:name=".activity.FeedBackActivity" />
         <activity android:name=".activity.BrowserActivity" />
+        <activity android:name=".activity.PartitionListActivity" />
         <activity android:name=".activity.SettingActivity" />
 
         <activity

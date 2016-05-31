@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
-            android:drawableRight="@mipmap/icon_light"
+            android:drawableLeft="@mipmap/icon_light"
             android:gravity="center"
             android:textColor="@color/base_second_text_color"
             android:textSize="@dimen/text_size_14" />
@@ -52,7 +52,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:drawableRight="@mipmap/icon_light"
+            android:drawableLeft="@mipmap/icon_light"
             android:gravity="center"
             android:textColor="@color/base_second_text_color"
             android:textSize="@dimen/text_size_14" />

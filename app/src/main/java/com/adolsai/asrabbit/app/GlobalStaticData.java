@@ -28,4 +28,9 @@ public class GlobalStaticData {
      * 用户是否已经登陆标识
      */
     public static final String IS_LOGIN = "is_login";
+
+    /**
+     * 用户是否已经登陆标识
+     */
+    public static final String IS_FAVOURITE_PARTITION_IDS = "is_favourite_partition_ids";
 }

@@ -1,4 +1,4 @@
-package com.adolsai.asrabbit.model;
+package com.ht.baselib.network;
 
 /**
  * <p>ErrorModel类 1、提供异常，错误的属性类</p>
