@@ -104,7 +104,6 @@ public class DataSourceManager {
             public void onSuccess(Command cmd, Object obj) {
                 LogUtils.e("getBroadListData onSuccess obj is " + obj.toString());
 
-
             }
 
             @Override
