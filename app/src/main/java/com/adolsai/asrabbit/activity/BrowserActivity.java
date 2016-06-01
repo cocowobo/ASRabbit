@@ -3,13 +3,13 @@ package com.adolsai.asrabbit.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
 
 import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
 import com.adolsai.asrabbit.helper.HtWebViewHelper;
 import com.adolsai.asrabbit.utils.LocalAppUtil;
-import com.adolsai.asrabbit.views.AsRabbitTitleBar;
 import com.ht.baselib.utils.ActivityUtil;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.utils.StringUtils;
@@ -78,8 +78,8 @@ public class BrowserActivity extends AsRabbitBaseActivity {
      * 是否等网络返回后加载URL
      */
     protected boolean isDelay = false;
-    @Bind(R.id.as_rabbit_title_bar)
-    AsRabbitTitleBar asRabbitTitleBar;
+    @Bind(R.id.toolbar)
+    protected Toolbar toolbar;
 
 
     //执行区 start===================================================================================
@@ -125,7 +125,7 @@ public class BrowserActivity extends AsRabbitBaseActivity {
     protected void initViews() {
         titleName = intent.getStringExtra(INTENT_PARAMS_KEY_TITLE);
         if (!StringUtils.isBlank(titleName)) {
-            asRabbitTitleBar.setTvBarCenterTitle(titleName);
+            toolbar.setTitle(titleName);
         }
 
         llMainView = (LinearLayout) findViewById(R.id.ll_main_view);

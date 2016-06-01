@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_last_page"
+        android:orderInCategory="100"
+        android:title="上一页"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_next_page"
+        android:orderInCategory="100"
+        android:title="下一页"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="100"
+        android:title="跳页"
+        app:showAsAction="never" />
+</menu>
