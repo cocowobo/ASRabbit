@@ -17,6 +17,12 @@ import com.adolsai.asrabbit.R;
  * @version 1.0 (2016/3/2 9:42)<br/>
  */
 public class AsRabbitTitleBar extends RelativeLayout implements View.OnClickListener {
+
+
+    /**
+     * 左侧突变点击事件
+     */
+    protected RelativeLayout rlLeftIcon;
     /**
      * 标题栏左侧图标
      */
@@ -76,6 +82,7 @@ public class AsRabbitTitleBar extends RelativeLayout implements View.OnClickList
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.base_title_bar, this);
         //获取控件
+        rlLeftIcon = (RelativeLayout) findViewById(R.id.rl_left_icon);
         ivBarLeftIcon = (ImageView) findViewById(R.id.iv_bar_left_icon);
         tvBarLeftTips = (TextView) findViewById(R.id.tv_bar_left_tips);
         tvBarCenterTitle = (TextView) findViewById(R.id.tv_bar_center_title);
@@ -85,7 +92,7 @@ public class AsRabbitTitleBar extends RelativeLayout implements View.OnClickList
         ivBarRightIconExpand = (ImageView) findViewById(R.id.iv_bar_right_icon_expand);
 
         //注册点击事件
-        ivBarLeftIcon.setOnClickListener(this);
+        rlLeftIcon.setOnClickListener(this);
         tvBarLeftTips.setOnClickListener(this);
         tvBarCenterTitle.setOnClickListener(this);
         rlBarRight.setOnClickListener(this);
@@ -102,7 +109,7 @@ public class AsRabbitTitleBar extends RelativeLayout implements View.OnClickList
             return;
         }
         switch (v.getId()) {
-            case R.id.iv_bar_left_icon:
+            case R.id.rl_left_icon:
                 asRabbitTitleBarClick.barLeftIconClick(v);
                 break;
             case R.id.tv_bar_left_tips:
@@ -136,6 +143,7 @@ public class AsRabbitTitleBar extends RelativeLayout implements View.OnClickList
         if (ivBarLeftIcon != null) {
             ivBarLeftIcon.setBackgroundResource(id);
             ivBarLeftIcon.setVisibility(View.VISIBLE);
+            rlLeftIcon.setVisibility(VISIBLE);
         }
     }
 

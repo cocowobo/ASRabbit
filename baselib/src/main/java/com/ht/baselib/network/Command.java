@@ -1,5 +1,7 @@
 package com.ht.baselib.network;
 
+import java.util.Map;
+
 /**
  * <p>请求任务</p>
  *
@@ -41,6 +43,11 @@ public abstract class Command {
      * 请求结果响应对象
      */
     protected Object rspObject;
+
+    /**
+     * 请求参数，用于post请求
+     */
+    protected Map<String, Object> params;
 
     /**
      * 默认构造函数
@@ -102,5 +109,13 @@ public abstract class Command {
 
     public void setRspObject(Object rspObject) {
         this.rspObject = rspObject;
+    }
+
+    public Map<String, Object> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 }

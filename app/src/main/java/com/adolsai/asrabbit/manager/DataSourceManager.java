@@ -97,7 +97,7 @@ public class DataSourceManager {
     }
 
 
-    public static void getBroadListData(String broadId, int page, RequestListener listener) {
+    public static void getBroadListData(String broadId, int page, final RequestListener listener) {
         JsonCommand jsonCommand = new JsonCommand(GlobalUrlId.BroadListDataId,
                 GlobalUrl.getBoardUrlByIdAndPage(broadId, page), new RspListener() {
             @Override

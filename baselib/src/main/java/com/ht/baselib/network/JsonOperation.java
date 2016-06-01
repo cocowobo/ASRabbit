@@ -17,9 +17,16 @@ public class JsonOperation implements Operation {
     @Override
     public Object doOperate(Command cmd) throws Exception {
         JsonCommand jsonCmd = (JsonCommand) cmd;
+        String rspBody = "";
         try {
             HttpUtils httpUtils = new HttpUtils();
-            String rspBody = httpUtils.get(jsonCmd.getUrl());
+            if (cmd.getParams() != null) {
+                //Post请求
+                rspBody = httpUtils.post(jsonCmd.getUrl(), cmd.getParams());
+            } else {
+                //get请求
+                rspBody = httpUtils.get(jsonCmd.getUrl());
+            }
             LogUtils.v("------------------ >>>> 响应报文(原始):" + rspBody);
 //            jsonCmd.getJsonInvoker().perform(result)
             return rspBody;
