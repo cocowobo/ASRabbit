@@ -8,7 +8,8 @@
     <RelativeLayout
         android:id="@+id/rl_post_information"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/post_plate"
@@ -67,6 +68,11 @@
         android:padding="8dp"
         android:textColor="@color/base_first_text_color"
         android:textSize="@dimen/text_size_16" />
+
+    <View
+        style="@style/CommonHorizontalDivider"
+        android:layout_below="@+id/tv_post_content"
+        android:layout_marginLeft="5dp" />
 
 
 </RelativeLayout>

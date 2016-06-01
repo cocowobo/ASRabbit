@@ -23,7 +23,6 @@ import com.adolsai.asrabbit.model.Card;
 import com.adolsai.asrabbit.model.FavouritePost;
 import com.adolsai.asrabbit.utils.AnimatorUtils;
 import com.adolsai.asrabbit.utils.HexUtils;
-import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.views.dialog.CustomDialog;
 
 import java.lang.reflect.Field;
@@ -37,7 +36,6 @@ import java.util.List;
  * Description:
  */
 public class CardViewPagerFragment extends AsRabbitBaseFragment {
-    private static CardViewPagerFragment FavFragment;
 
     private View mCardMainView;
 
@@ -64,9 +62,8 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
      * @return CardViewPagerFragment
      */
     public static CardViewPagerFragment getInstance() {
-        if (FavFragment == null) {
-            FavFragment = new CardViewPagerFragment();
-        }
+        CardViewPagerFragment FavFragment = new CardViewPagerFragment();
+
         return FavFragment;
     }
 
@@ -106,7 +103,6 @@ public class CardViewPagerFragment extends AsRabbitBaseFragment {
 
     @Override
     protected void initViews() {
-        LogUtils.e("card initview");
         customDialog = CustomDialog.newLoadingInstance(activity);
 
     }

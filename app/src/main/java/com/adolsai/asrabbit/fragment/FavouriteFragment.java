@@ -1,6 +1,6 @@
 package com.adolsai.asrabbit.fragment;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,19 +9,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.adolsai.asrabbit.R;
-import com.adolsai.asrabbit.activity.PostDetailActivity;
 import com.adolsai.asrabbit.adapter.PostAdapter;
-import com.adolsai.asrabbit.app.GlobalUrl;
 import com.adolsai.asrabbit.base.AsRabbitBaseFragment;
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.Post;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
-import com.cjj.MaterialRefreshLayout;
-import com.cjj.MaterialRefreshListener;
-import com.ht.baselib.utils.ActivityUtil;
+import com.ht.baselib.utils.LocalDisplay;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.views.dialog.CustomDialog;
+import com.ht.baselib.views.swipemenulistview.SwipeMenu;
+import com.ht.baselib.views.swipemenulistview.SwipeMenuCreator;
+import com.ht.baselib.views.swipemenulistview.SwipeMenuItem;
+import com.ht.baselib.views.swipemenulistview.SwipeMenuListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +31,11 @@ import butterknife.Bind;
 /**
  * Created by Administrator on 2015/10/9.
  */
-public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView.OnItemClickListener {
-    private static HistoryFragment HisFragment;
-    @Bind(R.id.refreshlayout)
-    MaterialRefreshLayout mMaterialRefreshLayout;
-    @Bind(R.id.lv_history)
-    InnerSwipeListView lvHistory;
+public class FavouriteFragment extends AsRabbitBaseFragment implements AdapterView.OnItemClickListener {
+    private static FavouriteFragment FavFragment;
+    @Bind(R.id.lv_favourite)
+    InnerSwipeListView lvFavourite;
+
 
     private CustomDialog customDialog;
     private PostAdapter postAdapter;
@@ -48,16 +47,16 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
      *
      * @return HistoryFragment
      */
-    public static HistoryFragment getInstance() {
-        HisFragment = new HistoryFragment();
-        return HisFragment;
+    public static FavouriteFragment getInstance() {
+        FavFragment = new FavouriteFragment();
+        return FavFragment;
     }
 
     //*********************生命周期******************************************************************
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        initFragment(inflater, R.layout.fragment_history);
+        initFragment(inflater, R.layout.fragment_favourite);
         return mMainView;
     }
 
@@ -70,10 +69,6 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mMaterialRefreshLayout != null) {
-            mMaterialRefreshLayout.finishRefresh();
-            mMaterialRefreshLayout.finishRefreshLoadMore();
-        }
         if (customDialog != null) {
             customDialog.dismiss();
         }
@@ -86,19 +81,12 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
 
     @Override
     protected void initViews() {
-        LogUtils.e("history initview");
         customDialog = CustomDialog.newLoadingInstance(activity);
         postLists = new ArrayList<>();
         postAdapter = new PostAdapter(getActivity(), postLists);
-        lvHistory.setAdapter(postAdapter);
-        mMaterialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
-            @Override
-            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
-                getDate();
-
-            }
-        });
-        lvHistory.setOnItemClickListener(this);
+        lvFavourite.setAdapter(postAdapter);
+        initSwipeMenuListView();
+        lvFavourite.setOnItemClickListener(this);
     }
 
     @Override
@@ -111,8 +99,7 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Post currPost = (Post) parent.getItemAtPosition(position);
         LogUtils.e("onItemClick currPost is " + currPost.getContent());
-        Intent intent = PostDetailActivity.createIntent(activity, "帖子详情", GlobalUrl.ABOUT_URL);
-        ActivityUtil.startActivity(activity, intent);
+
     }
 
     //*************自定义方法*************************************************************************
@@ -157,15 +144,57 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
                 if (postAdapter != null) {
                     postAdapter.replaceAll(postLists);
                 }
-                if (mMaterialRefreshLayout != null) {
-                    mMaterialRefreshLayout.finishRefresh();
-                }
                 if (customDialog != null) {
                     customDialog.dismiss();
                 }
             }
         });
 
+    }
+
+    /**
+     * 初始化左滑删除的一些监听和设置
+     */
+    private void initSwipeMenuListView() {
+        // step 1. create a MenuCreator，添加左滑操作
+        SwipeMenuCreator creator1 = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                //创建撤销认证item
+                // create "revoke" item
+                SwipeMenuItem revokeItem = new SwipeMenuItem(context);
+                // set item background
+                revokeItem.setBackground(R.color.global_price_orange);
+                // set item width
+                revokeItem.setWidth(LocalDisplay.dp2px(80));
+                // set item title
+                revokeItem.setTitle("删除");
+                // set item title fontsize
+                revokeItem.setTitleSize(16);
+                // set item title font color
+                revokeItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(revokeItem);
+            }
+        };
+        // set creator
+        lvFavourite.setMenuCreator(creator1);
+        // step 2. listener item click event
+        lvFavourite.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                Post itemInfo = postAdapter.getAllItem().get(position);//确认取的是adapte中的动态值
+                switch (index) {
+                    case 0: {//删除
+
+                    }
+                    break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
 }

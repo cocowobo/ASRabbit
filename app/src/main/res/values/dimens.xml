@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!-- 公共分割线的高度-->
-    <dimen name="common_divider">1dp</dimen>
+    <dimen name="common_divider">1px</dimen>
     <!-- 公共左边间距-->
     <dimen name="common_margin_left">15dp</dimen>
     <!-- 公共右边间距-->

@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.cjj.MaterialRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/refreshlayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_favourite"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:overlay="false"
-    app:progress_colors="@array/material_colors"
-    app:wave_color="@color/window_background">
+    android:background="@color/window_background">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,7 +15,7 @@
             android:layout_height="match_parent">
 
             <com.adolsai.asrabbit.views.InnerSwipeListView
-                android:id="@+id/lv_history"
+                android:id="@+id/lv_favourite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/base_tab_white"
@@ -28,4 +25,4 @@
     </ScrollView>
 
 
-</com.cjj.MaterialRefreshLayout>
+</RelativeLayout>
