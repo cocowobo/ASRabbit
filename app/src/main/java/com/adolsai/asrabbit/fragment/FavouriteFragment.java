@@ -14,8 +14,6 @@ import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.Post;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
-import com.cjj.MaterialRefreshLayout;
-import com.cjj.MaterialRefreshListener;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.views.dialog.CustomDialog;
 
@@ -27,12 +25,11 @@ import butterknife.Bind;
 /**
  * Created by Administrator on 2015/10/9.
  */
-public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView.OnItemClickListener {
-    private static HistoryFragment HisFragment;
-    @Bind(R.id.refreshlayout)
-    MaterialRefreshLayout mMaterialRefreshLayout;
-    @Bind(R.id.lv_history)
-    InnerSwipeListView lvHistory;
+public class FavouriteFragment extends AsRabbitBaseFragment implements AdapterView.OnItemClickListener {
+    private static FavouriteFragment FavFragment;
+    @Bind(R.id.lv_favourite)
+    InnerSwipeListView lvFavourite;
+
 
     private CustomDialog customDialog;
     private PostAdapter postAdapter;
@@ -44,16 +41,16 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
      *
      * @return HistoryFragment
      */
-    public static HistoryFragment getInstance() {
-        HisFragment = new HistoryFragment();
-        return HisFragment;
+    public static FavouriteFragment getInstance() {
+        FavFragment = new FavouriteFragment();
+        return FavFragment;
     }
 
     //*********************生命周期******************************************************************
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        initFragment(inflater, R.layout.fragment_history);
+        initFragment(inflater, R.layout.fragment_favourite);
         return mMainView;
     }
 
@@ -66,10 +63,6 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mMaterialRefreshLayout != null) {
-            mMaterialRefreshLayout.finishRefresh();
-            mMaterialRefreshLayout.finishRefreshLoadMore();
-        }
         if (customDialog != null) {
             customDialog.dismiss();
         }
@@ -82,19 +75,12 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
 
     @Override
     protected void initViews() {
-        LogUtils.e("history initview");
+        LogUtils.e("favourite initview");
         customDialog = CustomDialog.newLoadingInstance(activity);
         postLists = new ArrayList<>();
         postAdapter = new PostAdapter(getActivity(), postLists);
-        lvHistory.setAdapter(postAdapter);
-        mMaterialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
-            @Override
-            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
-                getDate();
-
-            }
-        });
-        lvHistory.setOnItemClickListener(this);
+        lvFavourite.setAdapter(postAdapter);
+        lvFavourite.setOnItemClickListener(this);
     }
 
     @Override
@@ -151,9 +137,6 @@ public class HistoryFragment extends AsRabbitBaseFragment implements AdapterView
             public void run() {
                 if (postAdapter != null) {
                     postAdapter.replaceAll(postLists);
-                }
-                if (mMaterialRefreshLayout != null) {
-                    mMaterialRefreshLayout.finishRefresh();
                 }
                 if (customDialog != null) {
                     customDialog.dismiss();

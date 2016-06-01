@@ -44,7 +44,6 @@ import butterknife.Bind;
  */
 public class HomeFragment extends AsRabbitBaseFragment implements
         View.OnClickListener, AdapterView.OnItemClickListener {
-    private static HomeFragment homeFragment;
     @Bind(R.id.refreshlayout)
     MaterialRefreshLayout refreshLayout;
     @Bind(R.id.et_item_post_url)
@@ -68,9 +67,7 @@ public class HomeFragment extends AsRabbitBaseFragment implements
 
 
     public static HomeFragment getInstance() {
-        if (homeFragment == null) {
-            homeFragment = new HomeFragment();
-        }
+        HomeFragment homeFragment = new HomeFragment();
         return homeFragment;
     }
 
@@ -81,6 +78,12 @@ public class HomeFragment extends AsRabbitBaseFragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         initFragment(inflater, R.layout.fragment_home);
         return mMainView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getData();
     }
 
     @Override
@@ -98,7 +101,6 @@ public class HomeFragment extends AsRabbitBaseFragment implements
 
     @Override
     protected void initData() {
-        getData();
 
     }
 

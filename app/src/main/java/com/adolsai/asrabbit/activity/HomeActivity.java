@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.app.GlobalStaticData;
 import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
-import com.adolsai.asrabbit.fragment.CardViewPagerFragment;
+import com.adolsai.asrabbit.fragment.FavouriteFragment;
 import com.adolsai.asrabbit.fragment.HistoryFragment;
 import com.adolsai.asrabbit.fragment.HomeFragment;
 import com.adolsai.asrabbit.utils.DialogUtils;
@@ -81,9 +81,9 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
     private static boolean isFavourite = false;
     private static boolean isHome = true;
 
-    private static HomeFragment homeFragment;
-    private static HistoryFragment historyFragment;
-    private static CardViewPagerFragment cardViewPagerFragment;
+    private HomeFragment homeFragment;
+    private HistoryFragment historyFragment;
+    private FavouriteFragment favouriteFragment;
 
 
     //***********************生命周期区**************************************************************
@@ -95,9 +95,6 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
 
     @Override
     protected void initViews() {
-        homeFragment = HomeFragment.getInstance();
-        historyFragment = HistoryFragment.getInstance();
-        cardViewPagerFragment = CardViewPagerFragment.getInstance();
         StatusBarCompat.compat(this, getResources().getColor(R.color.base_sys_bar_bg));
         viewHide.setOnClickListener(this);
         fab.setOnClickListener(this);
@@ -112,7 +109,7 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
             setupDrawerContent(mNavigationView);
             mNavigationView.setCheckedItem(R.id.nav_home);
         }
-
+        homeFragment = HomeFragment.getInstance();
         switchFragment(TAG_HOME, homeFragment);
 
         handFabPathAndSearch();
@@ -303,7 +300,6 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
                                 isFavourite = false;
                                 isHistory = false;
                                 switchFragment(TAG_HOME, homeFragment);
-                                homeFragment.backToFragment();
                                 break;
                             case R.id.nav_history:
                                 setTitle("历史记录");
@@ -312,8 +308,10 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
                                 fab.setImageResource(R.mipmap.ic_action_search);
                                 isHistory = true;
                                 handFab(false);
+                                if (historyFragment == null) {
+                                    historyFragment = HistoryFragment.getInstance();
+                                }
                                 switchFragment(TAG_HISTORY, historyFragment);
-                                historyFragment.backToFragment();
 
                                 break;
                             case R.id.nav_favourite:
@@ -321,9 +319,11 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
                                 isHome = false;
                                 isHistory = false;
                                 setTitle("个人收藏");
-                                handFab(true);
-                                switchFragment(TAG_FAVOURITE, cardViewPagerFragment);
-                                cardViewPagerFragment.backToFragment();
+                                handFab(false);
+                                if (favouriteFragment == null) {
+                                    favouriteFragment = FavouriteFragment.getInstance();
+                                }
+                                switchFragment(TAG_FAVOURITE, favouriteFragment);
                                 break;
                             case R.id.help:
                                 Toast.makeText(HomeActivity.this, "帮助", Toast.LENGTH_SHORT).show();
