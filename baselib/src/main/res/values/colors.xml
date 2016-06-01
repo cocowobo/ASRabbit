@@ -37,6 +37,8 @@
     <color name="ht_common_aux_btn_normal">#FCFCFC</color>
     <color name="ht_common_aux_btn_press">#E7E7E7</color>
 
+    <color name="common_divider">#c8c7cc</color>
+
     <!--透明相关-->
     <!--透明-->
     <color name="transparent">#00000000</color>
