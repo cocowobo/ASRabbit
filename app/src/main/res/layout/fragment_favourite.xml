@@ -12,8 +12,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp">
+            android:layout_height="match_parent">
 
             <com.adolsai.asrabbit.views.InnerSwipeListView
                 android:id="@+id/lv_favourite"

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.cjj.MaterialRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/refreshlayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:overlay="false"
-    app:progress_colors="@array/material_colors"
-    app:wave_color="@color/window_background">
+    android:background="@color/window_background">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -138,4 +134,4 @@
         </RelativeLayout>
 
     </ScrollView>
-</com.cjj.MaterialRefreshLayout>
+</RelativeLayout>

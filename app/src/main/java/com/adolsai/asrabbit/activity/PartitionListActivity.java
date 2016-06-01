@@ -80,6 +80,8 @@ public class PartitionListActivity extends AsRabbitBaseActivity implements
         classifySelectorDialog.setTitle("请选择检索条件");
         classifySelectorDialog.setFirstCategoryList(firstCategoryList);
         classifySelectorDialog.setSecondCategoryList(secondCategoryList);
+        //设置是否上拉加载更多，默认是false，要手动改为true，要不然不会出现上拉加载
+        mMaterialRefreshLayout.setLoadMore(true);
 
         mMaterialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override

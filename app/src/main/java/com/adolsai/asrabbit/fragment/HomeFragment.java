@@ -21,8 +21,6 @@ import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.Partition;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
-import com.cjj.MaterialRefreshLayout;
-import com.cjj.MaterialRefreshListener;
 import com.ht.baselib.utils.ActivityUtil;
 import com.ht.baselib.utils.LocalDisplay;
 import com.ht.baselib.utils.LogUtils;
@@ -44,8 +42,6 @@ import butterknife.Bind;
  */
 public class HomeFragment extends AsRabbitBaseFragment implements
         View.OnClickListener, AdapterView.OnItemClickListener {
-    @Bind(R.id.refreshlayout)
-    MaterialRefreshLayout refreshLayout;
     @Bind(R.id.et_item_post_url)
     EditText etItemPostUrl;
     @Bind(R.id.tv_item_go)
@@ -80,33 +76,22 @@ public class HomeFragment extends AsRabbitBaseFragment implements
         return mMainView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getData();
-    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (refreshLayout != null) {
-            refreshLayout.finishRefresh();
-            refreshLayout.finishRefreshLoadMore();
-        }
         if (customDialog != null) {
             customDialog.dismiss();
         }
     }
 
-
     @Override
     protected void initData() {
-
+        getData();
     }
 
     @Override
     protected void initViews() {
-        LogUtils.e("home initview");
         customDialog = CustomDialog.newLoadingInstance(activity);
         favouriteLists = new ArrayList<>();
         otherLists = new ArrayList<>();
@@ -121,7 +106,6 @@ public class HomeFragment extends AsRabbitBaseFragment implements
         etItemPostUrl.setOnClickListener(this);
         tvItemGo.setOnClickListener(this);
 
-
         etItemPostUrl.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -134,18 +118,6 @@ public class HomeFragment extends AsRabbitBaseFragment implements
                 return false;
             }
 
-        });
-        refreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
-            @Override
-            public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
-                //下拉刷新...
-                getData();
-            }
-
-            @Override
-            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
-                //上拉加载更多...
-            }
         });
 
 
@@ -255,10 +227,6 @@ public class HomeFragment extends AsRabbitBaseFragment implements
                 }
                 if (partitionOtherAdapter != null) {
                     partitionOtherAdapter.replaceAll(otherLists);
-                }
-                if (refreshLayout != null) {
-                    refreshLayout.finishRefresh();
-                    refreshLayout.finishRefreshLoadMore();
                 }
                 if (customDialog != null) {
                     customDialog.dismiss();

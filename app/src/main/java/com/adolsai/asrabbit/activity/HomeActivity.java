@@ -295,7 +295,6 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
                             case R.id.nav_home:
                                 setTitle("最常查看");
                                 handFab(true);
-                                fab.setImageResource(R.mipmap.ic_add_white_24dp);
                                 isHome = true;
                                 isFavourite = false;
                                 isHistory = false;
@@ -318,6 +317,7 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
                                 isFavourite = true;
                                 isHome = false;
                                 isHistory = false;
+                                fab.setImageResource(R.mipmap.ic_action_search);
                                 setTitle("个人收藏");
                                 handFab(false);
                                 if (favouriteFragment == null) {

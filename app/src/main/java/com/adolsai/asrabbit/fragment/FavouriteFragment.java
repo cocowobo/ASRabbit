@@ -1,5 +1,6 @@
 package com.adolsai.asrabbit.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,8 +15,13 @@ import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.Post;
 import com.adolsai.asrabbit.views.InnerSwipeListView;
+import com.ht.baselib.utils.LocalDisplay;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.views.dialog.CustomDialog;
+import com.ht.baselib.views.swipemenulistview.SwipeMenu;
+import com.ht.baselib.views.swipemenulistview.SwipeMenuCreator;
+import com.ht.baselib.views.swipemenulistview.SwipeMenuItem;
+import com.ht.baselib.views.swipemenulistview.SwipeMenuListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,11 +81,11 @@ public class FavouriteFragment extends AsRabbitBaseFragment implements AdapterVi
 
     @Override
     protected void initViews() {
-        LogUtils.e("favourite initview");
         customDialog = CustomDialog.newLoadingInstance(activity);
         postLists = new ArrayList<>();
         postAdapter = new PostAdapter(getActivity(), postLists);
         lvFavourite.setAdapter(postAdapter);
+        initSwipeMenuListView();
         lvFavourite.setOnItemClickListener(this);
     }
 
@@ -144,6 +150,51 @@ public class FavouriteFragment extends AsRabbitBaseFragment implements AdapterVi
             }
         });
 
+    }
+
+    /**
+     * 初始化左滑删除的一些监听和设置
+     */
+    private void initSwipeMenuListView() {
+        // step 1. create a MenuCreator，添加左滑操作
+        SwipeMenuCreator creator1 = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                //创建撤销认证item
+                // create "revoke" item
+                SwipeMenuItem revokeItem = new SwipeMenuItem(context);
+                // set item background
+                revokeItem.setBackground(R.color.global_price_orange);
+                // set item width
+                revokeItem.setWidth(LocalDisplay.dp2px(80));
+                // set item title
+                revokeItem.setTitle("删除");
+                // set item title fontsize
+                revokeItem.setTitleSize(16);
+                // set item title font color
+                revokeItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(revokeItem);
+            }
+        };
+        // set creator
+        lvFavourite.setMenuCreator(creator1);
+        // step 2. listener item click event
+        lvFavourite.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                Post itemInfo = postAdapter.getAllItem().get(position);//确认取的是adapte中的动态值
+                switch (index) {
+                    case 0: {//删除
+
+                    }
+                    break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
 }
