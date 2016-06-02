@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.adolsai.asrabbit.R;
+import com.adolsai.asrabbit.app.SharePreferenceKey;
+import com.orhanobut.hawk.Hawk;
+
 import butterknife.ButterKnife;
 
 /**
@@ -55,6 +59,11 @@ public abstract class AsRabbitBaseFragment extends Fragment {
         } else {
             mMainView = inflater.inflate(id, null);
             ButterKnife.bind(this, mMainView);
+            if (Hawk.get(SharePreferenceKey.SETTING_NIGHT_MODEL, true)) {
+                getActivity().setTheme(R.style.NightTheme);
+            } else {
+                getActivity().setTheme(R.style.DayTheme);
+            }
             initViews();
         }
         initData();

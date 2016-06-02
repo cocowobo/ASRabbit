@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/window_background">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,7 +26,7 @@
                 android:layout_height="@dimen/common_item_height"
                 android:layout_below="@+id/tv_fragment0_tag1"
                 android:layout_marginTop="@dimen/common_margin_top"
-                android:background="@color/base_tab_white">
+                android:background="?attr/base_tab_white">
 
                 <View style="@style/CommonHorizontalDivider" />
 
@@ -71,7 +70,7 @@
                     android:drawablePadding="5dp"
                     android:drawableRight="@mipmap/icon_right_arrow"
                     android:gravity="center"
-                    android:textColor="@color/base_first_text_color"
+                    android:textColor="?attr/base_first_text_color"
                     android:textSize="@dimen/text_size_16" />
 
                 <View style="@style/CommonHorizontalDivider" />
@@ -102,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cut_line2"
-                android:background="@color/base_tab_white"
+                android:background="?attr/base_tab_white"
                 android:divider="@null"
                 android:listSelector="@android:color/transparent" />
 
@@ -128,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cut_line3"
                 android:layout_marginBottom="30dp"
-                android:background="@color/base_tab_white"
+                android:background="?attr/base_tab_white"
                 android:divider="@null"
                 android:listSelector="@android:color/transparent" />
         </RelativeLayout>

@@ -33,7 +33,6 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:lines="1"
-                android:textColor="@color/black"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -47,7 +46,6 @@
                 android:layout_toRightOf="@id/tv_title"
                 android:ellipsize="end"
                 android:lines="1"
-                android:textColor="@color/color_zhonghui"
                 android:textSize="16sp" />
         </RelativeLayout>
 
@@ -56,7 +54,6 @@
             android:layout_width="fill_parent"
             android:layout_height="180dp"
             android:layout_below="@id/rl_box_title"
-            android:background="@color/backColor"
             android:scaleType="centerCrop" />
 
         <TextView
@@ -83,7 +80,6 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingTop="15dp"
-            android:textColor="@color/color_zhonghui"
             android:textSize="16sp" />
 
         <TextView
@@ -97,7 +93,6 @@
             android:paddingBottom="15dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:textColor="@color/color_shenhui"
             android:textSize="16sp" />
     </RelativeLayout>
 </RelativeLayout>

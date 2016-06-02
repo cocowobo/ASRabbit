@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 
 import com.adolsai.asrabbit.R;
-import com.adolsai.asrabbit.utils.StatusBarCompat;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.utils.StringUtils;
 import com.ht.baselib.views.dialog.CustomDialog;
@@ -30,7 +29,7 @@ public class PostDetailActivity extends BrowserActivity implements
     @Override
     protected void initViews() {
         super.initViews();
-        StatusBarCompat.compat(this, getResources().getColor(R.color.brownness));
+//        StatusBarCompat.compat(this, getResources().getColor(R.color.base_sys_bar_bg));
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("帖子详情");
         toolbar.setOnMenuItemClickListener(this);

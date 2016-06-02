@@ -15,7 +15,6 @@ import com.adolsai.asrabbit.event.MainParamEvent;
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
 import com.adolsai.asrabbit.model.UserInfo;
-import com.adolsai.asrabbit.utils.StatusBarCompat;
 import com.ht.baselib.network.ErrorModel;
 import com.ht.baselib.utils.ActivityUtil;
 import com.ht.baselib.utils.StringUtils;
@@ -60,7 +59,7 @@ public class LoginActivity extends AsRabbitBaseActivity implements View.OnClickL
     //**********************方法重载******************************************************************
     @Override
     protected void initViews() {
-        StatusBarCompat.compat(this, getResources().getColor(R.color.brownness));
+//        StatusBarCompat.compat(this, getResources().getColor(R.color.base_sys_bar_bg));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("登录");

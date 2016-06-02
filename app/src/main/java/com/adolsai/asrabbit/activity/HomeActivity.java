@@ -95,7 +95,7 @@ public class HomeActivity extends AsRabbitBaseActivity implements OnClickListene
 
     @Override
     protected void initViews() {
-        StatusBarCompat.compat(this, getResources().getColor(R.color.base_sys_bar_bg));
+//        StatusBarCompat.compat(this, getResources().getColor(R.attr.base_soft_bg));
         viewHide.setOnClickListener(this);
         fab.setOnClickListener(this);
         setSupportActionBar(toolbar);

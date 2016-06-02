@@ -3,13 +3,13 @@ package com.adolsai.asrabbit.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.app.GlobalUrl;
 import com.adolsai.asrabbit.app.SharePreferenceKey;
 import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
-import com.adolsai.asrabbit.views.AsRabbitTitleBar;
 import com.adolsai.asrabbit.views.SettingItemView;
 import com.ht.baselib.utils.ActivityUtil;
 import com.ht.baselib.utils.AppUtils;
@@ -26,9 +26,6 @@ import butterknife.Bind;
  * @version 1.0 (2016-3-13 14:26)<br/>
  */
 public class SettingActivity extends AsRabbitBaseActivity implements SettingItemView.SettingItemViewListener {
-
-    @Bind(R.id.as_rabbit_title_bar)
-    AsRabbitTitleBar asRabbitTitleBar;//标题栏
     @Bind(R.id.setting_item_view_model)
     SettingItemView settingItemViewModel;//模式选择
     @Bind(R.id.setting_item_view_net)
@@ -51,6 +48,8 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
     SettingItemView settingItemViewUserAgreement;//用户许可协议
     @Bind(R.id.setting_item_view_support)
     SettingItemView settingItemViewSupport;//建议反馈
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     private String dnsValue;
 
@@ -67,8 +66,14 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
     @Override
     protected void initViews() {
         //初始化标题栏
-        asRabbitTitleBar.setTvBarCenterTitle("Settings");
-        asRabbitTitleBar.setTvBarLeftTips("返回");
+        toolbar.setTitle("设置");
+        toolbar.setNavigationIcon(R.drawable.selector_titlebar_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         //初始化下面那些奇奇怪怪的item
         settingItemViewModel.initConfigs("显示", "夜间模式", "", "我想妈妈保证睡觉前不玩手机", false);
         settingItemViewNet.initConfigs("网络设置", "访问域名", dnsValue,
@@ -86,38 +91,6 @@ public class SettingActivity extends AsRabbitBaseActivity implements SettingItem
 
         //设置各个开关状态
         updateSwButtonStatus();
-
-        //注册各种事件
-        asRabbitTitleBar.setAsRabbitTitleBarClick(new AsRabbitTitleBar.AsRabbitTitleBarClick() {
-            @Override
-            public void barLeftIconClick(View v) {
-
-            }
-
-            @Override
-            public void barLeftTipsClick(View v) {
-                finish();
-            }
-
-            @Override
-            public void barCenterTitleClick(View v) {
-
-            }
-
-            @Override
-            public void barRightTipsClick(View v) {
-            }
-
-            @Override
-            public void barRightIconClick(View v) {
-
-            }
-
-            @Override
-            public void barRightIconExpandClick(View v) {
-
-            }
-        });
 
         settingItemViewNet.setSettingItemViewListener(this);
         settingItemViewAboutApp.setSettingItemViewListener(this);

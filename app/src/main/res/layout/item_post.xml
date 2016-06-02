@@ -19,7 +19,7 @@
             android:layout_marginTop="5dp"
             android:drawableLeft="@mipmap/icon_light"
             android:gravity="center"
-            android:textColor="@color/base_second_text_color"
+            android:textColor="?attr/base_second_text_color"
             android:textSize="@dimen/text_size_14" />
 
         <LinearLayout
@@ -34,14 +34,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/base_second_text_color"
+                android:textColor="?attr/base_second_text_color"
                 android:textSize="@dimen/text_size_14" />
 
             <TextView
                 android:id="@+id/tv_post_read_position"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/base_second_text_color"
+                android:textColor="?attr/base_second_text_color"
                 android:textSize="@dimen/text_size_14" />
 
         </LinearLayout>
@@ -55,7 +55,7 @@
             android:layout_marginRight="5dp"
             android:drawableLeft="@mipmap/icon_light"
             android:gravity="center"
-            android:textColor="@color/base_second_text_color"
+            android:textColor="?attr/base_second_text_color"
             android:textSize="@dimen/text_size_14" />
 
     </RelativeLayout>
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_post_information"
         android:padding="8dp"
-        android:textColor="@color/base_first_text_color"
+        android:textColor="?attr/base_first_text_color"
         android:textSize="@dimen/text_size_16" />
 
     <View

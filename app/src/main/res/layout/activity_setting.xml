@@ -3,19 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/base_soft_bg"
+    android:background="?attr/base_soft_bg"
     android:fitsSystemWindows="true"
     tools:context=".activity.SettingActivity">
 
-    <com.adolsai.asrabbit.views.AsRabbitTitleBar
-        android:id="@+id/as_rabbit_title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_layout"></include>
+
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/as_rabbit_title_bar">
+        android:layout_below="@+id/toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -105,6 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cut_line3" />
+
             <View
                 android:id="@+id/cut_line4"
                 style="@style/CommonHorizontalDivider"
@@ -115,7 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cut_line4"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

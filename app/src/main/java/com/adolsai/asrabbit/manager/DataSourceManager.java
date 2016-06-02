@@ -107,6 +107,13 @@ public class DataSourceManager {
     }
 
 
+    /**
+     * 根据版区ID和页码，获取帖子数据
+     *
+     * @param broadId  版区ID
+     * @param page     页码
+     * @param listener 回调
+     */
     public static void getBroadListData(String broadId, int page, final RequestListener listener) {
         JsonCommand jsonCommand = new JsonCommand(GlobalUrlId.BroadListDataId,
                 GlobalUrl.getBoardUrlByIdAndPage(broadId, page), new RspListener() {

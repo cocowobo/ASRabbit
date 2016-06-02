@@ -14,7 +14,6 @@ import com.adolsai.asrabbit.event.MainParamEvent;
 import com.adolsai.asrabbit.event.ParamsBean;
 import com.adolsai.asrabbit.listener.RequestListener;
 import com.adolsai.asrabbit.manager.DataManager;
-import com.adolsai.asrabbit.utils.StatusBarCompat;
 import com.ht.baselib.network.ErrorModel;
 import com.ht.baselib.utils.FormatVerificationUtils;
 import com.ht.baselib.utils.StringUtils;
@@ -49,7 +48,7 @@ public class RegisterActivity extends AsRabbitBaseActivity implements View.OnCli
 
     @Override
     protected void initViews() {
-        StatusBarCompat.compat(this, getResources().getColor(R.color.brownness));
+//        StatusBarCompat.compat(this, getResources().getColor(R.color.base_sys_bar_bg));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

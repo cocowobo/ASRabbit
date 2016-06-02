@@ -10,7 +10,6 @@ import com.adolsai.asrabbit.R;
 import com.adolsai.asrabbit.adapter.PostAdapter;
 import com.adolsai.asrabbit.base.AsRabbitBaseActivity;
 import com.adolsai.asrabbit.model.Post;
-import com.adolsai.asrabbit.utils.StatusBarCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class SearchActivity extends AsRabbitBaseActivity implements
     @Override
     protected void initViews() {
         lists = new ArrayList<>();
-        StatusBarCompat.compat(this, getResources().getColor(R.color.brownness));
+//        StatusBarCompat.compat(this, getResources().getColor(R.attr.base_sys_bar_bg));
         mAdapter = new PostAdapter(activity, lists);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);

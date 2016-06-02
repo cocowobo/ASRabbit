@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.adolsai.asrabbit.R;
@@ -127,6 +128,13 @@ public class BrowserActivity extends AsRabbitBaseActivity {
         if (!StringUtils.isBlank(titleName)) {
             toolbar.setTitle(titleName);
         }
+        toolbar.setNavigationIcon(R.drawable.selector_titlebar_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         llMainView = (LinearLayout) findViewById(R.id.ll_main_view);
         pullToRefreshHtSafeWebView = (PullToRefreshHtSafeWebView) findViewById(R.id.pullToRefreshHtSafeWebView);

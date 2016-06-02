@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:overlay="false"
-    app:progress_colors="@array/material_colors"
-    app:wave_color="@color/window_background">
+    app:progress_colors="@array/material_colors">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,7 +20,7 @@
                 android:id="@+id/lv_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/base_tab_white"
+                android:background="?attr/base_tab_white"
                 android:divider="@null"
                 android:listSelector="@android:color/transparent" />
         </RelativeLayout>

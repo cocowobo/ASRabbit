@@ -35,7 +35,7 @@ public class FeedBackActivity extends AsRabbitBaseActivity implements AsRabbitTi
 
     @Override
     protected void initViews() {
-        titleBarFreeBack.setTvBarLeftTips("发送");
+        titleBarFreeBack.setTvBarRightTips("发送");
         etWords.addTextChangedListener(new OnTextWatcher(activity, etWords, tvWords, titleBarFreeBack.getTvBarRightTips(), 140));
     }
 

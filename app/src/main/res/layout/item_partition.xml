@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/common_margin_left"
-        android:textColor="@color/base_first_text_color"
+        android:textColor="?attr/base_first_text_color"
         android:textSize="@dimen/text_size_16" />
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_marginRight="@dimen/common_margin_right"
         android:drawablePadding="10dp"
         android:drawableRight="@mipmap/icon_right_arrow"
-        android:textColor="@color/base_second_text_color"
+        android:textColor="?attr/base_second_text_color"
         android:textSize="@dimen/text_size_14" />
 
     <View
