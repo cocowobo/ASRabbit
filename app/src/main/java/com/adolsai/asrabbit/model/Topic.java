@@ -1,7 +1,11 @@
 package com.adolsai.asrabbit.model;
 
+import com.adolsai.asrabbit.app.GlobalStaticData;
+import com.orhanobut.hawk.Hawk;
+
 import java.io.Serializable;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>Topic类 1、提供XXX功能；2、提供XXX方法</p>
@@ -10,21 +14,31 @@ import java.util.Date;
  * @version 1.0 (2016-5-30 19:05)<br/>
  */
 public class Topic implements Serializable {
-    private String title;
-    private String boardId;
-    private String topicId;
-    private String author;
-    private int totalReplyCount;
-    private int totalPage;
-    private Date leastReplyDate;
-    private String type;
-    private int unreadCount;
+    private String title;//帖子标题
+    private String boardId;//版区ID，左边显示
+    private String topicId;//话题ID
+    private String author;//作者
+    private int totalReplyCount;//总回复数
+    private int totalPage;//总页数
+    private String leastReplyDate;//最后回复时间
+    private String type;//类型ID，右边显示
+    private int unreadCount;//未读数目
+
+    /**
+     * 以下两个属性不需要构建，根据ID自动生成
+     **/
+    private String boardName;//版区名
+    private String typeName;//类型名
+
+    private static List<Partition.BoardListBean> tempList;//首页版区数据缓存
 
     public Topic() {
+        tempList = Hawk.get(GlobalStaticData.PARTITION_LIST_CACHE, new ArrayList<Partition.BoardListBean>());
     }
 
     public Topic(String title, String boardId, String topicId, String author, int totalReplyCount,
-                 int totalPage, Date leastReplyDate, String type, int unreadCount) {
+                 int totalPage, String leastReplyDate, String type, int unreadCount) {
+        tempList = Hawk.get(GlobalStaticData.PARTITION_LIST_CACHE, new ArrayList<Partition.BoardListBean>());
         this.title = title;
         this.boardId = boardId;
         this.topicId = topicId;
@@ -34,6 +48,7 @@ public class Topic implements Serializable {
         this.leastReplyDate = leastReplyDate;
         this.type = type;
         this.unreadCount = unreadCount;
+        setBoardAndTypeNameById();
     }
 
     public String getTitle() {
@@ -48,8 +63,10 @@ public class Topic implements Serializable {
         return boardId;
     }
 
-    public void setBoardId(String boardId) {
+    public void setBoardIdAndType(String boardId, String type) {
         this.boardId = boardId;
+        this.type = type;
+        setBoardAndTypeNameById();
     }
 
     public String getTopicId() {
@@ -84,20 +101,16 @@ public class Topic implements Serializable {
         this.totalPage = totalPage;
     }
 
-    public Date getLeastReplyDate() {
+    public String getLeastReplyDate() {
         return leastReplyDate;
     }
 
-    public void setLeastReplyDate(Date leastReplyDate) {
+    public void setLeastReplyDate(String leastReplyDate) {
         this.leastReplyDate = leastReplyDate;
     }
 
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public int getUnreadCount() {
@@ -107,4 +120,30 @@ public class Topic implements Serializable {
     public void setUnreadCount(int unreadCount) {
         this.unreadCount = unreadCount;
     }
+
+    public String getBoardName() {
+        return boardName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setBoardAndTypeNameById() {
+        for (int i = 0; i < tempList.size(); i++) {
+            Partition.BoardListBean curr = tempList.get(i);
+            if (curr.getId().equals(boardId)) {
+                boardName = curr.getName();
+                List<Partition.BoardListBean.CategoriesBean> currCategory = curr.getCategories();
+                for (int j = 0; j < currCategory.size(); j++) {
+                    if (currCategory.get(j).getCategoryId().equals(type)) {
+                        typeName = currCategory.get(j).getCategoryValue();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+
 }
