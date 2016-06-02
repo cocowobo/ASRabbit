@@ -2,6 +2,7 @@ package com.adolsai.asrabbit.manager;
 
 import android.content.Context;
 
+import com.adolsai.asrabbit.app.GlobalStaticData;
 import com.adolsai.asrabbit.app.GlobalUrl;
 import com.adolsai.asrabbit.app.GlobalUrlId;
 import com.adolsai.asrabbit.listener.RequestListener;
@@ -15,6 +16,7 @@ import com.ht.baselib.network.TaskManager;
 import com.ht.baselib.utils.GsonUtil;
 import com.ht.baselib.utils.LogUtils;
 import com.ht.baselib.utils.ResourceUtils;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,10 @@ import java.util.List;
  * @version 1.0 (2016-5-23 16:48)<br/>
  */
 public class DataSourceManager {
+    /**
+     * 首页数据缓存
+     */
+    private static List<Partition.BoardListBean> partitionBeanList;
 
     /**
      * 获取首页数据源
@@ -33,16 +39,20 @@ public class DataSourceManager {
      * @return
      */
     public static List<Partition.BoardListBean> getPartitionData(Context context) {
-        List<Partition.BoardListBean> list = new ArrayList<>();
-        //从本地json中获取数据源
-        String result = ResourceUtils.getFileFromAssets(context, "BoardList.json");
-        //解析数据源
-        Partition currPartition = GsonUtil.jsonToBean(result, Partition.class);
-        if (currPartition != null) {
-            list.addAll(currPartition.getBoardList());
+        if (partitionBeanList == null) {
+            partitionBeanList = new ArrayList<>();
+            //从本地json中获取数据源
+            String result = ResourceUtils.getFileFromAssets(context, "BoardList.json");
+            //解析数据源
+            Partition currPartition = GsonUtil.jsonToBean(result, Partition.class);
+            if (currPartition != null) {
+                partitionBeanList.addAll(currPartition.getBoardList());
+            }
         }
-        return list;
+        Hawk.put(GlobalStaticData.PARTITION_LIST_CACHE, partitionBeanList);
+        return partitionBeanList;
     }
+
 
     /**
      * 获取历史业数据源
@@ -102,7 +112,12 @@ public class DataSourceManager {
                 GlobalUrl.getBoardUrlByIdAndPage(broadId, page), new RspListener() {
             @Override
             public void onSuccess(Command cmd, Object obj) {
+                String result = "";
                 LogUtils.e("getBroadListData onSuccess obj is " + obj.toString());
+                //TODO 处理数据源，封装成JSON
+                result = dealBroadData(obj);
+
+                LogUtils.e("getBroadListData onSuccess after deal result  is " + result);
 
             }
 
@@ -113,6 +128,18 @@ public class DataSourceManager {
         });
         TaskManager.getInstance().addCommand(jsonCommand);
 
+    }
+
+
+    /**
+     * 处理数据，包装成JSON字符串
+     *
+     * @param obj obj
+     * @return JSON 串
+     */
+    private static String dealBroadData(Object obj) {
+
+        return "";
     }
 
 
