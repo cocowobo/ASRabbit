@@ -3,7 +3,7 @@
     android:id="@+id/base_title_bar"
     android:layout_width="match_parent"
     android:layout_height="52dp"
-    android:background="?attr/base_color">
+    android:background="@color/base_color">
 
     <RelativeLayout
         android:id="@+id/rl_left_icon"

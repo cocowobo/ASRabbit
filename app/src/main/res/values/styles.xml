@@ -4,32 +4,9 @@
     <style name="AppTheme" parent="BaseTheme" />
 
     <style name="StartTheme" parent="AppTheme">
-        <item name="android:windowBackground">?attr/base_color</item>
+        <item name="android:windowBackground">@color/base_color</item>
 
     </style>
-
-    <style name="DayTheme" parent="AppTheme">>
-        <item name="base_color">@color/base_color</item>
-        <item name="base_sys_bar_bg">@color/base_sys_bar_bg</item>
-        <item name="base_soft_bg">@color/base_soft_bg</item>
-        <item name="base_tab_white">@color/base_tab_white</item>
-        <item name="base_first_text_color">@color/base_first_text_color</item>
-        <item name="base_second_text_color">@color/base_second_text_color</item>
-        <item name="common_divider">@color/common_divider</item>
-
-    </style>
-
-    <style name="NightTheme" parent="AppTheme">
-        <item name="base_color">@color/base_color_night</item>
-        <item name="base_sys_bar_bg">@color/base_sys_bar_bg_night</item>
-        <item name="base_soft_bg">@color/base_soft_bg_night</item>
-        <item name="base_tab_white">@color/base_tab_white_night</item>
-        <item name="base_first_text_color">@color/base_first_text_color_night</item>
-        <item name="base_second_text_color">@color/base_second_text_color_night</item>
-        <item name="common_divider">@color/common_divider_night</item>
-    </style>
-
-
     <!--水平分割线-->
     <style name="CommonHorizontalDivider">
         <item name="android:background">@color/common_divider</item>
@@ -41,7 +18,7 @@
         <item name="colorPrimary">#795548</item>
         <item name="colorPrimaryDark">#d4848f</item>
         <item name="colorAccent">#795548</item>
-        <item name="android:windowBackground">?attr/base_soft_bg</item>
+        <item name="android:windowBackground">@color/base_soft_bg</item>
     </style>
 
     <style name="TitleBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

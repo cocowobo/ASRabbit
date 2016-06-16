@@ -6,10 +6,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.adolsai.asrabbit.R;
-import com.adolsai.asrabbit.app.SharePreferenceKey;
 import com.ht.baselib.base.BaseActivity;
 import com.ht.baselib.manager.SystemBarTintManager;
-import com.orhanobut.hawk.Hawk;
 
 import butterknife.ButterKnife;
 
@@ -27,11 +25,6 @@ public abstract class AsRabbitBaseActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         progressDialog = new ProgressDialog(this);
-        if (Hawk.get(SharePreferenceKey.SETTING_NIGHT_MODEL, true)) {
-            this.setTheme(R.style.NightTheme);
-        } else {
-            this.setTheme(R.style.DayTheme);
-        }
     }
 
     //=======================================抽象方法区===============================================
